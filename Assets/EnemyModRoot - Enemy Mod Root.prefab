@@ -12,8 +12,6 @@ GameObject:
   - component: {fileID: 4498340145367161902}
   - component: {fileID: 6643780078286672672}
   - component: {fileID: 4081826194863581210}
-  - component: {fileID: 8960053159572872536}
-  - component: {fileID: 4953440505404620240}
   - component: {fileID: 1462446283190728489}
   m_Layer: 0
   m_Name: B-thigh_L
@@ -134,32 +132,6 @@ CapsuleCollider:
   m_Height: 0.46786717
   m_Direction: 0
   m_Center: {x: -0.23393358, y: 0.000000012631062, z: 9.313227e-10}
---- !u!114 &8960053159572872536
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 77299150243651178}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71113f02a0a0dcd4b9c193daf38b41c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Stationary: 0
-  Rigidbody: {fileID: 4498340145367161902}
---- !u!114 &4953440505404620240
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 77299150243651178}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f576523af23d8f74c8fb6754a5202e3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1462446283190728489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -174,8 +146,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unpin: 500
   force: 500
-  thisGrabbable: {fileID: 8960053159572872536}
-  thisStabbable: {fileID: 4953440505404620240}
+  thisGrabbable: {fileID: 0}
+  thisStabbable: {fileID: 0}
   vrPuppet: {fileID: 4441617799809837326}
   thisCollider: {fileID: 4081826194863581210}
   bodyPart: 0
@@ -546,8 +518,6 @@ GameObject:
   - component: {fileID: 1581768364554607075}
   - component: {fileID: 2283520276973134406}
   - component: {fileID: 7716851962202712633}
-  - component: {fileID: 5582305526168927799}
-  - component: {fileID: 8044179464097700597}
   - component: {fileID: 4923829593566995542}
   m_Layer: 0
   m_Name: B-shin_R
@@ -668,32 +638,6 @@ CapsuleCollider:
   m_Height: 0.37308785
   m_Direction: 0
   m_Center: {x: -0.18654393, y: -0.0000000010477379, z: -0.0000000050640665}
---- !u!114 &5582305526168927799
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 846567970597556295}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71113f02a0a0dcd4b9c193daf38b41c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Stationary: 0
-  Rigidbody: {fileID: 1581768364554607075}
---- !u!114 &8044179464097700597
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 846567970597556295}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f576523af23d8f74c8fb6754a5202e3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &4923829593566995542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -708,8 +652,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unpin: 500
   force: 500
-  thisGrabbable: {fileID: 5582305526168927799}
-  thisStabbable: {fileID: 8044179464097700597}
+  thisGrabbable: {fileID: 0}
+  thisStabbable: {fileID: 0}
   vrPuppet: {fileID: 4441617799809837326}
   thisCollider: {fileID: 7716851962202712633}
   bodyPart: 0
@@ -980,8 +924,6 @@ GameObject:
   - component: {fileID: 2989506719077276902}
   - component: {fileID: 6295053788726695233}
   - component: {fileID: 4098125926811698560}
-  - component: {fileID: 7183643358024486584}
-  - component: {fileID: 1695123751859130215}
   - component: {fileID: 6868317037583826344}
   m_Layer: 0
   m_Name: B-chest
@@ -1100,32 +1042,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.31131724, y: 0.34000003, z: 0.3115793}
   m_Center: {x: -0.058051474, y: 0.000000007709415, z: -0.02449885}
---- !u!114 &7183643358024486584
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1372773811373757038}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71113f02a0a0dcd4b9c193daf38b41c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Stationary: 0
-  Rigidbody: {fileID: 2989506719077276902}
---- !u!114 &1695123751859130215
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1372773811373757038}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f576523af23d8f74c8fb6754a5202e3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6868317037583826344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1140,8 +1056,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unpin: 500
   force: 500
-  thisGrabbable: {fileID: 7183643358024486584}
-  thisStabbable: {fileID: 1695123751859130215}
+  thisGrabbable: {fileID: 0}
+  thisStabbable: {fileID: 0}
   vrPuppet: {fileID: 4441617799809837326}
   thisCollider: {fileID: 4098125926811698560}
   bodyPart: 0
@@ -1857,8 +1773,6 @@ GameObject:
   - component: {fileID: 7863401844085808512}
   - component: {fileID: 4523349038404152817}
   - component: {fileID: 8913670321517722565}
-  - component: {fileID: 5226202037014486868}
-  - component: {fileID: 4810144465867150374}
   - component: {fileID: 9168265952970086531}
   m_Layer: 0
   m_Name: B-foot_L
@@ -1977,32 +1891,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.22733033, y: 0.16813575, z: 0.16813575}
   m_Center: {x: -0.08743475, y: 0.00000003537571, z: 0.00000020861626}
---- !u!114 &5226202037014486868
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2821024846266234715}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71113f02a0a0dcd4b9c193daf38b41c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Stationary: 0
-  Rigidbody: {fileID: 7863401844085808512}
---- !u!114 &4810144465867150374
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2821024846266234715}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f576523af23d8f74c8fb6754a5202e3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &9168265952970086531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2017,8 +1905,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unpin: 500
   force: 500
-  thisGrabbable: {fileID: 5226202037014486868}
-  thisStabbable: {fileID: 4810144465867150374}
+  thisGrabbable: {fileID: 0}
+  thisStabbable: {fileID: 0}
   vrPuppet: {fileID: 4441617799809837326}
   thisCollider: {fileID: 8913670321517722565}
   bodyPart: 0
@@ -2276,8 +2164,6 @@ GameObject:
   - component: {fileID: 1003632213948964175}
   - component: {fileID: 482876821497330958}
   - component: {fileID: 5108149867693071819}
-  - component: {fileID: 669803271714219244}
-  - component: {fileID: 506978280974782624}
   - component: {fileID: 3439921919685755677}
   m_Layer: 0
   m_Name: B-hips
@@ -2352,32 +2238,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.31757677, y: 0.32000002, z: 0.29196742}
   m_Center: {x: -0.059724398, y: 0.000000007450581, z: -0.011532398}
---- !u!114 &669803271714219244
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3147482869512313989}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71113f02a0a0dcd4b9c193daf38b41c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Stationary: 0
-  Rigidbody: {fileID: 482876821497330958}
---- !u!114 &506978280974782624
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3147482869512313989}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f576523af23d8f74c8fb6754a5202e3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3439921919685755677
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2392,8 +2252,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unpin: 500
   force: 500
-  thisGrabbable: {fileID: 669803271714219244}
-  thisStabbable: {fileID: 506978280974782624}
+  thisGrabbable: {fileID: 0}
+  thisStabbable: {fileID: 0}
   vrPuppet: {fileID: 4441617799809837326}
   thisCollider: {fileID: 5108149867693071819}
   bodyPart: 0
@@ -2544,8 +2404,6 @@ GameObject:
   - component: {fileID: 8469906073269873279}
   - component: {fileID: 3254185876695770897}
   - component: {fileID: 1268159824977811386}
-  - component: {fileID: 3058578693181343917}
-  - component: {fileID: 1594702893244585004}
   - component: {fileID: 3054361787214709341}
   m_Layer: 0
   m_Name: B-forearm_R
@@ -2666,32 +2524,6 @@ CapsuleCollider:
   m_Height: 0.28138602
   m_Direction: 0
   m_Center: {x: -0.14069301, y: 0.0000000069849193, z: -0.00000003859168}
---- !u!114 &3058578693181343917
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3542182590791830022}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71113f02a0a0dcd4b9c193daf38b41c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Stationary: 0
-  Rigidbody: {fileID: 8469906073269873279}
---- !u!114 &1594702893244585004
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3542182590791830022}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f576523af23d8f74c8fb6754a5202e3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3054361787214709341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2706,8 +2538,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unpin: 500
   force: 500
-  thisGrabbable: {fileID: 3058578693181343917}
-  thisStabbable: {fileID: 1594702893244585004}
+  thisGrabbable: {fileID: 0}
+  thisStabbable: {fileID: 0}
   vrPuppet: {fileID: 4441617799809837326}
   thisCollider: {fileID: 1268159824977811386}
   bodyPart: 0
@@ -3231,8 +3063,6 @@ GameObject:
   - component: {fileID: 8263769477602149589}
   - component: {fileID: 5130451511828374657}
   - component: {fileID: 4556261618557565779}
-  - component: {fileID: 1333360302746543004}
-  - component: {fileID: 7291971510800904866}
   - component: {fileID: 5148913130331380231}
   m_Layer: 0
   m_Name: B-head
@@ -3350,32 +3180,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.099999994
   m_Center: {x: -0.09150493, y: 0.000000007508453, z: 0.025036996}
---- !u!114 &1333360302746543004
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4635637764246584157}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71113f02a0a0dcd4b9c193daf38b41c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Stationary: 0
-  Rigidbody: {fileID: 8263769477602149589}
---- !u!114 &7291971510800904866
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4635637764246584157}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f576523af23d8f74c8fb6754a5202e3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &5148913130331380231
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3390,8 +3194,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unpin: 500
   force: 500
-  thisGrabbable: {fileID: 1333360302746543004}
-  thisStabbable: {fileID: 7291971510800904866}
+  thisGrabbable: {fileID: 0}
+  thisStabbable: {fileID: 0}
   vrPuppet: {fileID: 4441617799809837326}
   thisCollider: {fileID: 4556261618557565779}
   bodyPart: 0
@@ -3409,8 +3213,6 @@ GameObject:
   - component: {fileID: 5534762487685915685}
   - component: {fileID: 420124306612515558}
   - component: {fileID: 1059734353441685304}
-  - component: {fileID: 4357279356617805142}
-  - component: {fileID: 555029676199227901}
   - component: {fileID: 4391361988625373379}
   m_Layer: 0
   m_Name: B-hand_L
@@ -3532,32 +3334,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.29277027, y: 0.10431873, z: 0.10431873}
   m_Center: {x: -0.1105046, y: 0.011151141, z: -0.01854821}
---- !u!114 &4357279356617805142
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4681108713227949184}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71113f02a0a0dcd4b9c193daf38b41c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Stationary: 0
-  Rigidbody: {fileID: 5534762487685915685}
---- !u!114 &555029676199227901
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4681108713227949184}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f576523af23d8f74c8fb6754a5202e3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &4391361988625373379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3572,8 +3348,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unpin: 500
   force: 500
-  thisGrabbable: {fileID: 4357279356617805142}
-  thisStabbable: {fileID: 555029676199227901}
+  thisGrabbable: {fileID: 0}
+  thisStabbable: {fileID: 0}
   vrPuppet: {fileID: 4441617799809837326}
   thisCollider: {fileID: 1059734353441685304}
   bodyPart: 0
@@ -3747,7 +3523,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3743168699179244828}
-  - component: {fileID: 7454379944919026388}
   - component: {fileID: 4441617799809837326}
   m_Layer: 0
   m_Name: Ragdoll
@@ -3773,18 +3548,6 @@ Transform:
   - {fileID: 2230136349484664618}
   m_Father: {fileID: 655977262741176066}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7454379944919026388
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4869956034081337603}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b209ee8e254d41b4d99bcdf19544ad09, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &4441617799809837326
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3797,7 +3560,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8301edfa163aaed449126d8f97f69f14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  puppetMaster: {fileID: 7454379944919026388}
+  puppetMaster: {fileID: 0}
   puppetColliders:
   - {fileID: 5108149867693071819}
   - {fileID: 4098125926811698560}
@@ -3844,8 +3607,6 @@ GameObject:
   - component: {fileID: 6443735882108570713}
   - component: {fileID: 493035428834307260}
   - component: {fileID: 140989469234611855}
-  - component: {fileID: 7262510933053256478}
-  - component: {fileID: 3493924108381239625}
   - component: {fileID: 2352197725989136151}
   m_Layer: 0
   m_Name: B-hand_R
@@ -3967,32 +3728,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.2927701, y: 0.10431873, z: 0.10431873}
   m_Center: {x: -0.11050454, y: -0.011151013, z: -0.01854823}
---- !u!114 &7262510933053256478
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4963243227860600623}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71113f02a0a0dcd4b9c193daf38b41c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Stationary: 0
-  Rigidbody: {fileID: 6443735882108570713}
---- !u!114 &3493924108381239625
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4963243227860600623}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f576523af23d8f74c8fb6754a5202e3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2352197725989136151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4007,8 +3742,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unpin: 500
   force: 500
-  thisGrabbable: {fileID: 7262510933053256478}
-  thisStabbable: {fileID: 3493924108381239625}
+  thisGrabbable: {fileID: 0}
+  thisStabbable: {fileID: 0}
   vrPuppet: {fileID: 4441617799809837326}
   thisCollider: {fileID: 140989469234611855}
   bodyPart: 0
@@ -4573,8 +4308,6 @@ GameObject:
   - component: {fileID: 5661142207319241949}
   - component: {fileID: 6396943897933667656}
   - component: {fileID: 7024292447652663597}
-  - component: {fileID: 2338828405530796880}
-  - component: {fileID: 3848302859082208823}
   - component: {fileID: 3335935470035268120}
   m_Layer: 0
   m_Name: B-shin_L
@@ -4695,32 +4428,6 @@ CapsuleCollider:
   m_Height: 0.373088
   m_Direction: 0
   m_Center: {x: -0.186544, y: -0.000000009429642, z: -0.0000000064610504}
---- !u!114 &2338828405530796880
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6420149919391498328}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71113f02a0a0dcd4b9c193daf38b41c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Stationary: 0
-  Rigidbody: {fileID: 5661142207319241949}
---- !u!114 &3848302859082208823
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6420149919391498328}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f576523af23d8f74c8fb6754a5202e3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3335935470035268120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4735,8 +4442,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unpin: 500
   force: 500
-  thisGrabbable: {fileID: 2338828405530796880}
-  thisStabbable: {fileID: 3848302859082208823}
+  thisGrabbable: {fileID: 0}
+  thisStabbable: {fileID: 0}
   vrPuppet: {fileID: 4441617799809837326}
   thisCollider: {fileID: 7024292447652663597}
   bodyPart: 0
@@ -4947,8 +4654,6 @@ GameObject:
   - component: {fileID: 7513202230479081630}
   - component: {fileID: 1341971261610529509}
   - component: {fileID: 5879150939709718061}
-  - component: {fileID: 81928492871825532}
-  - component: {fileID: 6660336174065100160}
   - component: {fileID: 4819740370241597484}
   m_Layer: 0
   m_Name: B-thigh_R
@@ -5069,32 +4774,6 @@ CapsuleCollider:
   m_Height: 0.467867
   m_Direction: 0
   m_Center: {x: -0.2339335, y: 0.000000013096724, z: -0.0000000018626454}
---- !u!114 &81928492871825532
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7029151624828221808}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71113f02a0a0dcd4b9c193daf38b41c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Stationary: 0
-  Rigidbody: {fileID: 7513202230479081630}
---- !u!114 &6660336174065100160
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7029151624828221808}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f576523af23d8f74c8fb6754a5202e3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &4819740370241597484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5109,8 +4788,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unpin: 500
   force: 500
-  thisGrabbable: {fileID: 81928492871825532}
-  thisStabbable: {fileID: 6660336174065100160}
+  thisGrabbable: {fileID: 0}
+  thisStabbable: {fileID: 0}
   vrPuppet: {fileID: 4441617799809837326}
   thisCollider: {fileID: 5879150939709718061}
   bodyPart: 0
@@ -5415,38 +5094,8 @@ MonoBehaviour:
   - {fileID: 7513202230479081630}
   - {fileID: 1581768364554607075}
   - {fileID: 516253787420197083}
-  puppetGrabbables:
-  - {fileID: 669803271714219244}
-  - {fileID: 7183643358024486584}
-  - {fileID: 1333360302746543004}
-  - {fileID: 2149781976075638367}
-  - {fileID: 3991036535341253012}
-  - {fileID: 4357279356617805142}
-  - {fileID: 3963239972150876000}
-  - {fileID: 3058578693181343917}
-  - {fileID: 7262510933053256478}
-  - {fileID: 8960053159572872536}
-  - {fileID: 2338828405530796880}
-  - {fileID: 5226202037014486868}
-  - {fileID: 81928492871825532}
-  - {fileID: 5582305526168927799}
-  - {fileID: 1656432700591647684}
-  puppetStabbables:
-  - {fileID: 506978280974782624}
-  - {fileID: 1695123751859130215}
-  - {fileID: 7291971510800904866}
-  - {fileID: 9073203186477462084}
-  - {fileID: 4919407659004352323}
-  - {fileID: 555029676199227901}
-  - {fileID: 51310850766189763}
-  - {fileID: 1594702893244585004}
-  - {fileID: 3493924108381239625}
-  - {fileID: 4953440505404620240}
-  - {fileID: 3848302859082208823}
-  - {fileID: 4810144465867150374}
-  - {fileID: 6660336174065100160}
-  - {fileID: 8044179464097700597}
-  - {fileID: 3117443660305553961}
+  puppetGrabbables: []
+  puppetStabbables: []
   puppetGrabberHelpers:
   - {fileID: 3439921919685755677}
   - {fileID: 6868317037583826344}
@@ -5903,8 +5552,6 @@ GameObject:
   - component: {fileID: 5409801624523830273}
   - component: {fileID: 3694336252916005539}
   - component: {fileID: 8352799743705439132}
-  - component: {fileID: 3963239972150876000}
-  - component: {fileID: 51310850766189763}
   - component: {fileID: 6643370658782476059}
   m_Layer: 0
   m_Name: B-upper_arm_R
@@ -6025,32 +5672,6 @@ CapsuleCollider:
   m_Height: 0.25348923
   m_Direction: 0
   m_Center: {x: -0.12674461, y: 0.000000014901161, z: -0.00000003073365}
---- !u!114 &3963239972150876000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8503950592816023808}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71113f02a0a0dcd4b9c193daf38b41c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Stationary: 0
-  Rigidbody: {fileID: 5409801624523830273}
---- !u!114 &51310850766189763
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8503950592816023808}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f576523af23d8f74c8fb6754a5202e3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6643370658782476059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6065,8 +5686,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unpin: 500
   force: 500
-  thisGrabbable: {fileID: 3963239972150876000}
-  thisStabbable: {fileID: 51310850766189763}
+  thisGrabbable: {fileID: 0}
+  thisStabbable: {fileID: 0}
   vrPuppet: {fileID: 4441617799809837326}
   thisCollider: {fileID: 8352799743705439132}
   bodyPart: 0
@@ -6084,8 +5705,6 @@ GameObject:
   - component: {fileID: 3495615700117623250}
   - component: {fileID: 5811012088530106493}
   - component: {fileID: 9019862885304907639}
-  - component: {fileID: 3991036535341253012}
-  - component: {fileID: 4919407659004352323}
   - component: {fileID: 797874859859754402}
   m_Layer: 0
   m_Name: B-forearm_L
@@ -6206,32 +5825,6 @@ CapsuleCollider:
   m_Height: 0.28138608
   m_Direction: 0
   m_Center: {x: -0.14069304, y: 0.0000000074505815, z: 0.0000001222361}
---- !u!114 &3991036535341253012
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8606713927240646735}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71113f02a0a0dcd4b9c193daf38b41c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Stationary: 0
-  Rigidbody: {fileID: 3495615700117623250}
---- !u!114 &4919407659004352323
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8606713927240646735}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f576523af23d8f74c8fb6754a5202e3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &797874859859754402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6246,8 +5839,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unpin: 500
   force: 500
-  thisGrabbable: {fileID: 3991036535341253012}
-  thisStabbable: {fileID: 4919407659004352323}
+  thisGrabbable: {fileID: 0}
+  thisStabbable: {fileID: 0}
   vrPuppet: {fileID: 4441617799809837326}
   thisCollider: {fileID: 9019862885304907639}
   bodyPart: 0
@@ -6265,8 +5858,6 @@ GameObject:
   - component: {fileID: 516253787420197083}
   - component: {fileID: 7447731523668979101}
   - component: {fileID: 4461352414236082268}
-  - component: {fileID: 1656432700591647684}
-  - component: {fileID: 3117443660305553961}
   - component: {fileID: 857042236425211116}
   m_Layer: 0
   m_Name: B-foot_R
@@ -6385,32 +5976,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.22733006, y: 0.1681357, z: 0.1681357}
   m_Center: {x: -0.08743464, y: -0.000000013060346, z: 0.00000008940698}
---- !u!114 &1656432700591647684
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8723886811476925360}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71113f02a0a0dcd4b9c193daf38b41c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Stationary: 0
-  Rigidbody: {fileID: 516253787420197083}
---- !u!114 &3117443660305553961
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8723886811476925360}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f576523af23d8f74c8fb6754a5202e3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &857042236425211116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6425,8 +5990,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unpin: 500
   force: 500
-  thisGrabbable: {fileID: 1656432700591647684}
-  thisStabbable: {fileID: 3117443660305553961}
+  thisGrabbable: {fileID: 0}
+  thisStabbable: {fileID: 0}
   vrPuppet: {fileID: 4441617799809837326}
   thisCollider: {fileID: 4461352414236082268}
   bodyPart: 0
@@ -6476,8 +6041,6 @@ GameObject:
   - component: {fileID: 2786643961780674246}
   - component: {fileID: 4383570793854455876}
   - component: {fileID: 2899231007393907282}
-  - component: {fileID: 2149781976075638367}
-  - component: {fileID: 9073203186477462084}
   - component: {fileID: 6444869937650763280}
   m_Layer: 0
   m_Name: B-upper_arm_L
@@ -6598,32 +6161,6 @@ CapsuleCollider:
   m_Height: 0.25348923
   m_Direction: 0
   m_Center: {x: -0.12674461, y: 0.0000000037252903, z: -0.00000007357449}
---- !u!114 &2149781976075638367
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8733425020298332272}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71113f02a0a0dcd4b9c193daf38b41c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Stationary: 0
-  Rigidbody: {fileID: 2786643961780674246}
---- !u!114 &9073203186477462084
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8733425020298332272}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f576523af23d8f74c8fb6754a5202e3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6444869937650763280
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6638,8 +6175,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unpin: 500
   force: 500
-  thisGrabbable: {fileID: 2149781976075638367}
-  thisStabbable: {fileID: 9073203186477462084}
+  thisGrabbable: {fileID: 0}
+  thisStabbable: {fileID: 0}
   vrPuppet: {fileID: 4441617799809837326}
   thisCollider: {fileID: 2899231007393907282}
   bodyPart: 0

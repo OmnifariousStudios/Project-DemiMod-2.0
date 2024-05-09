@@ -53,7 +53,7 @@ namespace ModIO.EditorCode
 
                 //Find properties and apply default values
                 SerializedProperty serverSettingsProperty = so.FindProperty("serverSettings");
-                serverSettingsProperty.FindPropertyRelative("serverURL").stringValue = "https://api.mod.io/v1";;
+                serverSettingsProperty.FindPropertyRelative("serverURL").stringValue = SettingsAssetEditor.GetURLProduction(0);
                 serverSettingsProperty.FindPropertyRelative("languageCode").stringValue = "en";
 
                 //Apply new values while ensuring the user cannot use "undo" to erase the initial values.
@@ -70,7 +70,9 @@ namespace ModIO.EditorCode
         public static void ClearStoredData()
         {
             // Only used for the editor
-            SystemIOWrapper.DeleteDirectory(EditorDataService.GlobalRootDirectory);
+            SystemIOWrapper.DeleteDirectory(EditorDataService.TempRootDirectory);
+            SystemIOWrapper.DeleteDirectory(EditorDataService.UserRootDirectory);
+            SystemIOWrapper.DeleteDirectory(EditorDataService.PersistentDataRootDirectory);
         }
     }
 }

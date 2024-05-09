@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using RootMotion.Dynamics;
 using UnityEngine;
 
 public class EnemyComponentReference : MonoBehaviour

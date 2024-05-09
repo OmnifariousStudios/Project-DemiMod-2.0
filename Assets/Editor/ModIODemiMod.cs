@@ -36,6 +36,13 @@ public class ModIODemiMod : EditorWindow
             // Log in to mod.io.
             SendAuthenticationEmail(currentEmail);
         }
+        
+        
+        if (GUILayout.Button("Submit Security Code"))
+        {
+            SubmitSecurityCode(currentSecurityCode);
+            isLoggedIn = true;
+        }
     }
     
     
@@ -51,6 +58,23 @@ public class ModIODemiMod : EditorWindow
         else
         {
             Debug.Log("Failed to send security code to that email address");
+            
+            Debug.Log(result.message);
+            
+        }
+    }
+    
+    async void SubmitSecurityCode(string currentSecurityCode)
+    {
+        Result result = await ModIOUnityAsync.SubmitEmailSecurityCode(currentSecurityCode);
+ 
+        if (result.Succeeded())
+        {
+            Debug.Log("Succeeded to log in");
+        }
+        else
+        {
+            Debug.Log("Failed to log in");
         }
     }
 }

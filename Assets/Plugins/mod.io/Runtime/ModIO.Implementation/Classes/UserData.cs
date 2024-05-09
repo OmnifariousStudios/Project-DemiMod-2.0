@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using ModIO.Implementation.API;
 using ModIO.Implementation.API.Objects;
+using ModIO.Implementation.Wss.Messages.Objects;
 
 namespace ModIO.Implementation
 {
@@ -16,6 +18,8 @@ namespace ModIO.Implementation
         // TODO @Jackson Replace this with AccessToken.cs Type (so it has dateExpires and provider)
         /// <summary>OAuthToken assigned to the user.</summary>
         public string oAuthToken;
+
+        public AuthenticationServiceProvider currentServiceProvider = AuthenticationServiceProvider.None;
 
         public long oAuthExpiryDate;
 
@@ -56,7 +60,18 @@ namespace ModIO.Implementation
         }
 
         /// <summary>Convenience wrapper that sets OAuthToken and clears rejected flag.</summary>
-        public void SetOAuthToken(AccessTokenObject newToken)
+        public void SetOAuthToken(AccessTokenObject newToken, AuthenticationServiceProvider serviceProvider)
+        {
+            ResponseCache.ClearCache();
+            currentServiceProvider = serviceProvider;
+            oAuthToken = newToken.access_token;
+            oAuthExpiryDate = newToken.date_expires;
+            oAuthTokenWasRejected = false;
+            DataStorage.SaveUserData();
+        }
+
+        /// <summary>Convenience wrapper that sets OAuthToken and clears rejected flag.</summary>
+        public void SetOAuthToken(WssLoginSuccess newToken)
         {
             oAuthToken = newToken.access_token;
             oAuthExpiryDate = newToken.date_expires;

@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
+using System.IO;
 
 #pragma warning disable 1998 // These async functions don't use await!
 
@@ -13,6 +15,20 @@ namespace ModIO.Implementation.Platform
     internal class SystemIODataService : IUserDataService, IPersistentDataService, ITempDataService
     {
 #region Directories
+#if UNITY_ANDROID
+
+        private string persistentDataPath;
+        public SystemIODataService()
+        {
+            persistentDataPath = Application.persistentDataPath;
+        }
+
+        ~SystemIODataService()
+        {
+            AndroidJNI.DetachCurrentThread();
+        }
+#endif
+
 #if UNITY_STANDALONE_WIN
 
         /// <summary>Root directory for persistent data.</summary>
@@ -40,7 +56,7 @@ namespace ModIO.Implementation.Platform
         public static readonly string GlobalSettingsFilePath =
             $"{UserRootDirectory}/globalsettings.json";
 
-#endregion
+        #endregion
 
 #region Data
         /// <summary>Global Settings data structure.</summary>
@@ -237,10 +253,32 @@ namespace ModIO.Implementation.Platform
             return SystemIOWrapper.TryCreateParentDirectory(path, out Result _);
         }
 
+        //TODO: Write native code to properly check for disk space for ILLCPP builds
         public async Task<bool> IsThereEnoughDiskSpaceFor(long bytes)
         {
-            // Not implemented for this platform
+#if !ENABLE_IL2CPP
+    #if UNITY_ANDROID
+            AndroidJNI.AttachCurrentThread();
+            var statFs = new AndroidJavaObject("android.os.StatFs", PersistentDataRootDirectory);
+            var freeBytes = statFs.Call<long>("getFreeBytes");
+            return bytes < freeBytes;
+    #elif UNITY_IOS
             return true;
+    #elif UNITY_STANDALONE_OSX
+            return true;
+    #elif UNITY_STANDALONE_WIN
+            return true;
+    #elif UNITY_WSA
+            return true;
+    #else
+            return true;
+    #endif
+#else
+            FileInfo f = new FileInfo(PersistentDataRootDirectory);
+            string drive = Path.GetPathRoot(f.FullName);
+            DriveInfo d = new DriveInfo(drive);
+            return bytes < d.AvailableFreeSpace;
+#endif
         }
 
 #endregion // Operations
@@ -254,10 +292,10 @@ namespace ModIO.Implementation.Platform
         }
 
         /// <summary>Gets the size and hash of a file.</summary>
-        public ResultAnd<(long fileSize, string fileHash)> GetFileSizeAndHash(
-            string filePath)
+        public Result GetFileSizeAndHash(
+            string filePath, out long fileSize, out string fileHash)
         {
-            return SystemIOWrapper.GetFileSizeAndHash(filePath);
+            return SystemIOWrapper.GetFileSizeAndHash(filePath, out fileSize, out fileHash);
         }
 
         /// <summary>Determines whether a directory exists.</summary>

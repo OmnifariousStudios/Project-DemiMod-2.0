@@ -488,7 +488,7 @@ public static class DemiModBase
 
         try
         {
-            await compressOperation.Compress();
+            //await compressOperation.Compress();
         }
         catch (Exception e)
         {

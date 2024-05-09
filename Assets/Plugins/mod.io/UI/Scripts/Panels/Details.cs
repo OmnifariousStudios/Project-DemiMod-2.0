@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -43,9 +44,10 @@ namespace ModIOBrowser.Implementation
         [SerializeField] TMP_Text ModDetailsDownloadProgressRemaining;
         [SerializeField] TMP_Text ModDetailsDownloadProgressSpeed;
         [SerializeField] TMP_Text ModDetailsDownloadProgressCompleted;
-        [SerializeField]
+        [SerializeField] WrappingHorizontalLayoutGroup ModDetailsTagsGroup;
+        [SerializeField] GameObject ModDetailsTagsPrefab;
+        List<ListItem> _tagsListItems;
         public SubscribedProgressTab ModDetailsProgressTab;
-        [SerializeField]
         public GameObject ModDetailsScrollToggleGameObject;
         bool galleryImageInUse;
         Sprite[] ModDetailsGalleryImages;
@@ -129,16 +131,17 @@ namespace ModIOBrowser.Implementation
 
             int position = 0;
             galleryPosition = 0;
-            ModDetailsGalleryImages = new Sprite[profile.galleryImages_640x360.Length + 1];
+            ModDetailsGalleryImages = new Sprite[profile.galleryImages640x360.Length + 1];
             ModDetailsGalleryImagesFailedToLoad = new bool[ModDetailsGalleryImages.Length];
 
+            RefreshTags(profile);
 
             ListItem.HideListItems<GalleryImageButtonListItem>();
 
             List<DownloadReference> images = new List<DownloadReference>();
 
-            images.Add(profile.logoImage_640x360);
-            images.AddRange(profile.galleryImages_640x360);
+            images.Add(profile.logoImage640x360);
+            images.AddRange(profile.galleryImages640x360);
 
             ModDetailsGalleryNavBar.SetActive(images.Count > 1);
 
@@ -217,22 +220,47 @@ namespace ModIOBrowser.Implementation
             LayoutRebuilder.ForceRebuildLayoutImmediate(ModDetailsDescription.transform.parent.transform.parent as RectTransform);
         }
 
+        public async void RefreshTags(ModProfile profile)
+        {
+            ModDetailsTagsGroup.EmptyLayoutGroup();
+            ListItem.HideListItems<ModDetailsTagListItem>();
+
+            // get the tag categories so we know which ones to hide or not
+            if(SearchPanel.Instance.tags == null)
+            {
+                await SearchPanel.Instance.WaitForTagsToUpdate();
+                if(currentModProfileBeingViewed.id != profile.id)
+                {
+                    // Since waiting for the tags, the details panel has now changed
+                    return;
+                }
+            }
+            List<string> hiddenTags = SearchPanel.Instance.GetHiddenTags();
+
+            foreach(var tag in profile.tags)
+            {
+                if(hiddenTags.Contains(tag))
+                {
+                    continue;
+                }
+                ListItem li = ListItem.GetListItem<ModDetailsTagListItem>(ModDetailsTagsPrefab, transform, Browser.Instance.colorScheme);
+                li.Setup(tag);
+                ModDetailsTagsGroup.AddGameObjectToLayout(li.gameObject);
+            }
+        }
+
         public void SubscribeButtonPress()
         {
             if(!Authentication.Instance.IsAuthenticated)
             {
-                Translation.Get(ModDetailsSubscribeButtonTextTranslation, "Log in to Subscribe", ModDetailsSubscribeButtonText);
                 Mods.SubscribeToEvent(currentModProfileBeingViewed, UpdateSubscribeButtonText);
             }
             else if(Collection.Instance.IsSubscribed(currentModProfileBeingViewed.id))
             {
-                // This isnt actually subscribed to 'yet' but we make the UI toggle straight away
-                Translation.Get(ModDetailsSubscribeButtonTextTranslation, "Subscribe", ModDetailsSubscribeButtonText);
                 Mods.UnsubscribeFromEvent(currentModProfileBeingViewed, UpdateSubscribeButtonText);
             }
             else
             {
-                Translation.Get(ModDetailsSubscribeButtonTextTranslation, "Unsubscribe", ModDetailsSubscribeButtonText);
                 Mods.SubscribeToEvent(currentModProfileBeingViewed, UpdateSubscribeButtonText);
             }
 
@@ -338,6 +366,10 @@ namespace ModIOBrowser.Implementation
             {
                 Translation.Get(ModDetailsSubscribeButtonTextTranslation, "Log in to Subscribe", ModDetailsSubscribeButtonText);
             }
+            else if(!Collection.Instance.IsPurchased(currentModProfileBeingViewed))
+            {
+                Translation.Get(ModDetailsSubscribeButtonTextTranslation, "Buy Now", ModDetailsSubscribeButtonText);
+            }
             else if(Collection.Instance.IsSubscribed(currentModProfileBeingViewed.id))
             {
                 Translation.Get(ModDetailsSubscribeButtonTextTranslation, "Unsubscribe", ModDetailsSubscribeButtonText);
@@ -404,7 +436,7 @@ namespace ModIOBrowser.Implementation
 
                 if(Collection.Instance.GetSubscribedProfile(handle.modId, out ModProfile profile))
                 {
-                    TranslationManager.Instance.Get("{A} of {B}",
+                    ModDetailsDownloadProgressCompleted.text = TranslationManager.Instance.Get("{A} of {B}",
                         $"{ Utility.GenerateHumanReadableStringForBytes((long)(profile.archiveFileSize * handle.Progress))}",
                         $"{ Utility.GenerateHumanReadableStringForBytes(profile.archiveFileSize)}");
                 }
@@ -415,7 +447,7 @@ namespace ModIOBrowser.Implementation
 
                 detailsProgressTimePassed_onLastTextUpdate = detailsProgressTimePassed;
             }
-            detailsProgressTimePassed += Time.deltaTime;
+            detailsProgressTimePassed += Time.unscaledDeltaTime;
         }
 
         public void GalleryImageTransition(bool showNext)
@@ -508,7 +540,7 @@ namespace ModIOBrowser.Implementation
                 current.color = colOut;
 
                 yield return null;
-                timePassed += Time.deltaTime;
+                timePassed += Time.unscaledDeltaTime;
             }
         }
 

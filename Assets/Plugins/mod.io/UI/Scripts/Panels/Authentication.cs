@@ -1,4 +1,5 @@
-﻿using ModIO;
+﻿using System.Threading.Tasks;
+using ModIO;
 using ModIO.Util;
 using UnityEngine;
 
@@ -19,7 +20,7 @@ namespace ModIOBrowser.Implementation
         internal static Browser.RetrieveAuthenticationCodeDelegate getEpicAuthCode;
         internal static Browser.RetrieveAuthenticationCodeDelegate getGogAuthCode;
 
-
+        public ExternalAuthenticationToken currentAuthToken;
         public UserProfile currentUserProfile;
         public TermsOfUse LastReceivedTermsOfUse;
         public string privacyPolicyURL;
@@ -37,6 +38,47 @@ namespace ModIOBrowser.Implementation
         {
             AuthenticationPanels.Instance.OpenPanel_Waiting();
             ModIOUnity.RequestAuthenticationEmail(AuthenticationPanels.Instance.AuthenticationPanelEmailField.text, EmailSent);
+        }
+        public void SendRequestExternalAuthentication()
+        {
+            AuthenticationPanels.Instance.OpenPanel_Waiting();
+            ModIOUnity.RequestExternalAuthentication(ReceivedExternalAuthenticationToken);
+        }
+
+        public void ReceivedExternalAuthenticationToken(ResultAnd<ExternalAuthenticationToken> response)
+        {
+            if(response.result.Succeeded())
+            {
+                currentAuthToken = response.value;
+                AuthenticationPanels.Instance.OpenPanel_ExternalAuthentication(response.value);
+            }
+            else
+            {
+                AuthenticationPanels.Instance.OpenPanel_Problem(
+                    null, "could not connect", AuthenticationPanels.Instance.OpenPanel_TermsOfUse);
+            }
+        }
+
+        public void HyperLinkToExternalLogin()
+        {
+            WebBrowser.OpenWebPage($"{currentAuthToken.url}?code={currentAuthToken.code}");
+        }
+
+        public void CancelExternalAuthenticationRequest()
+        {
+            AuthenticationPanels.Instance.Close();
+            currentAuthToken.Cancel();
+        }
+
+        public void CopyExternalAuthenticationCodeToClipboard()
+        {
+            GUIUtility.systemCopyBuffer = currentAuthToken.code;
+            Notifications.Instance.AddNotificationToQueue(new Notifications.QueuedNotice()
+            {
+                title = "Copied",
+                description = "Code copied to clipboard",
+                positiveAccent = true,
+            });
         }
 
         public void SubmitAuthenticationCode()
@@ -218,19 +260,6 @@ namespace ModIOBrowser.Implementation
 
         public void HyperLinkToPrivacyPolicy() => AuthenticationPanels.Instance.HyperLinkToPrivacyPolicy();
 
-        void Logout()
-        {
-            if(ModIOUnity.LogOutCurrentUser().Succeeded())
-            {
-                Avatar.Instance.Avatar_Main.gameObject.SetActive(false);
-                IsAuthenticated = false;
-                Close();
-            }
-            else
-            {
-                // TODO inform the user if this failed (Which really shouldn't ever fail)
-            }
-        }
         #endregion
 
         #region Recieve Response
@@ -281,12 +310,6 @@ namespace ModIOBrowser.Implementation
             if(result.Succeeded())
             {
                 AuthenticationPanels.Instance.OpenPanel_Complete();
-                ModIOUnity.FetchUpdates(delegate { });
-                ModIOUnity.EnableModManagement(Mods.ModManagementEvent);
-                if(Details.IsOn())
-                {
-                    Details.Instance.UpdateSubscribeButtonText();
-                }
             }
             else
             {
@@ -301,6 +324,119 @@ namespace ModIOBrowser.Implementation
                 {
                     AuthenticationPanels.Instance.OpenPanel_Problem();
                 }
+            }
+        }
+        
+        public static async Task GetNewAccessToken()
+        {
+            //Re-cache the TOS because we need the hash
+            var response = await ModIOUnityAsync.GetTermsOfUse();
+            TermsHash hash = default;
+            if(response.result.Succeeded())
+            {
+                hash = response.value.hash;
+            }
+
+            // Use TCS to wait for the callbacks inside the following blocks to complete so we can
+            // inform the original invocation point when the access token has been renewed (or attempted to)
+            TaskCompletionSource<bool> callbackTcs = new TaskCompletionSource<bool>();
+
+            if(getSteamAppTicket != null)
+            {
+                getSteamAppTicket(appTicket =>
+                {
+                    ModIOUnity.AuthenticateUserViaSteam(appTicket,
+                        optionalThirdPartyEmailAddressUsedForAuthentication,
+                        hash,
+                        delegate
+                        {
+                            Instance.currentAuthenticationPortal = UserPortal.Steam;
+                            ModIOUnity.EnableModManagement(Mods.ModManagementEvent);
+                            callbackTcs.SetResult(true);
+                        });
+                });
+                await callbackTcs.Task;
+            }
+            else if(getXboxToken != null)
+            {
+                getXboxToken(token =>
+                {
+                    ModIOUnity.AuthenticateUserViaXbox(token,
+                        optionalThirdPartyEmailAddressUsedForAuthentication,
+                        hash,
+                        delegate
+                        {
+                            Instance.currentAuthenticationPortal = UserPortal.XboxLive;
+                            ModIOUnity.EnableModManagement(Mods.ModManagementEvent);
+                            callbackTcs.SetResult(true);
+                        });
+                });
+                await callbackTcs.Task;
+            }
+            else if(getSwitchToken != null)
+            {
+                getSwitchToken(token =>
+                {
+                    ModIOUnity.AuthenticateUserViaSwitch(token,
+                        optionalThirdPartyEmailAddressUsedForAuthentication,
+                        hash,
+                        delegate
+                        {
+                            Instance.currentAuthenticationPortal = UserPortal.Nintendo;
+                            ModIOUnity.EnableModManagement(Mods.ModManagementEvent);
+                            callbackTcs.SetResult(true);
+                        });
+                });
+                await callbackTcs.Task;
+            }
+            else if(getPlayStationAuthCode != null)
+            {
+                getPlayStationAuthCode(authCode =>
+                {
+                    ModIOUnity.AuthenticateUserViaPlayStation(authCode,
+                        optionalThirdPartyEmailAddressUsedForAuthentication,
+                        hash,
+                        PSEnvironment,
+                        delegate
+                        {
+                            Instance.currentAuthenticationPortal = UserPortal.PlayStationNetwork;
+                            ModIOUnity.EnableModManagement(Mods.ModManagementEvent);
+                            callbackTcs.SetResult(true);
+                        });
+                });
+                await callbackTcs.Task;
+            }
+            else if(getGogAuthCode != null)
+            {
+                getGogAuthCode(authCode =>
+                {
+                    ModIOUnity.AuthenticateUserViaGOG(authCode,
+                        optionalThirdPartyEmailAddressUsedForAuthentication,
+                        hash,
+                        delegate
+                        {
+                            Instance.currentAuthenticationPortal = UserPortal.GOG;
+                            ModIOUnity.EnableModManagement(Mods.ModManagementEvent);
+                            callbackTcs.SetResult(true);
+                        });
+                });
+                await callbackTcs.Task;
+            }
+            else if(getEpicAuthCode != null)
+            {
+                getEpicAuthCode(authCode =>
+                {
+                    ModIOUnity.AuthenticateUserViaEpic(authCode,
+                        optionalThirdPartyEmailAddressUsedForAuthentication,
+                        hash,
+                        delegate
+                        {
+                            Instance.currentAuthenticationPortal = UserPortal.EpicGamesStore;
+                            ModIOUnity.EnableModManagement(Mods.ModManagementEvent);
+                            callbackTcs.SetResult(true);
+                        });
+                });
+                await callbackTcs.Task;
             }
         }
 
@@ -324,14 +460,10 @@ namespace ModIOBrowser.Implementation
         {
             if(result.Succeeded())
             {
+                Home.Instance.RefreshHomePanel();
+                
                 currentAuthenticationPortal = authenticationPortal;
                 AuthenticationPanels.Instance.OpenPanel_Complete();
-                ModIOUnity.FetchUpdates(delegate { });
-                ModIOUnity.EnableModManagement(Mods.ModManagementEvent);
-                if(Details.IsOn())
-                {
-                    Details.Instance.UpdateSubscribeButtonText();
-                }
             }
             else
             {

@@ -5,6 +5,7 @@ using UnityEditor;
 using System.IO;
 using System.Linq;
 using BzKovSoft.RagdollHelper.Editor;
+using RootMotion.Dynamics;
 
 public class ProjectDemiModCustomEnemyExporter : EditorWindow
 {
@@ -364,10 +365,10 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
         
         foreach (Rigidbody rigidbody in rigidbodies)
         {
-            HVRGrabbable grabbable = rigidbody.GetComponent<HVRGrabbable>();
+            HVRGrabbablePlaceHolder grabbable = rigidbody.GetComponent<HVRGrabbablePlaceHolder>();
             
             if (grabbable == null)
-                grabbable = rigidbody.gameObject.AddComponent<HVRGrabbable>();
+                grabbable = rigidbody.gameObject.AddComponent<HVRGrabbablePlaceHolder>();
             
             HVRStabbable stabbable = rigidbody.GetComponent<HVRStabbable>();
             
@@ -382,11 +383,11 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             Collider collider = rigidbody.GetComponent<Collider>();
             
             
-            grabbable.Rigidbody = rigidbody;
+            //grabbable.Rigidbody = rigidbody;
             
             grabberHelper.thisCollider = collider;
             grabberHelper.rb = rigidbody;
-            grabberHelper.thisGrabbable = grabbable;
+            //grabberHelper.thisGrabbable = grabbable;
             grabberHelper.thisStabbable = stabbable;
             
             grabberHelper.enemyComponentReference = enemyComponentReference;
@@ -414,8 +415,8 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             if(enemyComponentReference.puppetGrabbables == null)
                 enemyComponentReference.puppetGrabbables = new System.Collections.Generic.List<HVRGrabbable>();
             
-            if(enemyComponentReference.puppetGrabbables.Contains(grabbable) == false)
-                enemyComponentReference.puppetGrabbables.Add(grabbable);
+            //if(enemyComponentReference.puppetGrabbables.Contains(grabbable) == false)
+                //enemyComponentReference.puppetGrabbables.Add(grabbable);
             
             if(enemyComponentReference.puppetStabbables == null)
                 enemyComponentReference.puppetStabbables = new System.Collections.Generic.List<HVRStabbable>();

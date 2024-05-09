@@ -12,25 +12,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94c96ecaeebcc024088ca4eb633ea8d2, type: 3}
   m_Name: config
   m_EditorClassIdentifier: 
-  androidConfiguration:
-    logLevel: 0
-    userPortal: 0
-    requestCacheLimitKB: 0
-  standaloneConfiguration:
-    logLevel: 0
-    userPortal: 0
-    requestCacheLimitKB: 0
-  iosConfiguration:
-    logLevel: 0
-    userPortal: 0
-    requestCacheLimitKB: 0
   serverSettings:
     serverURL: https://api.mod.io/v1
     gameId: 0
     gameKey: 
     languageCode: en
     disableUploads: 0
+  autoInitializePlugin: 1
+  playerLogLevel: 0
+  editorLogLevel: 0
+  iosConfiguration:
+    logLevel: 0
+    userPortal: 1
+    defaultPortal: 0
+    requestCacheLimitKB: 0
+  standaloneConfiguration:
+    logLevel: 0
+    userPortal: 0
+    defaultPortal: 0
+    requestCacheLimitKB: 0
+  androidConfiguration:
+    logLevel: 0
+    userPortal: 5
+    defaultPortal: 0
+    requestCacheLimitKB: 0
+  switchConfiguration:
+    logLevel: 0
+    userPortal: 7
+    defaultPortal: 0
+    requestCacheLimitKB: 0
+  gameCoreConfiguration:
+    logLevel: 0
+    userPortal: 11
+    defaultPortal: 0
+    requestCacheLimitKB: 0
+  playstationConfiguration:
+    logLevel: 0
+    userPortal: 9
+    defaultPortal: 0
+    requestCacheLimitKB: 0
   editorConfiguration:
     logLevel: 0
     userPortal: 0
+    defaultPortal: 0
     requestCacheLimitKB: 0

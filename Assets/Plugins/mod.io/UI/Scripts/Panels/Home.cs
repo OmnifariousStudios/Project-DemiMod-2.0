@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -14,10 +15,6 @@ namespace ModIOBrowser.Implementation
         [Header("Browse Panel")]
         public GameObject BrowserPanel;
         [SerializeField] Transform BrowserPanelContent;
-        [SerializeField] ModListRow BrowserPanelModListRow_HighestRated;
-        [SerializeField] ModListRow BrowserPanelModListRow_Trending;
-        [SerializeField] ModListRow BrowserPanelModListRow_MostPopular;
-        [SerializeField] ModListRow BrowserPanelModListRow_RecentlyAdded;
         [SerializeField] Image BrowserPanelHeaderBackground;
         [SerializeField] Scrollbar BrowserPanelContentScrollBar;
         IEnumerator browserHeaderTransition;
@@ -27,16 +24,17 @@ namespace ModIOBrowser.Implementation
         [Header("Browse Panel Featured Set")]
         [SerializeField] FeaturedModListItem[] featuredSlotListItems;
         [SerializeField] RectTransform[] featuredSlotPositions;
-        [SerializeField] TMP_Text featuredSelectedName;
         [SerializeField] TMP_Text featuredSelectedSubscribeButtonText;
         [SerializeField] Transform featuredSelectedMoreOptionsButtonPosition;
         [SerializeField] GameObject browserFeaturedSlotSelectionHighlightBorder;
-        [SerializeField] Image browserFeaturedSlotBackplate;
         [SerializeField] GameObject browserFeaturedSlotInfo;
+        [SerializeField] Image browserFeaturedSlotBackplate;
         [SerializeField] GameObject featuredOptionsButtons;
         [SerializeField] ScrollRect scrollRect;
+        [SerializeField] ModListRow modListRowPrefab;
         internal bool isFeaturedItemSelected = false;
         ModProfile[] featuredProfiles;
+        ModListRow[] modListRows;
         int featuredIndex;
 
         [Header("Settings")]
@@ -70,6 +68,15 @@ namespace ModIOBrowser.Implementation
             Details.Instance.Open(featuredProfiles[featuredIndex], Open);
         }
 
+        public static void RateMod(ModId modId, ModRating rating)
+        {
+            if(!Authentication.Instance.IsAuthenticated)
+            {
+                AuthenticationPanels.Instance.Open();
+                return;
+            }
+            ModIOUnity.RateMod(modId, rating, delegate { });
+        }
 
         /// <summary>
         /// This will open the context menu for the current highlighted featured mod 'more options'
@@ -93,7 +100,7 @@ namespace ModIOBrowser.Implementation
                     {
                         return;
                     }
-                    ModIOUnity.RateMod(Instance.featuredProfiles[Instance.featuredIndex].id, ModRating.Positive, delegate { });
+                    RateMod(Instance.featuredProfiles[Instance.featuredIndex].id, ModRating.Positive);
                     ModioContextMenu.Instance.Close();
                 }
             });
@@ -108,7 +115,7 @@ namespace ModIOBrowser.Implementation
                     {
                         return;
                     }
-                    ModIOUnity.RateMod(Instance.featuredProfiles[Instance.featuredIndex].id, ModRating.Negative, delegate { });
+                    RateMod(Instance.featuredProfiles[Instance.featuredIndex].id, ModRating.Positive);
                     ModioContextMenu.Instance.Close();
                 }
             });
@@ -138,23 +145,33 @@ namespace ModIOBrowser.Implementation
             {
                 return;
             }
+            if(!Authentication.Instance.IsAuthenticated)
+            {
+                AuthenticationPanels.Instance?.Open();
+                return;
+            }
+
+
             if(Collection.Instance.IsSubscribed(featuredProfiles[featuredIndex].id))
             {
                 // We are pre-emptively changing the text here to make the UI feel more responsive
                 //TranslationUpdateable.Get("Subscribe", s => featuredSelectedSubscribeButtonText.text = s);
 
-                Translation.Get(featuredSubscribeTranslation, "Subscribe", featuredSelectedSubscribeButtonText);
-                Mods.UnsubscribeFromEvent(featuredProfiles[featuredIndex],
-                    delegate { UpdateFeaturedSubscribeButtonText(featuredProfiles[featuredIndex].id); });
+                Translation.Get(featuredSubscribeTranslation, "Unsubscribe", featuredSelectedSubscribeButtonText);
+                Mods.UnsubscribeFromEvent(featuredProfiles[featuredIndex], ()=>UpdateSubscribeButton(featuredProfiles[featuredIndex].id));
             }
             else
             {
                 // We are pre-emptively changing the text here to make the UI feel more responsive
-                Translation.Get(featuredSubscribeTranslation, "Unsubscribe", featuredSelectedSubscribeButtonText);
-                Mods.SubscribeToEvent(featuredProfiles[featuredIndex],
-                    delegate { UpdateFeaturedSubscribeButtonText(featuredProfiles[featuredIndex].id); });
+                Translation.Get(featuredSubscribeTranslation, "Subscribe", featuredSelectedSubscribeButtonText);
+                Mods.SubscribeToEvent(featuredProfiles[featuredIndex], ()=>UpdateSubscribeButton(featuredProfiles[featuredIndex].id));
             }
             RefreshSelectedFeaturedModDetails();
+        }
+
+        private void UpdateSubscribeButton(ModId modId)
+        {
+            UpdateFeaturedSubscribeButtonText(modId);
         }
 
         /// <summary>
@@ -222,8 +239,8 @@ namespace ModIOBrowser.Implementation
         {
             browserFeaturedSlotSelectionHighlightBorder.SetActive(false);
             StartCoroutine(ImageTransitions.AlphaFast(browserFeaturedSlotBackplate, 0f));
-            // browserFeaturedSlotBackplate.gameObject.SetActive(false);
             browserFeaturedSlotInfo.SetActive(false);
+            // browserFeaturedSlotBackplate.gameObject.SetActive(false);
         }
 
         /// <summary>
@@ -234,9 +251,8 @@ namespace ModIOBrowser.Implementation
             browserFeaturedSlotSelectionHighlightBorder.SetActive(true);
             StartCoroutine(ImageTransitions.AlphaFast(browserFeaturedSlotBackplate, 1f));
             browserFeaturedSlotBackplate.gameObject.SetActive(true);
-            browserFeaturedSlotInfo.SetActive(true);
             RefreshSelectedFeaturedModDetails();
-
+            browserFeaturedSlotInfo.SetActive(true);
             InputNavigation.Instance.Select(browserFeaturedSlotSelection, true);
         }
 
@@ -252,7 +268,6 @@ namespace ModIOBrowser.Implementation
                 return;
             }
 
-            featuredSelectedName.text = featuredProfiles[featuredIndex].name;
             UpdateFeaturedSubscribeButtonText(featuredProfiles[featuredIndex].id);
 
             // Some of the featured slots will represent a different mod after the carousel moves
@@ -279,7 +294,11 @@ namespace ModIOBrowser.Implementation
         /// <param name="id">the mod id of the mod to check for subscription status</param>
         void UpdateFeaturedSubscribeButtonText(ModId id)
         {
-            if(Collection.Instance.IsSubscribed(id))
+            if(!Collection.Instance.IsPurchased(featuredProfiles[featuredIndex]))
+            {
+                Translation.Get(featuredSubscribeTranslation, "Buy Now", featuredSelectedSubscribeButtonText);
+            }
+            else if(Collection.Instance.IsSubscribed(featuredProfiles[featuredIndex].id))
             {
                 Translation.Get(featuredSubscribeTranslation, "Unsubscribe", featuredSelectedSubscribeButtonText);
             }
@@ -300,72 +319,66 @@ namespace ModIOBrowser.Implementation
             ClearRowListItems();
             ClearModListItemRowDictionary();
 
-            // Setup filter
-            SearchFilter filter = new SearchFilter();
-            filter.SetPageIndex(0);
-            filter.SetPageSize(10);
-            filter.SortBy(SortModsBy.Downloads); // TODO How do we get top ten featured?
-            // Note: this is a mistake on the backend api. Ascending is swapped with descending for this field
-            filter.SetToAscending(true);
-
             // Get Mods for featured row
-            ModIOUnity.GetMods(filter, AddModProfilesToFeaturedCarousel);
+            ModIOUnity.GetMods(Browser.Instance.FeaturedSearchFilter, AddModProfilesToFeaturedCarousel);
 
-            // Edit filter for next row
-            filter = new SearchFilter();
-            filter.SetPageIndex(0);
-            filter.SetPageSize(20);
-            filter.SortBy(SortModsBy.DateSubmitted);
-            filter.SetToAscending(false);
+            var filters = Browser.Instance.BrowserRowSearchFilters;
+            if(modListRows == null || modListRows.Length == 0)
+            {
+                modListRows = new ModListRow[filters.Length];
+                for(var i = 0; i < filters.Length; i++)
+                {
+                    ModListRow mlr = Instantiate(this.modListRowPrefab, this.BrowserPanelContent);
+                    //move row above the footer in the hierarchy
+                    mlr.transform.SetSiblingIndex(BrowserPanelContent.childCount >= 2 ? BrowserPanelContent.childCount-2 : 0);
+                    modListRows[i] = mlr;
+                    MultiTargetButton mtb = mlr.Selectable.GetComponent<MultiTargetButton>();
+                    ViewportRestraint vr = mlr.Selectable.GetComponent<ViewportRestraint>();
+                    vr.Viewport = this.GetComponent<RectTransform>();
+                    vr.DefaultViewportContainer = this.BrowserPanelContent.GetComponent<RectTransform>();
 
-            // Get Mods for Recently Added row
-            BrowserPanelModListRow_RecentlyAdded.AttemptToPopulateRowWithMods(filter);
-            // waitingForCallbacks++;
-            // AddPlaceholdersToList<BrowserModListItem>(BrowserPanelRow_RecentlyAdded,
-            //     BrowserPanelListItem_Regular, 20);
-            // ModIOUnity.GetMods(filter, (result, mods) => { AssignModsToRow(result, mods, BrowserPanelRow_RecentlyAdded);});
+                    if(i > 0)
+                    {
+                        var currentRow = modListRows[i];
+                        var previousRow = modListRows[i-1];
 
-            // Edit filter for next row
-            filter = new SearchFilter();
-            filter.SetPageIndex(0);
-            filter.SetPageSize(20);
-            filter.SortBy(SortModsBy.Subscribers);
-            filter.SetToAscending(true);
+                        currentRow.AboveSelection = previousRow.Selectable;
+                        var n = mtb.navigation;
+                        n.selectOnUp = previousRow.Selectable;
+                        mtb.navigation = n;
 
-            // Get Mods for Trending row
-            BrowserPanelModListRow_Trending.AttemptToPopulateRowWithMods(filter);
-            // waitingForCallbacks++;
-            // AddPlaceholdersToList<BrowserModListItem>(BrowserPanelRow_Trending,
-            //     BrowserPanelListItem_Regular, 20);
-            // ModIOUnity.GetMods(filter, (result, mods) => { AssignModsToRow(result, mods, BrowserPanelRow_Trending);});
+                        previousRow.BelowSelection = currentRow.Selectable;
+                        var previousMtb = previousRow.Selectable.GetComponent<MultiTargetButton>();
+                        n = previousMtb.navigation;
+                        n.selectOnDown = currentRow.Selectable;
+                        previousMtb.navigation = n;
+                    }
+                    else
+                    {
+                        var n = mtb.navigation;
+                        n.selectOnDown = modListRows[0].Selectable;
+                        browserFeaturedSlotSelection.navigation = n;
 
-            // Edit filter for next row
-            filter = new SearchFilter();
-            filter.SetPageIndex(0);
-            filter.SetPageSize(20);
-            filter.SortBy(SortModsBy.Popular);
-            filter.SetToAscending(false);
+                        modListRows[0].AboveSelection = this.browserFeaturedSlotSelection;
 
-            // Get Mods for Most Popular row
-            BrowserPanelModListRow_MostPopular.AttemptToPopulateRowWithMods(filter);
-            // waitingForCallbacks++;
-            // AddPlaceholdersToList<BrowserModListItem>(BrowserPanelRow_MostPopular,
-            //     BrowserPanelListItem_Regular, 20);
-            // ModIOUnity.GetMods(filter, (result, mods) => { AssignModsToRow(result, mods, BrowserPanelRow_MostPopular);});
+                        n = mtb.navigation;
+                        n.selectOnUp = this.browserFeaturedSlotSelection;
+                        mtb.navigation = n;
+                    }
 
-            // Edit filter for next row
-            filter = new SearchFilter();
-            filter.SetPageIndex(0);
-            filter.SetPageSize(20);
-            filter.SortBy(SortModsBy.Rating);
-            filter.SetToAscending(true);
+                }
+            }
 
-            // Get Mods for highest rated row
-            BrowserPanelModListRow_HighestRated.AttemptToPopulateRowWithMods(filter);
-            // waitingForCallbacks++;
-            // AddPlaceholdersToList<BrowserModListItem>(BrowserPanelRow_HighestRated,
-            //     BrowserPanelListItem_Regular, 20);
-            // ModIOUnity.GetMods(filter, (result, mods) => { AssignModsToRow(result, mods, BrowserPanelRow_HighestRated);});
+            if(modListRows.Length != filters.Length)
+            {
+                Debug.LogError("ModList and filters size should always match");
+                return;
+            }
+
+            for(var i = 0; i < modListRows.Length; i++)
+            {
+                modListRows[i].AttemptToPopulateRowWithMods(filters[i]);
+            }
         }
 
         /// <summary>
@@ -432,7 +445,7 @@ namespace ModIOBrowser.Implementation
             {
                 return;
             }
-            
+
             if(!response.result.Succeeded())
             {
                 // TODO we need to setup a reattempt option similar to mod list rows
@@ -521,16 +534,7 @@ namespace ModIOBrowser.Implementation
 
         internal static void ModManagementEvent(ModManagementEventType type, ModId id, Result eventResult)
         {
-            if(Instance.featuredProfiles != null)
-            {
-                foreach(var mod in Instance.featuredSlotListItems)
-                {
-                    if(Instance.featuredProfiles[mod.profileIndex].id == id)
-                    {
-                        mod.progressTab.UpdateStatus(type, id);
-                    }
-                }
-            }
+            SubscribedProgressTab.UpdateProgressTab(type, id);
         }
 
         internal static void UpdateProgressState(ProgressHandle handle)
@@ -555,7 +559,12 @@ namespace ModIOBrowser.Implementation
         public void RefreshModListItems()
         {
             List<SubscribedMod> subbedMods = ModIOUnity.GetSubscribedMods(out var result).ToList();
+            if(!result.Succeeded())
+            {
+                return;
+            }
 
+            List<ModProfile> purchasedMods = ModIOUnity.GetPurchasedMods(out result).ToList();
             if(!result.Succeeded())
             {
                 return;
@@ -565,11 +574,28 @@ namespace ModIOBrowser.Implementation
                               .ToList()
                               .ForEach(x =>
                               {
-                                  if(subbedMods.Any(mod => mod.modProfile.Equals(x.Value.profile)))
+                                  if(subbedMods.Any(mod => mod.modProfile.Equals(x.Value.profile)) ||
+                                     purchasedMods.Any(modProfile => modProfile.Equals(x.Value.profile)))
                                   {
                                       x.Value.Setup(x.Value.profile);
                                   }
                               });
+        }
+
+        public void RefreshAllListItems()
+        {
+            foreach(var listItem in featuredSlotListItems)
+            {
+                listItem.Refresh();
+            }
+
+            foreach(var listItems in cachedModListItemsByRow.Values)
+            {
+                foreach(var listItem in listItems)
+                {
+                    listItem.Refresh();
+                }
+            }
         }
 
         public void ResetScrollRect()
