@@ -15,6 +15,7 @@ using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Base script for all mod exporters.
+/// Mods are setup and created in their individual scripts, but this contains the base functions for exporting mods.
 /// </summary>
 public static class DemiModBase
 {
@@ -41,6 +42,10 @@ public static class DemiModBase
     
     private static UserProfile user;
     private static bool isAwaitingServerResponse = false;
+    
+    
+    // Mod Process
+    // 1. Add a Humanoid Model to the project.
     
     
     // Upload mods process:

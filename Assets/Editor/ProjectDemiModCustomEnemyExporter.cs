@@ -453,6 +453,8 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             Debug.Log("Removing MeshRenderer: " + meshRenderer);
             DestroyImmediate(meshRenderer);
         }
+        
+        DeleteExtra(ragdoll.transform);
     }
 
 
@@ -817,50 +819,44 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
     }
     
     
-    /*
-    //[ContextMenu("Check For Enemy Mod Path")]
-    private string CheckForEnemyModPath()
+    // Removes all bones that don't have a Rigidbody or a Collider attached because they are not part of the simulation
+    private void DeleteExtra(Transform transform) 
     {
-        Debug.Log("Checking current target: " + avatarModel);
+        Transform[] children = transform.GetComponentsInChildren<Transform>();
         
-        Debug.Log("Setting path to StandaloneTarget: " + EditorUserBuildSettings.selectedStandaloneTarget.ToString());
-        string enemyModStandaloneWindows64FolderPath = Path.Combine(DemiModBase.modsFolderPath, Path.Combine(BuildTarget.StandaloneWindows64.ToString(), avatarModel.gameObject.name));
-        string enemyModAndroidFolderPath = Path.Combine(DemiModBase.modsFolderPath, Path.Combine(BuildTarget.Android.ToString(), avatarModel.gameObject.name));
+        for (int i = 1; i < children.Length; i++) 
+        {
+            bool keep = false;
 
-        if (Directory.Exists(enemyModStandaloneWindows64FolderPath))
-        {
-            Debug.Log("Mod Folder Build Path already exists: " + enemyModStandaloneWindows64FolderPath);
-        }
-        else
-        {
-            Debug.Log("Creating ENEMY Mod StandaloneWindows64 Folder in Local Build Path: " + enemyModStandaloneWindows64FolderPath);
-            Directory.CreateDirectory(enemyModStandaloneWindows64FolderPath);
-        }
+            Rigidbody rb = children[i].GetComponent<Rigidbody>();
+            Collider collider = children[i].GetComponent<Collider>();
+            Joint joint = children[i].GetComponent<Joint>();
+            
+            if(rb != null || joint != null)
+                keep = true;
+            
+            if(!keep && collider != null && rb == null)
+                keep = true;
+            
 
-        if (Directory.Exists(enemyModAndroidFolderPath))
-        {
-            Debug.Log("Mod Folder Build Path already exists: " + enemyModAndroidFolderPath);
+            if (!keep)
+            {
+                Transform[] save = new Transform[children[i].childCount];
+                
+                for (int c = 0; c < save.Length; c++) 
+                {
+                    save[c] = children[i].GetChild(c);
+                }
+					
+                for (int c = 0; c < save.Length; c++) 
+                {
+                    save[c].parent = children[i].parent;
+                }
+					
+                DestroyImmediate(children[i].gameObject);
+            }
         }
-        else
-        {
-            Debug.Log("Creating ENEMY Mod Android Folder in Local Build Path: " + enemyModAndroidFolderPath);
-            Directory.CreateDirectory(enemyModAndroidFolderPath);
-        }
-        
-        
-        FolderSetupComplete = true;
-
-        if (DemiModBase.buildTarget == BuildTarget.Android)
-        {
-            return enemyModAndroidFolderPath;
-        }
-        else
-        {
-            return enemyModStandaloneWindows64FolderPath;
-        }
-        
     }
-    */
 }
 
 #endif
