@@ -11,4 +11,9 @@ public class VRPuppet : MonoBehaviour
     
     public GameObject rootObject;
     public EnemyComponentReference enemyComponentReference;
+    
+    public float initialMuscleSpringAmount;
+    public int initialSolverIterationCount;
+    public float maxRigidbodyVelocity;
 }
+

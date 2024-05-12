@@ -66,6 +66,7 @@ public class ProjectDemiModMapExporter : EditorWindow
 
         #region SwitchPlatforms
 
+        EditorGUILayout.HelpBox("Scene: " + currentSceneName, MessageType.Info);
         EditorGUILayout.HelpBox("Current Target: " + EditorUserBuildSettings.selectedStandaloneTarget.ToString(), MessageType.Info);
 
         GUILayout.BeginHorizontal("Switch Platforms", GUI.skin.window);
@@ -172,9 +173,9 @@ public class ProjectDemiModMapExporter : EditorWindow
 
                 DisableShieldWallRenderers();
 
-                DemiModBase.ExportWindows(DemiModBase.ModType.Avatar, null);
+                DemiModBase.ExportWindows(DemiModBase.ModType.Map, null);
 
-                DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Map, currentScene.name);
+                DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Map, currentSceneName);
                 //CheckForMapModPath();
                 
 
@@ -190,7 +191,7 @@ public class ProjectDemiModMapExporter : EditorWindow
 
                 DisableShieldWallRenderers();
 
-                DemiModBase.ExportAndroid(DemiModBase.ModType.Avatar, null);
+                DemiModBase.ExportAndroid(DemiModBase.ModType.Map, null);
 
                 DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Map, currentScene.name);
                 //CheckForMapModPath();
