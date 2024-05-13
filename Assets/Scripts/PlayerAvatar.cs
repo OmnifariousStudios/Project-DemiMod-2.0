@@ -107,15 +107,29 @@ public class PlayerAvatar : MonoBehaviour
     [Header("Material References")]
     public List<CustomMaterialSetting> customMaterialSettings = new List<CustomMaterialSetting>();
     
-    public List<UnityEvent> playerAvatarEvents = new List<UnityEvent>();
+    public List<UnityEvent> OnSlowMotionActivatedEvents = new List<UnityEvent>();
+    public List<UnityEvent> OnSlowMotionDeactivatedEvents = new List<UnityEvent>();
     
-    public UnityEvent OnSlowMotionActivated = new UnityEvent();
-    public UnityEvent OnSlowMotionDeactivated = new UnityEvent();
+    public List<UnityEvent> OnHoverActivatedEvents = new List<UnityEvent>();
+    public List<UnityEvent> OnHoverDeactivatedEvents = new List<UnityEvent>();
     
-    public UnityEvent OnGlidingActivated = new UnityEvent();
-    public UnityEvent OnGlidingDeactivated = new UnityEvent();
+    public List<UnityEvent> OnGlidingActivatedEvents = new List<UnityEvent>();
+    public List<UnityEvent> OnGlidingDeactivatedEvents = new List<UnityEvent>();
     
+    public List<UnityEvent> OnFreeFlowActivatedEvents = new List<UnityEvent>();
+    public List<UnityEvent> OnFreeFlowDeactivatedEvents = new List<UnityEvent>();
     
+    public List<UnityEvent> OnFlipActivatedEvents = new List<UnityEvent>();
+    
+    public List<UnityEvent> OnDiveActivatedEvents = new List<UnityEvent>();
+    public List<UnityEvent> OnDiveDeactivatedEvents = new List<UnityEvent>();
+    
+    public List<UnityEvent> OnWallRunActivatedEvents = new List<UnityEvent>();
+    public List<UnityEvent> OnWallRunDeactivatedEvents = new List<UnityEvent>();
+    
+    public List<UnityEvent> OnJumpActivatedEvents = new List<UnityEvent>();
+    
+    public List<UnityEvent> OnKickActivatedEvents = new List<UnityEvent>();
 }
 
 
@@ -126,10 +140,14 @@ public class PlayerAvatar : MonoBehaviour
 [Serializable]
 public class CustomMaterialSetting
 {
-    public string rendererNameForUserInterface;
     public Renderer renderer;
-
+    public string rendererNameForUserInterface;
+        
+    public string originalShaderName;
+    public Shader originalShader;
+        
     // The original variables for the material settings. Cached for when the material settings are reset.
+    //public string originalMaterialNameForUserInterface;
     public Material originalMaterial;
     public Texture originalMaterialMainTexture;
     public bool originalMaterialUsingTexture = true;
