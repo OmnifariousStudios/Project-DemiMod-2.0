@@ -142,7 +142,9 @@ public class CustomMaterialSetting
 {
     public Renderer renderer;
     public string rendererNameForUserInterface;
-        
+    
+    public bool rendererIsEnabled = true;
+    
     public string originalShaderName;
     public Shader originalShader;
         
