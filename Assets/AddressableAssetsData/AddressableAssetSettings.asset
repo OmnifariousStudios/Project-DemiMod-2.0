@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: d45708f53d3c5454c91f6c211064d4ae
   m_currentHash:
     serializedVersion: 2
-    Hash: c6d91ee4449d34a24385272698c2f08d
+    Hash: 4cf24ea4a61f8aaad2865828891c8e91
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 1
   m_BundleLocalCatalog: 0
@@ -30,10 +30,10 @@ MonoBehaviour:
   m_StripUnityVersionFromBundleBuild: 0
   m_DisableVisibleSubAssetRepresentations: 0
   m_ShaderBundleNaming: 2
-  m_ShaderBundleCustomNaming: Enemy Mod RootShaders4258
+  m_ShaderBundleCustomNaming: Grabbable Test SceneShaders4418
   m_MonoScriptBundleNaming: 3
   m_CheckForContentUpdateRestrictionsOption: 0
-  m_MonoScriptBundleCustomNaming: Enemy Mod RootMono4258
+  m_MonoScriptBundleCustomNaming: Grabbable Test SceneMono4418
   m_RemoteCatalogBuildPath:
     m_Id: c583c98940729bc419d8ac3cfc0eeb33
   m_RemoteCatalogLoadPath:

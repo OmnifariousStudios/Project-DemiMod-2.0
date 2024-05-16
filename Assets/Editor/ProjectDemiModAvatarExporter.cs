@@ -344,8 +344,10 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, avatarModel.name);
                 //CheckForAvatarModPath();
                 
-                if (DemiModBase.openAfterExport)
-                    EditorUtility.RevealInFinder(DemiModBase.exportPath);
+                EditorApplication.delayCall += () =>
+                {
+                    OpenFolderAfterModsBuild();
+                };
                 
                 RetrievePrefabInstanceFromScene();
             }
@@ -363,8 +365,10 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, avatarModel.name);
                 //CheckForAvatarModPath();
                 
-                if (DemiModBase.openAfterExport)
-                    EditorUtility.RevealInFinder(DemiModBase.exportPath);
+                EditorApplication.delayCall += () =>
+                {
+                    OpenFolderAfterModsBuild();
+                };
                 
                 RetrievePrefabInstanceFromScene();
             }
@@ -508,6 +512,8 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         
         // End the scroll view that we began above.
         EditorGUILayout.EndScrollView();
+        
+        //EditorUtility.RevealInFinder(DemiModBase.exportPath);
     }
     
     
@@ -1315,6 +1321,12 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 }
             }
         }
+    }
+    
+    
+    public void OpenFolderAfterModsBuild()
+    {
+        EditorUtility.RevealInFinder(DemiModBase.exportPath);
     }
     
 

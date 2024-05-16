@@ -167,26 +167,20 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
                 
                 DemiModBase.ExportWindows(DemiModBase.ModType.Enemy, enemyModRoot);
 
-                //DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Enemy, name);
-
-                if (openAfterExport)
-                    EditorUtility.RevealInFinder(DemiModBase.exportPath);
-
-
+                EditorApplication.delayCall += () =>
+                {
+                    OpenFolderAfterModsBuild();
+                };
             }
 
             if (GUILayout.Button("Build for Android (Quest)", GUILayout.Height(20)))
             {
                 DemiModBase.ExportAndroid(DemiModBase.ModType.Enemy, avatarModel);
 
-                //DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Enemy, avatarModel.name);
-                //CheckForEnemyModPath();
-
-                
-                if (openAfterExport)
-                    EditorUtility.RevealInFinder(DemiModBase.exportPath);
-
-
+                EditorApplication.delayCall += () =>
+                {
+                    OpenFolderAfterModsBuild();
+                };
             }
 
             GUILayout.EndHorizontal();
@@ -257,6 +251,9 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
         
         DemiModBase.AddLineAndSpace();
         EditorGUILayout.EndScrollView();
+        
+        //if (openAfterExport)
+            //EditorUtility.RevealInFinder(DemiModBase.exportPath);
     }
 
 
@@ -856,6 +853,11 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
                 DestroyImmediate(children[i].gameObject);
             }
         }
+    }
+    
+    public void OpenFolderAfterModsBuild()
+    {
+        EditorUtility.RevealInFinder(DemiModBase.exportPath);
     }
 }
 

@@ -176,13 +176,12 @@ public class ProjectDemiModMapExporter : EditorWindow
                 DemiModBase.ExportWindows(DemiModBase.ModType.Map, null);
 
                 DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Map, currentSceneName);
-                //CheckForMapModPath();
-                
-
-                if (openAfterExport)
-                    EditorUtility.RevealInFinder(DemiModBase.exportPath);
 
 
+                EditorApplication.delayCall += () =>
+                {
+                    OpenFolderAfterModsBuild();
+                };
             }
 
             if (GUILayout.Button("Build for Android (Quest)", GUILayout.Height(20)))
@@ -196,8 +195,10 @@ public class ProjectDemiModMapExporter : EditorWindow
                 DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Map, currentScene.name);
                 //CheckForMapModPath();
 
-                if (openAfterExport)
-                    EditorUtility.RevealInFinder(DemiModBase.exportPath);
+                EditorApplication.delayCall += () =>
+                {
+                    OpenFolderAfterModsBuild();
+                };
 
 
             }
@@ -256,6 +257,10 @@ public class ProjectDemiModMapExporter : EditorWindow
 
 
         EditorGUILayout.EndScrollView();
+        
+        
+        //if (openAfterExport)
+            //EditorUtility.RevealInFinder(DemiModBase.exportPath);
     }
 
 
@@ -587,8 +592,12 @@ public class ProjectDemiModMapExporter : EditorWindow
         }
         
     }
-    
-    
+
+
+    public void OpenFolderAfterModsBuild()
+    {
+        EditorUtility.RevealInFinder(DemiModBase.exportPath);
+    }
 }
 
 #endif

@@ -15,4 +15,6 @@ public class SceneController : MonoBehaviour
     public bool thisSceneUsesUmbraOcclusionCulling = true;
     
     public List<Light> sceneLights;
+    
+    public List<DemigodProp> propsInScene = new List<DemigodProp>();
 }

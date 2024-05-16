@@ -30,6 +30,10 @@ public static class DemiModBase
     public static string unityAssetsMapModsFolderPath => unityAssetsModsFolderPath + "/Maps";
     public static string unityAssetsEnemyModsFolderPath => unityAssetsModsFolderPath + "/Enemies";
     
+    /// <summary>
+    /// Location where files are stored.
+    /// todo: Create a folder here and zip it, then export to mod.io 
+    /// </summary>
     public static string exportPath => DemiModBase.FormatForFileExplorer(modsFolderPath + "/" + EditorUserBuildSettings.selectedStandaloneTarget);
     public static string basePath = "";
     
@@ -136,17 +140,20 @@ public static class DemiModBase
     {
         string finalPath = "";
         string targetName = "";
+        string label = "";
         
         switch (modType)
         {
             case ModType.Avatar:
                 finalPath = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(target);
                 targetName = target.name;
+                label = "Player Avatar";
                 break;
             
             case ModType.Map:
                 finalPath = currentScene.path;
                 targetName = currentScene.name;
+                label = "Map";
                 break;
             
             case ModType.Enemy:
@@ -156,6 +163,8 @@ public static class DemiModBase
                 Debug.Log("Final path: " + finalPath);
                 
                 targetName = target.name;
+                
+                label = "Enemy Avatar";
                 break;
         }
 
@@ -183,7 +192,9 @@ public static class DemiModBase
 
         var e = AddressableAssetSettingsDefaultObject.Settings.CreateOrMoveEntry(guid, group, false, false);
         var entriesAdded = new List<AddressableAssetEntry> { e };
-        e.SetLabel("Enemy Avatar", true, true, false);
+        
+        
+        e.SetLabel(label, true, true, false);
 
         group.SetDirty(AddressableAssetSettings.ModificationEvent.EntryMoved, entriesAdded, false, true);
         AddressableAssetSettingsDefaultObject.Settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryMoved, entriesAdded, true, false);
