@@ -10,12 +10,6 @@ using UnityEngine.Serialization;
 
 public class ProjectDemiModMapExporter : EditorWindow
 {
-    string exportPath = "";
-    string basePath = "";
-
-    bool showExportSettings = true;
-    private bool openAfterExport = true;
-
     public bool FolderSetupComplete = false;
 
     public Scene currentScene;

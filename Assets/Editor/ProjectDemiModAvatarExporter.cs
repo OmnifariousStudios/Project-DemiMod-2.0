@@ -8,15 +8,12 @@ using System.IO;
 
 public class ProjectDemiModAvatarExporter : EditorWindow
 {
-    string basePath = "";
-    string exportPath = "";
     bool showExportSettings = true;
 
     public HandPoseCopier handPoseCopierScript;
     
     // Demi-Mod Variables
     private GameObject avatarModel;
-    string avatarName = "";
     public Animator animator;
     public PlayerAvatar playerAvatarScript;
     public string avatarNameString = "";
@@ -53,8 +50,6 @@ public class ProjectDemiModAvatarExporter : EditorWindow
     
     private void Awake() 
     {
-        exportPath = "";
-        basePath = DemiModBase.FormatPath(UnityEngine.Application.persistentDataPath + "/Export");
         UnityModsFolderPath =  Application.dataPath + "/MODS";
         
         if(buildTarget == BuildTarget.NoTarget)
@@ -118,11 +113,6 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         GUILayout.EndHorizontal();
 
         #endregion
-
-        if (avatarModel)
-            avatarName = avatarModel.name;
-        else
-            avatarName = "";
 
         
         DemiModBase.DrawUILine(Color.blue);
@@ -749,6 +739,19 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             leftPalmTransform.parent = playerAvatarScript.leftHand;
             leftPalmTransform.localPosition = Vector3.zero;
             leftPalmTransform.localRotation = Quaternion.identity;
+ 
+            
+            // Find the approximate position & rotation of the avatar palm to make it easier for modders.
+            // Use the cross product of the hand to the pointer finger and the hand to the middle finger to get the palm forward direction.
+            Vector3 handToPointer = animator.GetBoneTransform(HumanBodyBones.LeftIndexProximal).position - animator.GetBoneTransform(HumanBodyBones.LeftHand).position;
+            Vector3 handToMiddle = animator.GetBoneTransform(HumanBodyBones.LeftMiddleProximal).position - animator.GetBoneTransform(HumanBodyBones.LeftHand).position;
+            
+            // This has to be the opposite of the right hand because of the way the cross product works.
+            leftPalmTransform.forward = Vector3.Cross(handToPointer, handToMiddle);
+
+            Vector3 middleOfPalm = (animator.GetBoneTransform(HumanBodyBones.LeftHand).position + animator.GetBoneTransform(HumanBodyBones.LeftMiddleProximal).position) / 2;
+            leftPalmTransform.position = middleOfPalm + leftPalmTransform.forward * 0.05f;
+            
             
             if (handPoseCopierScript)
             {
@@ -805,6 +808,17 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             rightPalmTransform.parent = playerAvatarScript.rightHand;
             rightPalmTransform.localPosition = Vector3.zero;
             rightPalmTransform.localRotation = Quaternion.identity;
+            
+            // Find the approximate position & rotation of the avatar palm to make it easier for modders.
+            // Use the cross product of the hand to the pointer finger and the hand to the middle finger to get the palm forward direction.
+            Vector3 handToPointer = animator.GetBoneTransform(HumanBodyBones.RightIndexProximal).position - animator.GetBoneTransform(HumanBodyBones.RightHand).position;
+            Vector3 handToMiddle = animator.GetBoneTransform(HumanBodyBones.RightMiddleProximal).position - animator.GetBoneTransform(HumanBodyBones.RightHand).position;
+            
+            rightPalmTransform.forward = Vector3.Cross(handToMiddle, handToPointer);
+
+            Vector3 middleOfPalm = (animator.GetBoneTransform(HumanBodyBones.RightHand).position + animator.GetBoneTransform(HumanBodyBones.RightMiddleProximal).position) / 2;
+            rightPalmTransform.position = middleOfPalm + rightPalmTransform.forward * 0.05f;
+            
 
             if (handPoseCopierScript)
             {
@@ -1163,22 +1177,35 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 CustomMaterialSetting newSetting = new CustomMaterialSetting();
                 
                 newSetting.renderer = avatarRenderers[i];
+                
+                if(newSetting.renderer.enabled)
+                {
+                    newSetting.rendererIsEnabled = true;
+                }
+                else
+                {
+                    newSetting.rendererIsEnabled = false;
+                }
 
                 newSetting.rendererNameForUserInterface = newSetting.renderer.name;
                         
                 if(newSetting.renderer && newSetting.renderer.sharedMaterial)
+                {
                     newSetting.originalMaterial = newSetting.renderer.sharedMaterial;
-    
                 
-                newSetting.originalMaterialMainTexture = newSetting.renderer.sharedMaterial.mainTexture;
+                    newSetting.originalMaterialMainTexture = newSetting.renderer.sharedMaterial.mainTexture;
+                    
+                    newSetting.color = newSetting.renderer.sharedMaterial.color;
+                }
+                
+                
                 newSetting.originalMaterialUsingTexture = true;
 
                 newSetting.activeMaterial = newSetting.originalMaterial;
                 newSetting.activeMaterialMainTexture = newSetting.originalMaterialMainTexture;
                 newSetting.activeMaterialUsingTexture = newSetting.originalMaterialUsingTexture;
                         
-                newSetting.color = newSetting.renderer.sharedMaterial.color;
-
+                
                 customSettingsArray[i] = newSetting;
             }
         }
