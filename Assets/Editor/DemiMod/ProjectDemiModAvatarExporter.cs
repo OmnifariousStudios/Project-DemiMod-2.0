@@ -118,8 +118,8 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         DemiModBase.DrawUILine(Color.blue);
 
         
-        if (showExportSettings = EditorGUILayout.Foldout(showExportSettings, "Export Settings")) 
-            DemiModBase.ExportSettings();
+        //if (showExportSettings = EditorGUILayout.Foldout(showExportSettings, "Export Settings")) 
+            //DemiModBase.ExportSettings();
         
         DemiModBase.DrawUILine(Color.blue);
 

@@ -17,11 +17,11 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: d45708f53d3c5454c91f6c211064d4ae
   m_SerializeEntries:
-  - m_GUID: a41768393e79a764b97ff5d84fc8ade3
-    m_Address: Assets/Scenes/Grabbable Test Scene.unity
+  - m_GUID: 4ea1158027c9bef48b6336a158b69e4c
+    m_Address: Assets/Enemy Mod Root - FemaleDummy.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Map
+    - Enemy Avatar
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: ab3ef46107c2bfb499cc177a1efc4d32, type: 2}

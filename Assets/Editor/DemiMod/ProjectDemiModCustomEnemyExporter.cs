@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using System.IO;
-using System.Linq;
 using BzKovSoft.RagdollHelper.Editor;
 using RootMotion.Dynamics;
 
@@ -19,9 +17,10 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
     private GameObject characterRoot;
     private GameObject enemyModRoot;
     private Animator characterAnimator;
+    private CapsuleCollider characterCapsuleCollider;
     private GameObject ragdoll;
-    private PuppetMaster puppetMaster;
-    private VRPuppet vrPuppet;
+    //private PuppetMaster puppetMaster;
+    //private VRPuppet vrPuppet;
 
     private List<Transform> aimIKBones;
 
@@ -74,9 +73,13 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
 
         
         avatarModel = EditorGUILayout.ObjectField("Avatar Model", avatarModel, typeof(GameObject), true) as GameObject;
-        enemyModRoot = EditorGUILayout.ObjectField("Enemy Mod Root", enemyModRoot, typeof(GameObject), true) as GameObject;
-        characterRoot = EditorGUILayout.ObjectField("Character Root", characterRoot, typeof(GameObject), true) as GameObject;
-        ragdoll = EditorGUILayout.ObjectField("Ragdoll", ragdoll, typeof(GameObject), true) as GameObject;
+        
+        if(avatarModel || enemyModRoot)
+        {
+            enemyModRoot = EditorGUILayout.ObjectField("Enemy Mod Root", enemyModRoot, typeof(GameObject), true) as GameObject;
+            characterRoot = EditorGUILayout.ObjectField("Character Root", characterRoot, typeof(GameObject), true) as GameObject;
+            ragdoll = EditorGUILayout.ObjectField("Ragdoll", ragdoll, typeof(GameObject), true) as GameObject;
+        }
 
         
         
@@ -251,9 +254,6 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
         
         DemiModBase.AddLineAndSpace();
         EditorGUILayout.EndScrollView();
-        
-        //if (openAfterExport)
-            //EditorUtility.RevealInFinder(DemiModBase.exportPath);
     }
 
 
@@ -285,7 +285,11 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             Debug.Log("Creating Enemy Mod Root");
             
             enemyModRoot = new GameObject();
-            enemyModRoot.name = "Enemy Mod Root";
+            enemyModRoot.name = "Enemy Mod Root - " + avatarModel.name;
+        }
+        else
+        {
+            enemyModRoot.name = "Enemy Mod Root - " + avatarModel.name;
         }
         
         
@@ -304,6 +308,8 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             ragdoll.name = "Ragdoll";
         }
         
+        
+        /*
         if(ragdoll.GetComponent<PuppetMaster>() == null)
         {
             Debug.Log("Adding PuppetMaster to Ragdoll");
@@ -315,6 +321,7 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             puppetMaster = ragdoll.GetComponent<PuppetMaster>();
         }
 
+        
         if (ragdoll.GetComponent<VRPuppet>() == null)
         {
             Debug.Log("Adding VRPuppet to Ragdoll");
@@ -328,7 +335,7 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
         
         vrPuppet.puppetMaster = puppetMaster;
         vrPuppet.enemyComponentReference = enemyComponentReference;
-        
+        */
         
         // Set both as children.
         if(characterRoot.transform.parent != enemyModRoot.transform)
@@ -336,6 +343,20 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
         
         if(ragdoll.transform.parent != enemyModRoot.transform)
             ragdoll.transform.SetParent(enemyModRoot.transform);
+        
+        
+        if (characterRoot.TryGetComponent(out characterCapsuleCollider) == false)
+        {
+            characterCapsuleCollider = characterRoot.AddComponent<CapsuleCollider>();
+            
+            if(characterRoot && !characterAnimator)
+                characterAnimator = characterRoot.GetComponent<Animator>();
+            
+            // Set collider to be the same size as the character.
+            float characterHeight = characterAnimator.GetBoneTransform(HumanBodyBones.Head).position.y - characterAnimator.GetBoneTransform(HumanBodyBones.LeftToes).position.y;
+            characterCapsuleCollider.center = new Vector3(0, characterHeight / 2, 0);
+            characterCapsuleCollider.height = characterHeight;
+        }
         
         
         RemoveRagdollComponentsFromCharacterRoot();
@@ -350,7 +371,7 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
         SetEnemyReferences();
         
         
-        finalPrefab = PrefabUtility.SaveAsPrefabAssetAndConnect(enemyModRoot, "Assets/EnemyModRoot - " + enemyModRoot.name + ".prefab", InteractionMode.UserAction);
+        finalPrefab = PrefabUtility.SaveAsPrefabAssetAndConnect(enemyModRoot, "Assets/" + enemyModRoot.name + ".prefab", InteractionMode.UserAction);
     }
 
 
@@ -367,10 +388,10 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             if (grabbable == null)
                 grabbable = rigidbody.gameObject.AddComponent<HVRGrabbablePlaceHolder>();
             
-            HVRStabbable stabbable = rigidbody.GetComponent<HVRStabbable>();
+            //HVRStabbable stabbable = rigidbody.GetComponent<HVRStabbable>();
             
-            if (stabbable == null)
-                stabbable = rigidbody.gameObject.AddComponent<HVRStabbable>();
+            //if (stabbable == null)
+                //stabbable = rigidbody.gameObject.AddComponent<HVRStabbable>();
             
             GrabberHelper grabberHelper = rigidbody.GetComponent<GrabberHelper>();
             
@@ -385,9 +406,11 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             grabberHelper.thisCollider = collider;
             grabberHelper.rb = rigidbody;
             //grabberHelper.thisGrabbable = grabbable;
-            grabberHelper.thisStabbable = stabbable;
+            //grabberHelper.thisStabbable = stabbable;
             
             grabberHelper.enemyComponentReference = enemyComponentReference;
+            
+            /*
             grabberHelper.vrPuppet = vrPuppet;
             
             if(vrPuppet.puppetRigidbodies == null)
@@ -401,7 +424,7 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             
             if(vrPuppet.puppetColliders.Contains(collider) == false)
                 vrPuppet.puppetColliders.Add(collider);
-            
+            */
             
             if(enemyComponentReference.enemyRigidbodies == null)
                 enemyComponentReference.enemyRigidbodies = new System.Collections.Generic.List<Rigidbody>();
@@ -418,8 +441,8 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             if(enemyComponentReference.puppetStabbables == null)
                 enemyComponentReference.puppetStabbables = new System.Collections.Generic.List<HVRStabbable>();
             
-            if(enemyComponentReference.puppetStabbables.Contains(stabbable) == false)
-                enemyComponentReference.puppetStabbables.Add(stabbable);
+            //if(enemyComponentReference.puppetStabbables.Contains(stabbable) == false)
+                //enemyComponentReference.puppetStabbables.Add(stabbable);
             
             if(enemyComponentReference.puppetGrabberHelpers == null)
                 enemyComponentReference.puppetGrabberHelpers = new System.Collections.Generic.List<GrabberHelper>();
@@ -477,6 +500,10 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
         foreach (Collider collider in colliders)
         {
             Debug.Log("Removing Collider: " + collider);
+            
+            if(characterCapsuleCollider && collider == characterCapsuleCollider)
+                continue;
+            
             DestroyImmediate(collider);
         }
     }
@@ -487,7 +514,16 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
     {
         // Use BZ Ragdoll Helper to create ragdoll. 
         
-        ShowRagdollHelperWindow();
+        //ShowRagdollHelperWindow();
+
+        if (characterRoot && !ragdoll)
+        {
+            if (characterRoot.TryGetComponent(out BipedRagdollCreator bipedRagdollCreator) == false)
+            {
+                characterRoot.AddComponent<BipedRagdollCreator>();
+            }
+            
+        }
     }
     
     void RagdollFinished()
@@ -495,6 +531,16 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
         Debug.Log("Ragdoll Finished");
         
         CloseRagdollHelperWindow();
+        
+        if (characterRoot.TryGetComponent(out BipedRagdollCreator bipedRagdollCreator))
+        {
+            DestroyImmediate(bipedRagdollCreator);
+        }
+        
+        if (characterRoot.TryGetComponent(out RagdollEditor ragdollEditor))
+        {
+            DestroyImmediate(ragdollEditor);
+        }
     }
     
     
@@ -793,6 +839,32 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
         if (enemyComponentReference)
         {
             enemyComponentReference.spineBones = aimIKBones.ToArray();
+
+            foreach (var bone in enemyComponentReference.spineBones)
+            {
+                Debug.Log("Testing bone: " + bone);
+                // remove any null bones
+                if (bone == null)
+                {
+                    aimIKBones.Remove(bone);
+                    
+                    Debug.Log("Removing null bone");
+                }
+            }
+            
+            if (characterAnimator)
+            {
+                enemyComponentReference.anim = characterAnimator;
+            }
+            
+            if(characterAnimator.TryGetComponent(out Rigidbody rigidbody))
+            {
+                enemyComponentReference.mainEnemyRigidbody = rigidbody;
+            }
+            else
+            {
+                enemyComponentReference.mainEnemyRigidbody = characterAnimator.gameObject.AddComponent<Rigidbody>();
+            }
             
             if(eyes)
                 enemyComponentReference.eyes = eyes;
@@ -811,6 +883,10 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             
             if(leftPalmForward)
                 enemyComponentReference.leftPalmForward = leftPalmForward;
+            
+            
+            //if(puppetMaster)
+                //enemyComponentReference.puppetMaster = puppetMaster;
         }
         
     }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ModIO;
 using ModIO.Implementation;
+using Unity.SharpZipLib.Utils;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Build;
@@ -142,6 +143,8 @@ public static class DemiModBase
         string targetName = "";
         string label = "";
         
+        
+        // Get final path of object in database.
         switch (modType)
         {
             case ModType.Avatar:
@@ -220,13 +223,38 @@ public static class DemiModBase
         }
 
 
+        string buildPath = modsFolderPath + "/" + targetName;
+
+        if (Directory.Exists(buildPath))
+        {
+            Debug.Log("Directory exists: " + buildPath);
+            
+            DirectoryInfo directoryInfo = new DirectoryInfo(buildPath);
+            
+            foreach (FileInfo file in directoryInfo.GetFiles())
+            {
+                Debug.Log("Deleting file: " + file.FullName);
+                file.Delete();
+            }
+        }
+        else
+        {
+            Directory.CreateDirectory(buildPath);
+            
+            Debug.Log("Creating directory: " + buildPath);
+        }
+
         AddressableAssetSettingsDefaultObject.Settings.profileSettings
-            .SetValue(AddressableAssetSettingsDefaultObject.Settings.activeProfileId, "LocalBuildPath", "[UnityEngine.Application.persistentDataPath]" + "/" + "mod.io/04747/data/mods/");
+            .SetValue(AddressableAssetSettingsDefaultObject.Settings.activeProfileId, "LocalBuildPath", buildPath);    //"[UnityEngine.Application.persistentDataPath]" + "/" + "mod.io/04747/data/mods/");
 
         
         AddressableAssetSettings.CleanPlayerContent(AddressableAssetSettingsDefaultObject.Settings.ActivePlayerDataBuilder);
         AddressableAssetSettings.BuildPlayerContent(out AddressablesPlayerBuildResult result);
         
+        //string tempZipPath = FileUtil.GetUniqueTempPathInProject();
+        //ZipUtility.CompressFolderToZip(tempZipPath, null, buildPath);
+        
+        //EditorUtility.RevealInFinder(tempZipPath);
     }
     
     
@@ -497,6 +525,11 @@ public static class DemiModBase
     }
     
     
+    public static void OpenFolderAfterModsBuild()
+    {
+        EditorUtility.RevealInFinder(DemiModBase.exportPath);
+    }
+    
     
     public static async Task ZipFolder(string sourceFolder, string targetPath)
     {
@@ -504,7 +537,7 @@ public static class DemiModBase
 
         try
         {
-            //await compressOperation.Compress();
+           // await compressOperation.Compress();
         }
         catch (Exception e)
         {
