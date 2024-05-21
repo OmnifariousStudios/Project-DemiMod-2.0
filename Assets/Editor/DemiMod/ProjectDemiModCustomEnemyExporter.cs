@@ -7,7 +7,6 @@ using RootMotion.Dynamics;
 
 public class ProjectDemiModCustomEnemyExporter : EditorWindow
 {
-    private bool openAfterExport = true;
     public bool FolderSetupComplete = false;
 
     // The original avatar model that will be used to create the enemy mod.
@@ -28,10 +27,6 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
 
     float vSbarValue;
     public Vector2 scrollPosition = Vector2.zero;
-    
-    
-    /// Where the built mods will be stored on this PC.
-    //public string modsFolderPath => Application.persistentDataPath + "/mod.io/04747/data/mods";
 
 
     [MenuItem("Project Demigod/Enemy Mod Exporter")]
@@ -113,15 +108,20 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
 
         #endregion
         
+        DemiModBase.AddLineAndSpace();
 
+        
         #region Starting Mod Process
 
         using (new EditorGUI.DisabledScope(avatarModel == null))
         {
+            EditorGUILayout.HelpBox("Create folders to store your mod in the project.", MessageType.Info);
             if (GUILayout.Button("Setup Folder Structure", GUILayout.Height(20)))
             {
                 DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Enemy, avatarModel.name);
             }
+            
+            DemiModBase.AddLineAndSpace();
             
             if (GUILayout.Button("Start Mod Process", GUILayout.Height(20)))
             {
@@ -150,11 +150,14 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
         
         #endregion
 
-        finalPrefab = EditorGUILayout.ObjectField("Final Prefab", finalPrefab, typeof(GameObject), true) as GameObject;
-
+        DemiModBase.AddLineAndSpace();
+        
+        using (new EditorGUI.DisabledScope(finalPrefab == null))
+        {
+            finalPrefab = EditorGUILayout.ObjectField("Final Prefab", finalPrefab, typeof(GameObject), true) as GameObject;
+        }
         
         
-
 
         #region Build Addressables
 
@@ -166,8 +169,7 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             GUILayout.BeginHorizontal("Build the Mods", GUI.skin.window);
             if (GUILayout.Button("Build for Windows (PCVR)", GUILayout.Height(20)))
             {
-                string name = enemyModRoot.name;
-                
+                //string name = enemyModRoot.name;
                 DemiModBase.ExportWindows(DemiModBase.ModType.Enemy, enemyModRoot);
 
                 EditorApplication.delayCall += () =>
@@ -200,36 +202,7 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
         EditorGUILayout.HelpBox(" Use this button to Finish Setup AFTER building the Addressable.", MessageType.Info);
         if (GUILayout.Button("Finish Setup", GUILayout.Height(20)))
         {
-            //string enemyModFolderPath = 
             DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Enemy, avatarModel.name);
-            //CheckForEnemyModPath();
-
-            
-            /*
-            if (enemyModFolderPath == "")
-                return;
-            
-
-            // Moves all created addressable files to the correct folder.
-            DirectoryInfo dirInfo = new DirectoryInfo(DemiModBase.modsFolderPath);
-
-            foreach (FileInfo fileInfo in dirInfo.GetFiles())
-            {
-                Debug.Log("File: " + fileInfo.Name);
-
-                if (fileInfo.Name == "StandaloneWindows64.zip" || fileInfo.Name == "Android.zip")
-                    continue;
-
-                string filePath = Path.Combine(enemyModFolderPath, fileInfo.Name);
-                
-                File.Move(fileInfo.FullName, filePath);
-                
-                Debug.Log("Moved File: " + fileInfo.Name + " to: " + filePath);
-            }
-            */
-            //Directory.SetAccessControl(enemyModFolderPath, new DirectorySecurity(DemigodModBase.modsFolderPath, AccessControlSections.All));
-            
-            //ZipUtility.CompressFolderToZip(tempPath, null, enemyModFolderPath);
         }
 
         #endregion
@@ -252,7 +225,22 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
         }
 
         
+        #region Clear Data
+        
+        EditorGUILayout.HelpBox("Reset all data for this Mod Exporter Tab.", MessageType.Info);
+        GUI.color = Color.red;
+        if (GUILayout.Button("Clear Mod Exporter", GUILayout.Height(20)))
+        {
+            ResetButtonCompletionStatus();
+        }
+        
+        GUI.color = Color.white;
+        
+        #endregion
+        
         DemiModBase.AddLineAndSpace();
+        
+        // End the scroll view that we began above.
         EditorGUILayout.EndScrollView();
     }
 
@@ -930,6 +918,22 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             }
         }
     }
+    
+    
+    private void ResetButtonCompletionStatus()
+    {
+        FolderSetupComplete = false;
+        
+        avatarModel = null;
+        characterRoot = null;
+        enemyModRoot = null;
+        characterAnimator = null;
+        characterCapsuleCollider = null;
+        ragdoll = null;
+        aimIKBones = null;
+        finalPrefab = null;
+    }
+    
     
     public void OpenFolderAfterModsBuild()
     {

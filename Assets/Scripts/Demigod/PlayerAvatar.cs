@@ -106,6 +106,14 @@ public class PlayerAvatar : MonoBehaviour
 
     [Header("Material References")]
     public List<CustomMaterialSetting> customMaterialSettings = new List<CustomMaterialSetting>();
+
+
+    public Transform rightWebGrabHandPositionUpper;
+    public Transform rightWebGrabHandPositionLower;
+    
+    public Transform leftWebGrabHandPositionUpper;
+    public Transform leftWebGrabHandPositionLower;
+    
     
     public List<UnityEvent> OnSlowMotionActivatedEvents = new List<UnityEvent>();
     public List<UnityEvent> OnSlowMotionDeactivatedEvents = new List<UnityEvent>();

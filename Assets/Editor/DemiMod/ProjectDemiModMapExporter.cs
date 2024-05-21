@@ -2,7 +2,6 @@
 using UnityEngine;
 using UnityEditor;
 using System.Linq;
-using System.IO;
 using UnityEditor.AI;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
@@ -19,17 +18,13 @@ public class ProjectDemiModMapExporter : EditorWindow
     public GameObject currentPlayerSpawnpoint;
     [FormerlySerializedAs("currentEnemySpawnpoint")] public GameObject currentEnemySpawnpointsHolder;
 
+    public GameObject shieldWalls;
+    bool shieldsAreVisible = false;
 
     public BuildTarget buildTarget = BuildTarget.StandaloneWindows64;
 
     float vSbarValue;
     public Vector2 scrollPosition = Vector2.zero;
-
-    
-    /// <summary>
-    /// Where the built mods will be stored on this PC.
-    /// </summary>
-    //public string modsFolderPath => Application.persistentDataPath + "/mod.io/04747/data/mods";
 
 
     [MenuItem("Project Demigod/Map Mod Exporter")]
@@ -54,15 +49,17 @@ public class ProjectDemiModMapExporter : EditorWindow
 
         GUILayoutOption[] options = { GUILayout.MaxWidth(1000), GUILayout.MinWidth(250) };
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition, options);
-
-
-
+        
 
         #region SwitchPlatforms
 
         EditorGUILayout.HelpBox("Scene: " + currentSceneName, MessageType.Info);
+        
+        //currentScene = EditorGUILayout.ObjectField("Current Scene", currentScene, typeof(SceneInstance), true) as SceneInstance;
+        DemiModBase.AddLineAndSpace();
+        
         EditorGUILayout.HelpBox("Current Target: " + EditorUserBuildSettings.selectedStandaloneTarget.ToString(), MessageType.Info);
-
+        
         GUILayout.BeginHorizontal("Switch Platforms", GUI.skin.window);
 
         using (new EditorGUI.DisabledScope(EditorUserBuildSettings.selectedStandaloneTarget == BuildTarget.StandaloneWindows64))
@@ -86,6 +83,8 @@ public class ProjectDemiModMapExporter : EditorWindow
         GUILayout.EndHorizontal();
 
         #endregion
+        
+        DemiModBase.AddLineAndSpace();
 
         #region Scene Setup
 
@@ -102,54 +101,94 @@ public class ProjectDemiModMapExporter : EditorWindow
             GetSceneLights();
         }
         
-        if (GUILayout.Button("Add Enemy Spawnpoint"))
-        {
-            CreateEnemySpawnPoint();
-        }
-
         
-        if (GUILayout.Button("Bake Nav Mesh"))
-        {
-            NavMeshBuilder.BuildNavMesh();
-        }
+        DemiModBase.AddLineAndSpace();
         
-        if (GUILayout.Button("Bake Lighting"))
-        {
-            Lightmapping.Bake();
-        }
         
-        if (GUILayout.Button("Bake Occlusion Culling"))
-        {
-            StaticOcclusionCulling.Compute();
-        }
-
-        #endregion
-
         #region Setup Folders
 
         using (new EditorGUI.DisabledScope(currentSceneController == null))
         {
+            EditorGUILayout.HelpBox("Create folders to store your mod in the project.", MessageType.Info);
             if (GUILayout.Button("Setup Folder Structure", GUILayout.Height(20)))
             {
-                //CheckForMapModPath();
                 DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Map, currentScene.name);
             }
         }
 
         #endregion
 
+        
+        DemiModBase.AddLineAndSpace();
+        
+        
+        using (new EditorGUI.DisabledScope(currentSceneController == null))
+        {
+            if (GUILayout.Button("Add Enemy Spawnpoint"))
+            {
+                CreateEnemySpawnPoint();
+            }
+
+
+            if (GUILayout.Button("Bake Nav Mesh"))
+            {
+                NavMeshBuilder.BuildNavMesh();
+            }
+
+            if (GUILayout.Button("Bake Lighting"))
+            {
+                Lightmapping.Bake();
+            }
+
+            if (GUILayout.Button("Bake Occlusion Culling"))
+            {
+                StaticOcclusionCulling.Compute();
+            }
+        }
+
+        #endregion
+
+        
+        DemiModBase.AddLineAndSpace();
+        
+        
+        
         #region Shield Wall Renderers
 
-        if(GUILayout.Button("Enable Shield Wall Renderers"))
+        if (shieldsAreVisible)
         {
-            EnableShieldWallRenderers();
+            GUI.color = Color.red;
+        }
+        else
+        {
+            GUI.color = Color.green;
         }
         
-        if (GUILayout.Button("Disable Shield Wall Renderers"))
+        
+        using (new EditorGUI.DisabledScope(shieldWalls == null))
         {
-            DisableShieldWallRenderers();
+            if (GUILayout.Button("Enable Shield Wall Renderers"))
+            {
+                EnableShieldWallRenderers();
+            }
+
+            if (shieldsAreVisible)
+            {
+                GUI.color = Color.green;
+            }
+            else
+            {
+                GUI.color = Color.red;
+            }
+
+            if (GUILayout.Button("Disable Shield Wall Renderers"))
+            {
+                DisableShieldWallRenderers();
+            }
         }
 
+        GUI.color = Color.white;
+        
         #endregion
 
 
@@ -207,54 +246,41 @@ public class ProjectDemiModMapExporter : EditorWindow
 
 
         #region Finish Setup
-
+        
         EditorGUILayout.HelpBox(" Use this button to Finish Setup AFTER building the Addressable.", MessageType.Info);
-        if (GUILayout.Button("Finish Setup", GUILayout.Height(20)))
+        
+        using (new EditorGUI.DisabledScope(currentSceneController == null))
         {
-
-            DisableInterfaceSpawnPoints();
-            DisableShieldWallRenderers();
-            DisableEnemySpawnpointShapes();
-            
-            
-            /*
-            
-            string mapModFolderPath = DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Map, currentScene.name);
-            //CheckForMapModPath();
-
-            if (mapModFolderPath == "")
-                return;
-            
-
-            DirectoryInfo dirInfo = new DirectoryInfo(DemiModBase.modsFolderPath);
-
-            foreach (FileInfo fileInfo in dirInfo.GetFiles())
+            if (GUILayout.Button("Finish Setup", GUILayout.Height(20)))
             {
-                Debug.Log("File: " + fileInfo.Name);
 
-                if (fileInfo.Name == "StandaloneWindows64.zip" || fileInfo.Name == "Android.zip")
-                    continue;
-
-                File.Move(fileInfo.FullName, Path.Combine(mapModFolderPath, fileInfo.Name));
-
-                Debug.Log("Moved File: " + fileInfo.Name + " to: " + Path.Combine(mapModFolderPath, fileInfo.Name));
-
-                //FileUtil.CopyFileOrDirectory(fileInfo.FullName, Path.Combine(avatarModFolderPath, fileInfo.Name));
-
+                DisableInterfaceSpawnPoints();
+                DisableShieldWallRenderers();
+                DisableEnemySpawnpointShapes();
             }
-            
-            */
-            
         }
 
         #endregion
 
+        DemiModBase.AddLineAndSpace();
+        
+        #region Clear Data
+        
+        EditorGUILayout.HelpBox("Reset all data for this Mod Exporter Tab.", MessageType.Info);
+        GUI.color = Color.red;
+        if (GUILayout.Button("Clear Mod Exporter", GUILayout.Height(20)))
+        {
+            ResetButtonCompletionStatus();
+        }
+        
+        GUI.color = Color.white;
+        
+        #endregion
+        
+        DemiModBase.AddLineAndSpace();
 
+        // End the scroll view that we began above.
         EditorGUILayout.EndScrollView();
-        
-        
-        //if (openAfterExport)
-            //EditorUtility.RevealInFinder(DemiModBase.exportPath);
     }
 
 
@@ -438,7 +464,7 @@ public class ProjectDemiModMapExporter : EditorWindow
 
     void AddShieldWalls()
     {
-        GameObject shieldWalls = GameObject.Find("Shield Walls");
+        shieldWalls = GameObject.Find("Shield Walls");
 
         if (!shieldWalls)
         {
@@ -447,16 +473,19 @@ public class ProjectDemiModMapExporter : EditorWindow
 
         if (shieldWalls == null)
         {
-            GameObject newShieldWalls = Instantiate(Resources.Load("Shield Walls", typeof(GameObject))) as GameObject;
-            newShieldWalls.name = "Shield Walls";
-            newShieldWalls.transform.position = Vector3.zero;
-            newShieldWalls.transform.rotation = Quaternion.identity;
+            shieldWalls = Instantiate(Resources.Load("Shield Walls", typeof(GameObject))) as GameObject;
+            shieldWalls.name = "Shield Walls";
+            shieldWalls.transform.position = Vector3.zero;
+            shieldWalls.transform.rotation = Quaternion.identity;
         }
+        
+        shieldsAreVisible = true;
     }
 
     void EnableShieldWallRenderers()
     {
-        GameObject shieldWalls = GameObject.Find("Shield Walls");
+        if(!shieldWalls)
+            shieldWalls = GameObject.Find("Shield Walls");
 
         if (!shieldWalls)
         {
@@ -470,11 +499,14 @@ public class ProjectDemiModMapExporter : EditorWindow
                 VARIABLE.enabled = true;
             }
         }
+        
+        shieldsAreVisible = true;
     }
 
     private void DisableShieldWallRenderers()
     {
-        GameObject shieldWalls = GameObject.Find("Shield Walls");
+        if (!shieldWalls)
+            shieldWalls = GameObject.Find("Shield Walls");
 
         if (!shieldWalls)
         {
@@ -488,6 +520,8 @@ public class ProjectDemiModMapExporter : EditorWindow
                 VARIABLE.enabled = false;
             }
         }
+        
+        shieldsAreVisible = false;
     }
 
     private void DisableEnemySpawnpointShapes()
@@ -530,61 +564,13 @@ public class ProjectDemiModMapExporter : EditorWindow
             currentSceneController.sceneLights = FindObjectsOfType<Light>().ToList();
         }
     }
+
     
-    
-    //[ContextMenu("Check For Map Mod Path")]
-    private string CheckForMapModPath()
+    private void ResetButtonCompletionStatus()
     {
-        if (currentSceneController == null)
-        {
-            AddSceneController();
-        }
+        FolderSetupComplete = false;
         
-        if(currentSceneController == null)
-        {
-            return "";
-        }
-        
-        string builtModsFolderPath = Path.Combine(Application.persistentDataPath, "mod.io/04747/data/mods/");
-
-        Debug.Log("Checking current scene: " + currentSceneName);
-        
-        Debug.Log("Setting path to StandaloneTarget: " + EditorUserBuildSettings.selectedStandaloneTarget.ToString());
-        string mapModStandaloneWindows64FolderPath = Path.Combine(builtModsFolderPath, Path.Combine(BuildTarget.StandaloneWindows64.ToString(), currentSceneName));
-        string mapModAndroidFolderPath = Path.Combine(builtModsFolderPath, Path.Combine(BuildTarget.Android.ToString(), currentSceneName));
-
-        if (Directory.Exists(mapModStandaloneWindows64FolderPath))
-        {
-            Debug.Log("Mod Folder Build Path already exists: " + mapModStandaloneWindows64FolderPath);
-        }
-        else
-        {
-            Debug.Log("Creating Map Mod StandaloneWindows64 Folder in Local Build Path: " + mapModStandaloneWindows64FolderPath);
-            Directory.CreateDirectory(mapModStandaloneWindows64FolderPath);
-        }
-
-        if (Directory.Exists(mapModAndroidFolderPath))
-        {
-            Debug.Log("Mod Folder Build Path already exists: " + mapModAndroidFolderPath);
-        }
-        else
-        {
-            Debug.Log("Creating Map Mod Android Folder in Local Build Path: " + mapModAndroidFolderPath);
-            Directory.CreateDirectory(mapModAndroidFolderPath);
-        }
-        
-        
-        FolderSetupComplete = true;
-
-        if (buildTarget == BuildTarget.Android)
-        {
-            return mapModAndroidFolderPath;
-        }
-        else
-        {
-            return mapModStandaloneWindows64FolderPath;
-        }
-        
+        currentSceneName = null;
     }
 
 

@@ -66,6 +66,8 @@ public class HandPoseCopier : MonoBehaviour
     public Text currentWeaponShapeReadout;
     public Text poseCompletionReadout;
 
+    public string avatarModFolderPath;
+    
     private void Awake()
     {
         // Sphere Grip Pose -> FireballShape
@@ -326,29 +328,13 @@ public class HandPoseCopier : MonoBehaviour
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore
         });
 
-
-
-        // Check if Folder for this Mod exists in MODS folder. If not, create one.
-        string avatarModFolderPath = Path.Combine(Application.dataPath, "MODS" + "/" + playerAvatarScript.gameObject.name);
-
-        if (Directory.Exists(avatarModFolderPath))
-        {
-            if(debugHandPoseCopier)
-                Debug.Log("Avatar mod folder already exists");
-        }
-        else
-        {
-            if(debugHandPoseCopier)
-                Debug.Log("Creating avatar mod folder");
-            Directory.CreateDirectory(avatarModFolderPath);
-        }
-        
         
         // Check if the AvatarModHandPoses.json file exists in Avatar Mod Folder and overwrite it. If not, create one.
-        string handPoseCachePath = Path.Combine(Application.dataPath, "MODS" + "/" + playerAvatarScript.gameObject.name + "/AvatarModHandPoses.json");
+        string handPoseCachePath = Path.Combine(avatarModFolderPath + "/AvatarModHandPoses.json");
         
         if(debugHandPoseCopier)
             Debug.Log("Writing json file to memory.");
+        
         if (File.Exists(handPoseCachePath))
         {
             File.WriteAllText(handPoseCachePath, jsonFile);

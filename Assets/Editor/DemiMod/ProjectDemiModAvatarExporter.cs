@@ -18,10 +18,6 @@ public class ProjectDemiModAvatarExporter : EditorWindow
     public PlayerAvatar playerAvatarScript;
     public string avatarNameString = "";
     
-    public string UnityModsFolderPath = "";
-    public string activeModFolderPath = "";
-    public string activeModPrefabPath = "";
-    
     
     public bool FolderSetupComplete = false;
     public bool AvatarSetupComplete = false;
@@ -34,12 +30,8 @@ public class ProjectDemiModAvatarExporter : EditorWindow
     
     float vSbarValue;
     public Vector2 scrollPosition = Vector2.zero;
-
     
-    /// <summary>
-    /// Where the built mods will be stored on this PC.
-    /// </summary>
-    //public string modsFolderPath => Application.persistentDataPath + "/mod.io/04747/data/mods";
+    private GameObject finalPrefab;
     
     
     [MenuItem("Project Demigod/Avatar Mod Exporter")]
@@ -50,8 +42,6 @@ public class ProjectDemiModAvatarExporter : EditorWindow
     
     private void Awake() 
     {
-        UnityModsFolderPath =  Application.dataPath + "/MODS";
-        
         if(buildTarget == BuildTarget.NoTarget)
             buildTarget = BuildTarget.StandaloneWindows64;
     }
@@ -113,26 +103,28 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         GUILayout.EndHorizontal();
 
         #endregion
-
         
-        DemiModBase.DrawUILine(Color.blue);
-
-        
-        //if (showExportSettings = EditorGUILayout.Foldout(showExportSettings, "Export Settings")) 
-            //DemiModBase.ExportSettings();
-        
-        DemiModBase.DrawUILine(Color.blue);
-
+        DemiModBase.AddLineAndSpace();
 
 
         using (new EditorGUI.DisabledScope(avatarModel == null))
         {
             GUI.color = Color.white;
             
+            EditorGUILayout.HelpBox("Create folders to store your mod in the project.", MessageType.Info);
+            if(GUILayout.Button("Setup Folder Structure", GUILayout.Height(20)))
+            {
+                DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, avatarModel.name);
+            }
+            
+            DemiModBase.AddLineAndSpace();
+            
+            
             EditorGUILayout.HelpBox("Use this button first to get all references and add necessary scripts.", MessageType.Info);
             
             AvatarSetupComplete = playerAvatarScript != null && animator != null && animator.avatar != null && animator.avatar.isHuman;
             
+            // Colors
             if (AvatarSetupComplete)
             {
                 GUI.color = Color.green;
@@ -205,23 +197,8 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 }
                 
                 
-                // Check if Folder for this Mod exists in MODS folder. If not, create one.
-                activeModFolderPath = Path.Combine(UnityModsFolderPath, playerAvatarScript.gameObject.name);
-                activeModPrefabPath = Path.Combine(activeModFolderPath, playerAvatarScript.gameObject.name);
-
-                Debug.Log("activeModFolderPath: " + activeModFolderPath);
-                Debug.Log("activeModPrefabPath: " + activeModPrefabPath);
                 
-                if (Directory.Exists(activeModFolderPath))
-                {
-                    Debug.Log("Avatar mod folder already exists");
-                }
-                else
-                {
-                    Debug.Log("Creating avatar mod folder");
-                    Directory.CreateDirectory(activeModFolderPath);
-                }
-                
+                handPoseCopierScript.avatarModFolderPath = DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, playerAvatarScript.gameObject.name);
                 
                 playerAvatarScript.animator = animator;
                 
@@ -229,9 +206,15 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 
                 SetupHealthEnergyReadout();
                 
+                
+                if(playerAvatarScript && playerAvatarScript.gameObject)
+                    finalPrefab = PrefabUtility.SaveAsPrefabAssetAndConnect(playerAvatarScript.gameObject, "Assets/" + playerAvatarScript.name + ".prefab", InteractionMode.UserAction);
+                
                 AvatarSetupComplete = true;
             }
             
+            
+            // Colors
             if (FolderSetupComplete)
             {
                 GUI.color = Color.green;
@@ -241,16 +224,6 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 GUI.color = Color.white;
             }
             
-            if(GUILayout.Button("Setup Folder Structure", GUILayout.Height(20)))
-            {
-                DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, avatarModel.name);
-                //CheckForAvatarModPath();
-            }
-            
-            GUI.color = Color.white;
-            
-
-            
             
             DemiModBase.AddLineAndSpace();
             
@@ -258,6 +231,8 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             //EditorGUILayout.HelpBox("Warning. These buttons will clear all material settings and any changes you made.", MessageType.Warning);
             EditorGUILayout.HelpBox("Collect all data about the Avatar's renderers and materials, so users can customize them in game. Warning. These buttons will clear all material settings and any changes you made.", MessageType.Info);
             
+            
+            // Colors
             if (CustomMaterialSettingsComplete)
             {
                 GUI.color = Color.green;
@@ -283,9 +258,9 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             
             GUILayout.EndHorizontal();
             
-            DemiModBase.AddLineAndSpace();
-
             GUI.color = Color.white;
+            
+            DemiModBase.AddLineAndSpace();
             
             
             EditorGUILayout.HelpBox("Create Hand Poses in Play Mode.", MessageType.Info);
@@ -307,8 +282,13 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                     EditorApplication.EnterPlaymode();
                 }
             }
-            
-            
+        }
+        
+        DemiModBase.AddLineAndSpace();
+        
+        using (new EditorGUI.DisabledScope(finalPrefab == null))
+        {
+            finalPrefab = EditorGUILayout.ObjectField("Final Prefab", finalPrefab, typeof(GameObject), true) as GameObject;
         }
         
         DemiModBase.AddLineAndSpace();
@@ -353,7 +333,6 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 DemiModBase.ExportAndroid(DemiModBase.ModType.Avatar, avatarModel);
                 
                 DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, avatarModel.name);
-                //CheckForAvatarModPath();
                 
                 EditorApplication.delayCall += () =>
                 {
@@ -386,60 +365,8 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                         playerAvatarScript = avatarModel.GetComponentInChildren<PlayerAvatar>();
                 }
                 
-                string handPoseCachePath = Path.Combine(Application.dataPath, "MODS" + "/" + playerAvatarScript.gameObject.name + "/AvatarModHandPoses.json");
-                //string avatarModFolderPath =
-                //CheckForAvatarModPath();
                 
                 DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, avatarModel.name); 
-                
-                /*
-                if(avatarModFolderPath == "")
-                    return;
-                
-                if (File.Exists(handPoseCachePath))
-                {
-                    Debug.Log("Hand Pose Cache File Exists");
-
-                    string newHandPosePath = Path.Combine(avatarModFolderPath, "AvatarModHandPoses.json");
-
-                    newHandPosePath = DemiModBase.FormatPathKeepSpaces(newHandPosePath);
-
-                    if (File.Exists(newHandPosePath))
-                    {
-                        Debug.Log("Hand Pose Script already exists in Local Build Path. Replacing...");
-                        FileUtil.ReplaceFile(handPoseCachePath, newHandPosePath);
-                    }
-                    else
-                    {
-                        Debug.Log("Hand Pose Script moving to Local Build Path: " + newHandPosePath);
-                        FileUtil.CopyFileOrDirectory(handPoseCachePath, newHandPosePath);
-                    }
-
-                }
-                else
-                {
-                    Debug.Log("Hand Pose Cache JSON File Does Not Exist! Please enter Play Mode and use the Hand Pose button to create one.");
-                }
-                
-
-                DirectoryInfo dirInfo = new DirectoryInfo(DemiModBase.modsFolderPath);
-                
-                foreach (FileInfo fileInfo in dirInfo.GetFiles())
-                {
-                    Debug.Log("File: " + fileInfo.Name);
-
-                    if(fileInfo.Name == "StandaloneWindows64.zip" || fileInfo.Name == "Android.zip")
-                        continue;
-                    
-                    File.Move(fileInfo.FullName, Path.Combine(avatarModFolderPath, fileInfo.Name));
-                    
-                    Debug.Log("Moved File: " + fileInfo.Name + " to: " + Path.Combine(avatarModFolderPath, fileInfo.Name));
-                    
-                    //FileUtil.CopyFileOrDirectory(fileInfo.FullName, Path.Combine(avatarModFolderPath, fileInfo.Name));
-                    
-                }
-                
-                */
             }
         }
         
@@ -460,7 +387,8 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         }
 
         DemiModBase.AddLineAndSpace();
-        
+
+        #region Debug Shapes
         
         GUI.color = Color.white;
         using (new EditorGUI.DisabledScope(avatarModel == null))
@@ -490,20 +418,26 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         
         GUILayout.EndHorizontal();
         
+        #endregion
+
+
+        #region Clear Data
         
-        EditorGUILayout.HelpBox("Use this button to reset this Mod Exporter Tab.", MessageType.Info);
+        EditorGUILayout.HelpBox("Reset all data for this Mod Exporter Tab.", MessageType.Info);
         GUI.color = Color.red;
         if (GUILayout.Button("Clear Mod Exporter", GUILayout.Height(20)))
         {
             ResetButtonCompletionStatus();
         }
         
+        GUI.color = Color.white;
         
+        #endregion
+        
+        DemiModBase.AddLineAndSpace();
         
         // End the scroll view that we began above.
         EditorGUILayout.EndScrollView();
-        
-        //EditorUtility.RevealInFinder(DemiModBase.exportPath);
     }
     
     
@@ -515,6 +449,11 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         CustomMaterialSettingsComplete = false;
         FolderSetupComplete = false;
         CustomHandPoseSettingsComplete = false;
+        
+        avatarModel = null;
+        animator = null;
+        playerAvatarScript = null;
+        avatarNameString = "";
     }
 
     private void RetrievePrefabInstanceFromScene()
