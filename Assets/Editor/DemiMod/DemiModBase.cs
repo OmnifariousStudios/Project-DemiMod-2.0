@@ -250,11 +250,6 @@ public static class DemiModBase
         
         AddressableAssetSettings.CleanPlayerContent(AddressableAssetSettingsDefaultObject.Settings.ActivePlayerDataBuilder);
         AddressableAssetSettings.BuildPlayerContent(out AddressablesPlayerBuildResult result);
-        
-        //string tempZipPath = FileUtil.GetUniqueTempPathInProject();
-        //ZipUtility.CompressFolderToZip(tempZipPath, null, buildPath);
-        
-        //EditorUtility.RevealInFinder(tempZipPath);
     }
     
     
@@ -284,8 +279,8 @@ public static class DemiModBase
     {
         Debug.Log("Checking folders for current mod target: " + modName);
 
-        string modStandaloneWindows64FolderPath = modName + " - ROOT /" + Path.Combine(BuildTarget.StandaloneWindows64.ToString(), modName);
-        string modAndroidFolderPath = modName + " - ROOT /" + Path.Combine(BuildTarget.Android.ToString(), modName);
+        string modStandaloneWindows64FolderPath = Path.Combine(modName, Path.Combine(BuildTarget.StandaloneWindows64.ToString(), modName));
+        string modAndroidFolderPath = Path.Combine(modName, Path.Combine(BuildTarget.Android.ToString(), modName));
         
         switch (modType)
         {
@@ -310,12 +305,6 @@ public static class DemiModBase
         if (Directory.Exists(modStandaloneWindows64FolderPath))
         {
             Debug.Log("Mod folder already exists: " + modStandaloneWindows64FolderPath);
-            
-            //Directory.SetAccessControl(Directory.GetParent(modStandaloneWindows64FolderPath).FullName, new DirectorySecurity(Directory.GetParent(modStandaloneWindows64FolderPath).FullName, AccessControlSections.All));
-            
-            
-            
-            //return modStandaloneWindows64FolderPath;
         }
         else
         {
@@ -326,7 +315,6 @@ public static class DemiModBase
         if (Directory.Exists(modAndroidFolderPath))
         {
             Debug.Log("Mod folder already exists: " + modAndroidFolderPath);
-            //return modAndroidFolderPath;
         }
         else
         {

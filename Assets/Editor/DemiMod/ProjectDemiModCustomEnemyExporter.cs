@@ -359,7 +359,8 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
         SetEnemyReferences();
         
         
-        finalPrefab = PrefabUtility.SaveAsPrefabAssetAndConnect(enemyModRoot, "Assets/" + enemyModRoot.name + ".prefab", InteractionMode.UserAction);
+        finalPrefab = PrefabUtility.SaveAsPrefabAssetAndConnect(enemyModRoot, 
+            DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Enemy, enemyModRoot.gameObject.name) + ".prefab", InteractionMode.UserAction);
     }
 
 

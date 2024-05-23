@@ -17,11 +17,11 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: d45708f53d3c5454c91f6c211064d4ae
   m_SerializeEntries:
-  - m_GUID: 4ea1158027c9bef48b6336a158b69e4c
-    m_Address: Assets/Enemy Mod Root - FemaleDummy.prefab
+  - m_GUID: ff005e913258b064f8e68b90c89e57b3
+    m_Address: Assets/MODS/Avatars/FreeCharacter_01/StandaloneWindows64/FreeCharacter_01.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Enemy Avatar
+    - Player Avatar
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: ab3ef46107c2bfb499cc177a1efc4d32, type: 2}

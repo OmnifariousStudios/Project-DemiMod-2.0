@@ -124,6 +124,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             
             AvatarSetupComplete = playerAvatarScript != null && animator != null && animator.avatar != null && animator.avatar.isHuman;
             
+            
             // Colors
             if (AvatarSetupComplete)
             {
@@ -194,11 +195,13 @@ public class ProjectDemiModAvatarExporter : EditorWindow
 
                     if (playerAvatarScript)
                         handPoseCopierScript.playerAvatarScript = playerAvatarScript;
+                    
+                    
+                    handPoseCopierScript.avatarModFolderPath = Path.Combine(DemiModBase.unityAssetsAvatarModsFolderPath, playerAvatarScript.gameObject.name);
+                    Debug.Log("Hand Pose Script should now be in Path: " + handPoseCopierScript.avatarModFolderPath);
+                    // = DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, playerAvatarScript.gameObject.name);
                 }
                 
-                
-                
-                handPoseCopierScript.avatarModFolderPath = DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, playerAvatarScript.gameObject.name);
                 
                 playerAvatarScript.animator = animator;
                 
@@ -208,7 +211,12 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 
                 
                 if(playerAvatarScript && playerAvatarScript.gameObject)
-                    finalPrefab = PrefabUtility.SaveAsPrefabAssetAndConnect(playerAvatarScript.gameObject, "Assets/" + playerAvatarScript.name + ".prefab", InteractionMode.UserAction);
+                {
+                    DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, playerAvatarScript.gameObject.name);
+                    
+                    finalPrefab = PrefabUtility.SaveAsPrefabAssetAndConnect(playerAvatarScript.gameObject,
+                        DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, playerAvatarScript.gameObject.name) + ".prefab", InteractionMode.UserAction);
+                }
                 
                 AvatarSetupComplete = true;
             }
@@ -229,9 +237,15 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             
             GUI.color = Color.white;
             //EditorGUILayout.HelpBox("Warning. These buttons will clear all material settings and any changes you made.", MessageType.Warning);
-            EditorGUILayout.HelpBox("Collect all data about the Avatar's renderers and materials, so users can customize them in game. Warning. These buttons will clear all material settings and any changes you made.", MessageType.Info);
+            EditorGUILayout.HelpBox("Collect all data about the Avatar's renderers and materials, so users can customize them in game. Warning. " +
+                                    "These buttons will clear all material settings and any changes you made.", MessageType.Info);
             
             
+
+            
+            
+            GUILayout.BeginHorizontal("Material Settings", GUI.skin.window);
+
             // Colors
             if (CustomMaterialSettingsComplete)
             {
@@ -241,9 +255,6 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             {
                 GUI.color = Color.white;
             }
-            
-            
-            GUILayout.BeginHorizontal("Material Settings", GUI.skin.window);
             
             if (GUILayout.Button("Create Custom Material Settings", GUILayout.Height(20)))
             {
@@ -297,7 +308,6 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         
         bool canBuild = avatarModel != null;
         
-        
         using (new EditorGUI.DisabledScope(!canBuild)) 
         {
             GUILayout.BeginHorizontal("Build the Mods", GUI.skin.window);
@@ -310,9 +320,6 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 PrefabUtility.ApplyPrefabInstance(avatarModel, InteractionMode.UserAction);
                 
                 DemiModBase.ExportWindows(DemiModBase.ModType.Avatar, avatarModel);
-                
-                DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, avatarModel.name);
-                //CheckForAvatarModPath();
                 
                 EditorApplication.delayCall += () =>
                 {
@@ -331,8 +338,6 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 PrefabUtility.ApplyPrefabInstance(avatarModel, InteractionMode.UserAction);
                 
                 DemiModBase.ExportAndroid(DemiModBase.ModType.Avatar, avatarModel);
-                
-                DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, avatarModel.name);
                 
                 EditorApplication.delayCall += () =>
                 {
@@ -501,7 +506,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             else
             {
                 
-                Debug.Log("No Eye Bones Found. Eyes Debug Shape created. Please the Eyes Debug Shape to the eyes position.");
+                Debug.Log("No Eye Bones Found. Eyes Debug Shape created. Please move the Eyes Debug Shape to the eyes position.");
                 
                 GameObject eyes = Instantiate(Resources.Load("Eyes Debug Capsule", typeof(GameObject))) as GameObject;
                 eyes.transform.SetParent(playerAvatarScript.avatarHead, true);
@@ -753,10 +758,17 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             Vector3 handToPointer = animator.GetBoneTransform(HumanBodyBones.RightIndexProximal).position - animator.GetBoneTransform(HumanBodyBones.RightHand).position;
             Vector3 handToMiddle = animator.GetBoneTransform(HumanBodyBones.RightMiddleProximal).position - animator.GetBoneTransform(HumanBodyBones.RightHand).position;
             
-            rightPalmTransform.forward = Vector3.Cross(handToMiddle, handToPointer);
+            // Rotate the forward direction to the cross of the hand to the pointer and hand to the middle,
+            // and rotate the upward direction to 
+            Vector3 forward = Vector3.Cross(handToMiddle, handToPointer);
+            Vector3 upward = Vector3.Cross(forward, handToMiddle);
+            
+            rightPalmTransform.rotation = Quaternion.LookRotation(forward, upward);
 
             Vector3 middleOfPalm = (animator.GetBoneTransform(HumanBodyBones.RightHand).position + animator.GetBoneTransform(HumanBodyBones.RightMiddleProximal).position) / 2;
-            rightPalmTransform.position = middleOfPalm + rightPalmTransform.forward * 0.05f;
+            rightPalmTransform.position = middleOfPalm + rightPalmTransform.forward * 0.03f;
+            
+            rightPalmTransform.position += rightPalmTransform.right * 0.02f;
             
 
             if (handPoseCopierScript)
@@ -1132,9 +1144,12 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 {
                     newSetting.originalMaterial = newSetting.renderer.sharedMaterial;
                 
-                    newSetting.originalMaterialMainTexture = newSetting.renderer.sharedMaterial.mainTexture;
+                    newSetting.originalMaterialMainTexture = newSetting.originalMaterial.mainTexture;
                     
-                    newSetting.color = newSetting.renderer.sharedMaterial.color;
+                    newSetting.color = newSetting.originalMaterial.color;
+                    
+                    newSetting.originalShader = newSetting.originalMaterial.shader;
+                    newSetting.originalShaderName = newSetting.originalMaterial.shader.name;
                 }
                 
                 
