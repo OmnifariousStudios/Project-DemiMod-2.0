@@ -31,12 +31,17 @@ public static class DemiModBase
     public static string unityAssetsMapModsFolderPath => unityAssetsModsFolderPath + "/Maps";
     public static string unityAssetsEnemyModsFolderPath => unityAssetsModsFolderPath + "/Enemies";
     
+    
+    
+    public static string windowsbuildPath = "C:/Users/Public/mod.io/4747/mods/{LOCAL_FILE_NAME}/";
+    public static string editorBuildPath = "{UnityEngine.Application.persistentDataPath}/mod.io/04747/data/mods/{LOCAL_FILE_NAME}/";
+    
+    
     /// <summary>
     /// Location where files are stored.
     /// todo: Create a folder here and zip it, then export to mod.io 
     /// </summary>
-    public static string exportPath => DemiModBase.FormatForFileExplorer(modsFolderPath + "/" + EditorUserBuildSettings.selectedStandaloneTarget);
-    public static string basePath = "";
+    public static string exportPath => DemiModBase.FormatForFileExplorer(modsFolderPath);  // + "/" + EditorUserBuildSettings.selectedStandaloneTarget);
     
     
     // Scene
@@ -201,9 +206,7 @@ public static class DemiModBase
 
         group.SetDirty(AddressableAssetSettings.ModificationEvent.EntryMoved, entriesAdded, false, true);
         AddressableAssetSettingsDefaultObject.Settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryMoved, entriesAdded, true, false);
-
-        string windowsbuildPath = "C:/Users/Public/mod.io/4747/mods/{LOCAL_FILE_NAME}/";
-        string editorPath = "{UnityEngine.Application.persistentDataPath}/mod.io/04747/data/mods/{LOCAL_FILE_NAME}/";
+        
 
         Debug.Log("Build target: " + buildTarget);
 
@@ -212,7 +215,7 @@ public static class DemiModBase
         {
             Debug.Log("Setting load path for windows");
             AddressableAssetSettingsDefaultObject.Settings.profileSettings
-                .SetValue(AddressableAssetSettingsDefaultObject.Settings.activeProfileId, "LocalLoadPath", editorPath);
+                .SetValue(AddressableAssetSettingsDefaultObject.Settings.activeProfileId, "LocalLoadPath", editorBuildPath);
         }
         else if (buildTarget == BuildTarget.Android)
         {
@@ -640,8 +643,8 @@ public static class DemiModBase
 
     public static void ExportSettings() 
     {
-        if (GUILayout.Button("Open Export Folder"))
-            EditorUtility.RevealInFinder(basePath + "/");
+        //if (GUILayout.Button("Open Export Folder"))
+            //EditorUtility.RevealInFinder(basePath + "/");
 
         EditorGUIUtility.labelWidth = 200;
         openAfterExport = EditorGUILayout.Toggle("Open Export Folder On Complete", openAfterExport);

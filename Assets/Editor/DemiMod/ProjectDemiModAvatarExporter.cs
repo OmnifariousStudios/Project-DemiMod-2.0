@@ -196,9 +196,13 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                     if (playerAvatarScript)
                         handPoseCopierScript.playerAvatarScript = playerAvatarScript;
                     
+                    Debug.Log(DemiModBase.unityAssetsAvatarModsFolderPath);
                     
-                    handPoseCopierScript.avatarModFolderPath = Path.Combine(DemiModBase.unityAssetsAvatarModsFolderPath, playerAvatarScript.gameObject.name);
+                    Debug.Log(Path.Combine(DemiModBase.unityAssetsAvatarModsFolderPath, playerAvatarScript.gameObject.name));
+                    
+                    handPoseCopierScript.avatarModFolderPath = Path.Combine(Path.Combine(DemiModBase.unityAssetsAvatarModsFolderPath, playerAvatarScript.gameObject.name), "AvatarModHandPoses.json");
                     Debug.Log("Hand Pose Script should now be in Path: " + handPoseCopierScript.avatarModFolderPath);
+
                     // = DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, playerAvatarScript.gameObject.name);
                 }
                 
@@ -370,8 +374,10 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                         playerAvatarScript = avatarModel.GetComponentInChildren<PlayerAvatar>();
                 }
                 
-                
-                DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, avatarModel.name); 
+                // Move the Hand Pose JSON file to the folder where we've built the addressable.
+                //File.Copy(handPoseCopierScript.avatarModFolderPath, DemiModBase.exportPath + "/AvatarModHandPoses.json", true);
+                File.Move(handPoseCopierScript.avatarModFolderPath, DemiModBase.exportPath + "/AvatarModHandPoses.json");
+                //DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, avatarModel.name); 
             }
         }
         
@@ -690,11 +696,17 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             Vector3 handToPointer = animator.GetBoneTransform(HumanBodyBones.LeftIndexProximal).position - animator.GetBoneTransform(HumanBodyBones.LeftHand).position;
             Vector3 handToMiddle = animator.GetBoneTransform(HumanBodyBones.LeftMiddleProximal).position - animator.GetBoneTransform(HumanBodyBones.LeftHand).position;
             
-            // This has to be the opposite of the right hand because of the way the cross product works.
-            leftPalmTransform.forward = Vector3.Cross(handToPointer, handToMiddle);
+            // Rotate the forward direction to the cross of the hand to the pointer and hand to the middle,
+            // and rotate the upward direction to
+            Vector3 forward = Vector3.Cross(handToPointer, handToMiddle);
+            Vector3 upward = Vector3.Cross(handToMiddle, forward);
+            
+            leftPalmTransform.rotation = Quaternion.LookRotation(forward, upward);
 
             Vector3 middleOfPalm = (animator.GetBoneTransform(HumanBodyBones.LeftHand).position + animator.GetBoneTransform(HumanBodyBones.LeftMiddleProximal).position) / 2;
-            leftPalmTransform.position = middleOfPalm + leftPalmTransform.forward * 0.05f;
+            leftPalmTransform.position = middleOfPalm + leftPalmTransform.forward * 0.03f;
+            
+            leftPalmTransform.position -= leftPalmTransform.right * 0.02f;
             
             
             if (handPoseCopierScript)

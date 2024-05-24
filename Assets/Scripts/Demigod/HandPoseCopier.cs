@@ -330,7 +330,7 @@ public class HandPoseCopier : MonoBehaviour
 
         
         // Check if the AvatarModHandPoses.json file exists in Avatar Mod Folder and overwrite it. If not, create one.
-        string handPoseCachePath = Path.Combine(avatarModFolderPath + "/AvatarModHandPoses.json");
+        string handPoseCachePath = avatarModFolderPath;
         
         if(debugHandPoseCopier)
             Debug.Log("Writing json file to memory.");
