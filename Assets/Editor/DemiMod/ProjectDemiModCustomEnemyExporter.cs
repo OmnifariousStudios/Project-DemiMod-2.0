@@ -7,6 +7,8 @@ using RootMotion.Dynamics;
 
 public class ProjectDemiModCustomEnemyExporter : EditorWindow
 {
+    public DataHolder dataHolder;
+    
     public bool FolderSetupComplete = false;
 
     // The original avatar model that will be used to create the enemy mod.
@@ -39,9 +41,25 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
     {
         if (DemiModBase.buildTarget == BuildTarget.NoTarget)
             DemiModBase.buildTarget = BuildTarget.StandaloneWindows64;
+        
+        GetDataHolder();
     }
 
+    public void GetDataHolder()
+    {
+        if(!dataHolder)
+            dataHolder = Resources.Load<DataHolder>("DataHolder");
+    }
 
+    public void SetDefaultModLocation()
+    {
+        if (dataHolder)
+        {
+            dataHolder.userDefinedModsLocation = EditorUtility.OpenFolderPanel("Select Directory", "", "");
+        }
+    }
+    
+    
     private void OnGUI()
     {
         EditorGUIUtility.labelWidth = 80;
@@ -52,6 +70,21 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
         GUILayoutOption[] options = { GUILayout.MaxWidth(1000), GUILayout.MinWidth(250) };
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition, options);
 
+        
+        if(!dataHolder)
+            GetDataHolder();
+        
+        EditorGUILayout.HelpBox("Choose where you would like mods to be stored.", MessageType.Info);
+        if(GUILayout.Button("Select Mod Location", GUILayout.Height(20)))
+        {
+            if (dataHolder)
+            {
+                SetDefaultModLocation();
+            }
+        }
+        if(dataHolder)
+            EditorGUILayout.HelpBox("Current Location: " + dataHolder.userDefinedModsLocation, MessageType.Info);
+        
         
         if (avatarModel == null) 
         {
@@ -115,14 +148,6 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
 
         using (new EditorGUI.DisabledScope(avatarModel == null))
         {
-            EditorGUILayout.HelpBox("Create folders to store your mod in the project.", MessageType.Info);
-            if (GUILayout.Button("Setup Folder Structure", GUILayout.Height(20)))
-            {
-                DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Enemy, avatarModel.name);
-            }
-            
-            DemiModBase.AddLineAndSpace();
-            
             if (GUILayout.Button("Start Mod Process", GUILayout.Height(20)))
             {
                 CreateCharacterRootFromModel();
@@ -169,9 +194,15 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             GUILayout.BeginHorizontal("Build the Mods", GUI.skin.window);
             if (GUILayout.Button("Build for Windows (PCVR)", GUILayout.Height(20)))
             {
+                GetDataHolder();
+                dataHolder.lastEnemyAvatarPrefab = finalPrefab;
+                dataHolder.lastEnemyAvatarName = enemyModRoot.name;
+                
                 //string name = enemyModRoot.name;
                 DemiModBase.ExportWindows(DemiModBase.ModType.Enemy, enemyModRoot);
 
+                PostBuildCleanup();
+                
                 EditorApplication.delayCall += () =>
                 {
                     OpenFolderAfterModsBuild();
@@ -180,8 +211,14 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
 
             if (GUILayout.Button("Build for Android (Quest)", GUILayout.Height(20)))
             {
+                GetDataHolder();
+                dataHolder.lastEnemyAvatarPrefab = finalPrefab;
+                dataHolder.lastEnemyAvatarName = enemyModRoot.name;
+                
                 DemiModBase.ExportAndroid(DemiModBase.ModType.Enemy, avatarModel);
 
+                PostBuildCleanup();
+                
                 EditorApplication.delayCall += () =>
                 {
                     OpenFolderAfterModsBuild();
@@ -244,7 +281,22 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
         EditorGUILayout.EndScrollView();
     }
 
+    
+    public void PostBuildCleanup()
+    {
+        GetDataHolder();
+        
+        finalPrefab = dataHolder.lastEnemyAvatarPrefab;
+        
+        avatarModel = GameObject.Find(dataHolder.lastEnemyAvatarName);
 
+        if (avatarModel)
+        {
+            Debug.Log("Avatar Model Found");
+        }
+    }
+
+    
     void CreateCharacterRootFromModel()
     {
         if(!characterRoot)

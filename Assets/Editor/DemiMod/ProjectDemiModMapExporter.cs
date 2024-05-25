@@ -9,6 +9,8 @@ using UnityEngine.Serialization;
 
 public class ProjectDemiModMapExporter : EditorWindow
 {
+    public DataHolder dataHolder;
+    
     public bool FolderSetupComplete = false;
 
     public Scene currentScene;
@@ -37,9 +39,25 @@ public class ProjectDemiModMapExporter : EditorWindow
     {
         if (buildTarget == BuildTarget.NoTarget)
             buildTarget = BuildTarget.StandaloneWindows64;
+        
+        GetDataHolder();
     }
 
+    public void GetDataHolder()
+    {
+        if(!dataHolder)
+            dataHolder = Resources.Load<DataHolder>("DataHolder");
+    }
 
+    public void SetDefaultModLocation()
+    {
+        if (dataHolder)
+        {
+            dataHolder.userDefinedModsLocation = EditorUtility.OpenFolderPanel("Select Directory", "", "");
+        }
+    }
+    
+    
     private void OnGUI()
     {
         EditorGUIUtility.labelWidth = 80;
@@ -50,6 +68,19 @@ public class ProjectDemiModMapExporter : EditorWindow
         GUILayoutOption[] options = { GUILayout.MaxWidth(1000), GUILayout.MinWidth(250) };
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition, options);
         
+        if(!dataHolder)
+            GetDataHolder();
+        
+        EditorGUILayout.HelpBox("Choose where you would like mods to be stored.", MessageType.Info);
+        if(GUILayout.Button("Select Mod Location", GUILayout.Height(20)))
+        {
+            if (dataHolder)
+            {
+                SetDefaultModLocation();
+            }
+        }
+        if(dataHolder)
+            EditorGUILayout.HelpBox("Current Location: " + dataHolder.userDefinedModsLocation, MessageType.Info);
 
         #region SwitchPlatforms
 
@@ -100,23 +131,6 @@ public class ProjectDemiModMapExporter : EditorWindow
             DestroyCamera();
             GetSceneLights();
         }
-        
-        
-        DemiModBase.AddLineAndSpace();
-        
-        
-        #region Setup Folders
-
-        using (new EditorGUI.DisabledScope(currentSceneController == null))
-        {
-            EditorGUILayout.HelpBox("Create folders to store your mod in the project.", MessageType.Info);
-            if (GUILayout.Button("Setup Folder Structure", GUILayout.Height(20)))
-            {
-                DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Map, currentScene.name);
-            }
-        }
-
-        #endregion
 
         
         DemiModBase.AddLineAndSpace();
@@ -579,5 +593,20 @@ public class ProjectDemiModMapExporter : EditorWindow
         EditorUtility.RevealInFinder(DemiModBase.exportPath);
     }
 }
+
+/*
+        #region Setup Folders
+
+        using (new EditorGUI.DisabledScope(currentSceneController == null))
+        {
+            EditorGUILayout.HelpBox("Create folders to store your mod in the project.", MessageType.Info);
+            if (GUILayout.Button("Setup Folder Structure", GUILayout.Height(20)))
+            {
+                DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Map, currentScene.name);
+            }
+        }
+
+        #endregion
+ */
 
 #endif

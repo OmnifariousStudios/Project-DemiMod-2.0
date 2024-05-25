@@ -20,10 +20,13 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public static class DemiModBase
 {
+    public static DataHolder DataHolder;
+    
     public static BuildTarget buildTarget = BuildTarget.StandaloneWindows64;
     
     // Path 
-    public static string modsFolderPath => Application.persistentDataPath + "/mod.io/04747/data/mods";
+    public static string modsFolderPath => GetDataHolder().userDefinedModsLocation;
+        //Application.persistentDataPath + "/mod.io/04747/data/mods";
     
     // Paths for storing mods prefabs once they've been created.
     public static string unityAssetsModsFolderPath => Application.dataPath + "/MODS";
@@ -41,93 +44,19 @@ public static class DemiModBase
     /// Location where files are stored.
     /// todo: Create a folder here and zip it, then export to mod.io 
     /// </summary>
-    public static string exportPath => DemiModBase.FormatForFileExplorer(modsFolderPath);  // + "/" + EditorUserBuildSettings.selectedStandaloneTarget);
+    public static string exportPath => DemiModBase.FormatForFileExplorer(modsFolderPath);  
+    // + "/" + EditorUserBuildSettings.selectedStandaloneTarget);
     
     
     // Scene
     public static Scene currentScene => SceneManager.GetActiveScene();
     
-    public static bool openAfterExport = EditorPrefs.GetBool("OpenAfterExport", false);
+    //public static bool openAfterExport = EditorPrefs.GetBool("OpenAfterExport", false);
     
     
     private static UserProfile user;
     private static bool isAwaitingServerResponse = false;
-    
-    
-    // Mod Process
-    // 1. Add a Humanoid Model to the project.
-    
-    
-    // Upload mods process:
-    // 1. User must sign in to mod.io.
-    // 2. User must assign a logo, name, and summary for the mod.
-    // 3. User must assign a mod type (Avatar, Map, Enemy).
-    
-    
-    
-    static ModId newMod;
-    static Texture2D logo;
-    static CreationToken token;
-    
-    static void CreateModProfile()
-    {
-         token = ModIOUnity.GenerateCreationToken();
-    
-         ModProfileDetails profile = new ModProfileDetails();
-         profile.name = "mod name";
-         profile.summary = "a brief summary about this mod being submitted";
-         profile.logo = logo;
-    
-         ModIOUnity.CreateModProfile(token, profile, CreateProfileCallback);
-     }
-    
-     static void CreateProfileCallback(ResultAnd<ModId> response)
-     {
-         if (response.result.Succeeded())
-         {
-             newMod = response.value;
-             Debug.Log("created new mod profile with id " + response.value.ToString());
-         }
-         else
-         {
-             Debug.Log("failed to create new mod profile");
-         }
-     }
-    
-    
-    
-    // Variables for Uploading Mods
-    public static ModId modId;
-    
-    private static void UploadMod(string fileDirectory)
-     {
-         ModfileDetails modfile = new ModfileDetails();
-         modfile.modId = modId;
-         
-         //modfile.directory = "files/mods/mod_123";
-         modfile.directory = fileDirectory;
-         
-         ModIOUnity.UploadModfile(modfile, UploadModCallback);
-     }
-    
-     static void UploadModCallback(Result result)
-     {
-          if (result.Succeeded())
-          {
-              Debug.Log("uploaded mod file");
-          }
-          else
-          {
-              Debug.Log("failed to upload mod file");
-          }
-     }
      
-     
-     
-     
-     
-     
-    
     
     public static void ExportWindows(ModType modType, GameObject target) 
     {
@@ -210,15 +139,23 @@ public static class DemiModBase
 
         Debug.Log("Build target: " + buildTarget);
 
+        //string buildPath = modsFolderPath + "/" + targetName + " - PCVR";
+        
+        string buildPath = GetDataHolder().userDefinedModsLocation + "/" + targetName;
+        
         // We can dynamically change the LOAD path here, and replace the LOCAL_FILE_NAME with: MOD-ID/BUILD TARGET/AVATAR NAME
         if (buildTarget == BuildTarget.StandaloneWindows64)
         {
+            buildPath = GetDataHolder().userDefinedModsLocation + "/" + targetName + " - PCVR";
+            
             Debug.Log("Setting load path for windows");
             AddressableAssetSettingsDefaultObject.Settings.profileSettings
                 .SetValue(AddressableAssetSettingsDefaultObject.Settings.activeProfileId, "LocalLoadPath", editorBuildPath);
         }
         else if (buildTarget == BuildTarget.Android)
         {
+            buildPath = GetDataHolder().userDefinedModsLocation + "/" + targetName + " - Android";
+            
             Debug.Log("Setting load path for android");
             AddressableAssetSettingsDefaultObject.Settings.profileSettings
                 .SetValue(AddressableAssetSettingsDefaultObject.Settings.activeProfileId, "LocalLoadPath", "{UnityEngine.Application.persistentDataPath}/mod.io/4747/mods/{LOCAL_FILE_NAME}/");
@@ -226,7 +163,7 @@ public static class DemiModBase
         }
 
 
-        string buildPath = modsFolderPath + "/" + targetName;
+        // Create two different folders. One for Windows, and one for Android.
 
         if (Directory.Exists(buildPath))
         {
@@ -247,6 +184,7 @@ public static class DemiModBase
             Debug.Log("Creating directory: " + buildPath);
         }
 
+        
         AddressableAssetSettingsDefaultObject.Settings.profileSettings
             .SetValue(AddressableAssetSettingsDefaultObject.Settings.activeProfileId, "LocalBuildPath", buildPath);    //"[UnityEngine.Application.persistentDataPath]" + "/" + "mod.io/04747/data/mods/");
 
@@ -282,6 +220,9 @@ public static class DemiModBase
     {
         Debug.Log("Checking folders for current mod target: " + modName);
 
+        string unityAssetModPath = Path.Combine(unityAssetsAvatarModsFolderPath, modName);
+        
+        /*
         string modStandaloneWindows64FolderPath = Path.Combine(modName, Path.Combine(BuildTarget.StandaloneWindows64.ToString(), modName));
         string modAndroidFolderPath = Path.Combine(modName, Path.Combine(BuildTarget.Android.ToString(), modName));
         
@@ -302,42 +243,22 @@ public static class DemiModBase
                 modAndroidFolderPath = Path.Combine(unityAssetsEnemyModsFolderPath, modAndroidFolderPath);
                 break;
         }
-
+        */
         
         
-        if (Directory.Exists(modStandaloneWindows64FolderPath))
+        if (Directory.Exists(unityAssetModPath))
         {
-            Debug.Log("Mod folder already exists: " + modStandaloneWindows64FolderPath);
+            Debug.Log("Mod folder already exists: " + unityAssetModPath);
         }
         else
         {
-            Debug.Log("Mod folder does not exist: " + modStandaloneWindows64FolderPath);
-            Directory.CreateDirectory(modStandaloneWindows64FolderPath);
+            Debug.Log("Mod folder does not exist: " + unityAssetModPath);
+            Directory.CreateDirectory(unityAssetModPath);
         }
-        
-        if (Directory.Exists(modAndroidFolderPath))
-        {
-            Debug.Log("Mod folder already exists: " + modAndroidFolderPath);
-        }
-        else
-        {
-            Debug.Log("Mod folder does not exist: " + modAndroidFolderPath);
-            Directory.CreateDirectory(modAndroidFolderPath);
-        }
-        
         
         AssetDatabase.Refresh();
         
-        
-        
-        if (buildTarget == BuildTarget.StandaloneWindows64)
-        {
-            return modStandaloneWindows64FolderPath;
-        }
-        else
-        {
-            return modAndroidFolderPath;
-        }
+        return unityAssetModPath;
     }
 
 
@@ -516,10 +437,76 @@ public static class DemiModBase
     }
     
     
-    public static void OpenFolderAfterModsBuild()
+    
+        
+    // Mod Process
+    // 1. Add a Humanoid Model to the project.
+    
+    
+    // Upload mods process:
+    // 1. User must sign in to mod.io.
+    // 2. User must assign a logo, name, and summary for the mod.
+    // 3. User must assign a mod type (Avatar, Map, Enemy).
+    
+    
+    static ModId newMod;
+    static Texture2D logo;
+    static CreationToken token;
+    
+    static void CreateModProfile()
     {
-        EditorUtility.RevealInFinder(DemiModBase.exportPath);
+        token = ModIOUnity.GenerateCreationToken();
+    
+        ModProfileDetails profile = new ModProfileDetails();
+        profile.name = "mod name";
+        profile.summary = "a brief summary about this mod being submitted";
+        profile.logo = logo;
+    
+        ModIOUnity.CreateModProfile(token, profile, CreateProfileCallback);
     }
+    
+    static void CreateProfileCallback(ResultAnd<ModId> response)
+    {
+        if (response.result.Succeeded())
+        {
+            newMod = response.value;
+            Debug.Log("created new mod profile with id " + response.value.ToString());
+        }
+        else
+        {
+            Debug.Log("failed to create new mod profile");
+        }
+    }
+    
+    
+    
+    // Variables for Uploading Mods
+    public static ModId modId;
+    
+    private static void UploadMod(string fileDirectory)
+    {
+        ModfileDetails modfile = new ModfileDetails();
+        modfile.modId = modId;
+         
+        //modfile.directory = "files/mods/mod_123";
+        modfile.directory = fileDirectory;
+         
+        ModIOUnity.UploadModfile(modfile, UploadModCallback);
+    }
+    
+    static void UploadModCallback(Result result)
+    {
+        if (result.Succeeded())
+        {
+            Debug.Log("uploaded mod file");
+        }
+        else
+        {
+            Debug.Log("failed to upload mod file");
+        }
+    }
+
+    
     
     
     public static async Task ZipFolder(string sourceFolder, string targetPath)
@@ -549,7 +536,9 @@ public static class DemiModBase
             //Directory.Delete(screenshotFolder, true);
         }
         else
+        {
             Directory.CreateDirectory(screenshotFolder);
+        }
         
         string screenshotPath = screenshotFolder + "/Screenshot" + stampString + ".png";
 
@@ -570,90 +559,97 @@ public static class DemiModBase
     
     
 
-/*
-    static void UploadToServer() 
-    {
-        isAwaitingServerResponse = true;
-
-        string profileFilePath = AssetDatabase.GetAssetPath(profile);
-
-        Action<WebRequestError> onSubmissionFailed = (e) => { 
-            EditorUtility.DisplayDialog("Upload Failed", "Failed to update the mod profile on the server.\n" + e.displayMessage, "Close");
-
-            isAwaitingServerResponse = false;
-            Repaint();
-        };
-
-        if (profile.modId > 0) 
+    /*
+        static void UploadToServer() 
         {
-            ModManager.SubmitModChanges(profile.modId, profile.editableModProfile, (m) => ModProfileSubmissionSucceeded(m, profileFilePath), onSubmissionFailed);
-        } 
-        else 
-        {
-            ModManager.SubmitNewMod(profile.editableModProfile, (m) => ModProfileSubmissionSucceeded(m, profileFilePath), onSubmissionFailed);
-        }
-    }
+            isAwaitingServerResponse = true;
 
-    private static void ModProfileSubmissionSucceeded(ModProfile updatedProfile, string profileFilePath) 
-    {
-        if (updatedProfile == null) 
-        {
-            isAwaitingServerResponse = false;
-            return;
-        }
+            string profileFilePath = AssetDatabase.GetAssetPath(profile);
 
-
-        // Update ScriptableModProfile
-        profile.modId = updatedProfile.id;
-        profile.editableModProfile = EditableModProfile.CreateFromProfile(updatedProfile);
-        EditorUtility.SetDirty(profile);
-        AssetDatabase.SaveAssets();
-
-        // Upload Build
-        if (Directory.Exists(exportPath)) 
-        {
-            Action<WebRequestError> onSubmissionFailed = (e) => {
-                EditorUtility.DisplayDialog("Upload Failed", "Failed to upload the mod build to the server.\n" + e.displayMessage, "Close");
+            Action<WebRequestError> onSubmissionFailed = (e) => { 
+                EditorUtility.DisplayDialog("Upload Failed", "Failed to update the mod profile on the server.\n" + e.displayMessage, "Close");
 
                 isAwaitingServerResponse = false;
-                //Repaint();
-
+                Repaint();
             };
 
-            ModManager.UploadModBinaryDirectory(profile.modId, buildProfile, exportPath, true, 
-                mf => NotifySubmissionSucceeded(updatedProfile.name, updatedProfile.profileURL), onSubmissionFailed);
-
-        } 
-        else 
-        {
-            NotifySubmissionSucceeded(updatedProfile.name, updatedProfile.profileURL);
+            if (profile.modId > 0) 
+            {
+                ModManager.SubmitModChanges(profile.modId, profile.editableModProfile, (m) => ModProfileSubmissionSucceeded(m, profileFilePath), onSubmissionFailed);
+            } 
+            else 
+            {
+                ModManager.SubmitNewMod(profile.editableModProfile, (m) => ModProfileSubmissionSucceeded(m, profileFilePath), onSubmissionFailed);
+            }
         }
-    }
 
-    private static void NotifySubmissionSucceeded(string modName, string modProfileURL) 
-    {
-        EditorUtility.DisplayDialog("Submission Successful", modName + " was successfully updated on the server." 
-                                                                     + "\nView the changes here: " + modProfileURL, "Close");
+        private static void ModProfileSubmissionSucceeded(ModProfile updatedProfile, string profileFilePath) 
+        {
+            if (updatedProfile == null) 
+            {
+                isAwaitingServerResponse = false;
+                return;
+            }
+
+
+            // Update ScriptableModProfile
+            profile.modId = updatedProfile.id;
+            profile.editableModProfile = EditableModProfile.CreateFromProfile(updatedProfile);
+            EditorUtility.SetDirty(profile);
+            AssetDatabase.SaveAssets();
+
+            // Upload Build
+            if (Directory.Exists(exportPath)) 
+            {
+                Action<WebRequestError> onSubmissionFailed = (e) => {
+                    EditorUtility.DisplayDialog("Upload Failed", "Failed to upload the mod build to the server.\n" + e.displayMessage, "Close");
+
+                    isAwaitingServerResponse = false;
+                    //Repaint();
+
+                };
+
+                ModManager.UploadModBinaryDirectory(profile.modId, buildProfile, exportPath, true, 
+                    mf => NotifySubmissionSucceeded(updatedProfile.name, updatedProfile.profileURL), onSubmissionFailed);
+
+            } 
+            else 
+            {
+                NotifySubmissionSucceeded(updatedProfile.name, updatedProfile.profileURL);
+            }
+        }
+
+        private static void NotifySubmissionSucceeded(string modName, string modProfileURL) 
+        {
+            EditorUtility.DisplayDialog("Submission Successful", modName + " was successfully updated on the server." 
+                                                                         + "\nView the changes here: " + modProfileURL, "Close");
+            
+            isAwaitingServerResponse = false;
+        }
+
+        */
+
+    /*
+        public static void OpenFolderAfterModsBuild()
+        {
+            EditorUtility.RevealInFinder(DemiModBase.exportPath);
+        }
         
-        isAwaitingServerResponse = false;
-    }
+     
+        public static void ExportSettings() 
+        {
+            //if (GUILayout.Button("Open Export Folder"))
+                //EditorUtility.RevealInFinder(basePath + "/");
 
-    */
+            EditorGUIUtility.labelWidth = 200;
+            openAfterExport = EditorGUILayout.Toggle("Open Export Folder On Complete", openAfterExport);
+            EditorPrefs.SetBool("OpenAfterExport", openAfterExport);
 
+            GUILayout.Space(10);
+            GUILayout.Label("Export path: " + exportPath, EditorStyles.label);
+        }
+      */
 
-    public static void ExportSettings() 
-    {
-        //if (GUILayout.Button("Open Export Folder"))
-            //EditorUtility.RevealInFinder(basePath + "/");
-
-        EditorGUIUtility.labelWidth = 200;
-        openAfterExport = EditorGUILayout.Toggle("Open Export Folder On Complete", openAfterExport);
-        EditorPrefs.SetBool("OpenAfterExport", openAfterExport);
-
-        GUILayout.Space(10);
-        GUILayout.Label("Export path: " + exportPath, EditorStyles.label);
-    }
-    
     public static Transform FindChildRecursive(this Transform parent, string name)
     {
         foreach (Transform child in parent)
@@ -666,6 +662,19 @@ public static class DemiModBase
                 return result;
         }
         return null;
+    }
+
+
+    
+    
+    public static DataHolder GetDataHolder()
+    {
+        if (!DataHolder)
+        {
+            DataHolder = Resources.Load<DataHolder>("DataHolder");
+        }
+
+        return DataHolder;
     }
     
     

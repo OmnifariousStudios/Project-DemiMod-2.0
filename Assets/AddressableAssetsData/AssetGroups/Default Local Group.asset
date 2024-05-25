@@ -17,8 +17,8 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: d45708f53d3c5454c91f6c211064d4ae
   m_SerializeEntries:
-  - m_GUID: ff005e913258b064f8e68b90c89e57b3
-    m_Address: Assets/MODS/Avatars/FreeCharacter_01/StandaloneWindows64/FreeCharacter_01.prefab
+  - m_GUID: bc3c5e8114dcb00498cc2c67244f9678
+    m_Address: Assets/MODS/Avatars/MaleDummy.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Player Avatar
