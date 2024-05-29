@@ -84,8 +84,23 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 SetDefaultModLocation();
             }
         }
+        
         if(dataHolder)
-            EditorGUILayout.HelpBox("Current Location: " + dataHolder.userDefinedModsLocation, MessageType.Info);
+        {
+            if (dataHolder.userDefinedModsLocation == "")
+            {
+                GUI.color = Color.red;
+                EditorGUILayout.HelpBox("Please choose a location to store built mods.", MessageType.Info);
+            }
+            else
+            {
+                GUI.color = Color.green;
+                EditorGUILayout.HelpBox("Current Location: " + dataHolder.userDefinedModsLocation, MessageType.Info);
+            }
+        }
+        
+        GUI.color = Color.white;
+        
         
         avatarModel = EditorGUILayout.ObjectField("Avatar Model", avatarModel, typeof(GameObject), true) as GameObject;
 
@@ -168,6 +183,11 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 playerAvatarScript = avatarModel.GetComponentInChildren<PlayerAvatar>();
                 
                 avatarNameString = avatarModel.name;
+
+                if (avatarNameString.Contains("Player Avatar - ") == false)
+                {
+                    avatarNameString = "Avatar Mod - " + avatarNameString;
+                }
                 
                 animator = avatarModel.GetComponent<Animator>();
 
@@ -242,7 +262,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                     DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, playerAvatarScript.gameObject.name);
                     
                     finalPrefab = PrefabUtility.SaveAsPrefabAssetAndConnect(playerAvatarScript.gameObject,
-                        DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, playerAvatarScript.gameObject.name) + ".prefab", InteractionMode.UserAction);
+                        DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, avatarNameString) + ".prefab", InteractionMode.UserAction);
                 }
                 
                 AvatarSetupComplete = true;
@@ -513,10 +533,21 @@ public class ProjectDemiModAvatarExporter : EditorWindow
     {
         GetDataHolder();
         
-        finalPrefab = dataHolder.lastPlayerAvatarPrefab;
+        if(dataHolder.lastPlayerAvatarPrefab != null)
+        {
+            finalPrefab = dataHolder.lastPlayerAvatarPrefab;
+        }
         
-        avatarModel = GameObject.Find(dataHolder.lastPlayerAvatarName);
+        
+        if(dataHolder.lastPlayerAvatarName != "")
+        {
+            if(GameObject.Find(dataHolder.lastPlayerAvatarName))
+            {
+                avatarModel = GameObject.Find(dataHolder.lastPlayerAvatarName);
+            }
+        }
 
+        
         if (avatarModel)
         {
             Debug.Log("Avatar Model Found");
@@ -722,6 +753,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             {
                 foundPalmLeft = true;
                 existingPalmLeft = handChild.gameObject;
+                break;
             }
             else
             {
@@ -777,6 +809,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         }
         else
         {
+            
             leftPalmTransform = existingPalmLeft.transform;
             //leftPalmTransform.localScale = Vector3.one * 0.02f;
         }
@@ -796,6 +829,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             {
                 foundPalmRight = true;
                 existingPalmRight = handChild.gameObject;
+                break;
             }
             else
             {
@@ -1262,6 +1296,8 @@ public class ProjectDemiModAvatarExporter : EditorWindow
 
     private void EnableDebugRenderers()
     {
+        PostBuildCleanup();
+        
         if (avatarModel)
             playerAvatarScript = avatarModel.GetComponent<PlayerAvatar>();
         
@@ -1269,6 +1305,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         {
             foreach (var tip in playerAvatarScript.fingerTips)
             {
+                tip.gameObject.SetActive(true);
                 if (tip.GetComponent<MeshRenderer>())
                 {
                     tip.GetComponent<MeshRenderer>().enabled = true;
@@ -1281,6 +1318,11 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             foreach (Transform childTransform in playerAvatarScript.leftPalm)
             {
                 childTransform.gameObject.SetActive(true);
+                
+                if (childTransform.GetComponent<MeshRenderer>())
+                {
+                    childTransform.GetComponent<MeshRenderer>().enabled = true;
+                }
             }
 
         }
@@ -1290,6 +1332,11 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             foreach (Transform childTransform in playerAvatarScript.rightPalm)
             {
                 childTransform.gameObject.SetActive(true);
+                
+                if (childTransform.GetComponent<MeshRenderer>())
+                {
+                    childTransform.GetComponent<MeshRenderer>().enabled = true;
+                }
             }
         }
         
@@ -1300,12 +1347,19 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             foreach (Transform childTransform in playerAvatarScript.avatarEyes)
             {
                 childTransform.gameObject.SetActive(true);
+                
+                if (childTransform.GetComponent<MeshRenderer>())
+                {
+                    childTransform.GetComponent<MeshRenderer>().enabled = true;
+                }
             }
         }
     }
 
     private void DisableDebugRenderers()
     {
+        PostBuildCleanup();
+        
         if (avatarModel)
             playerAvatarScript = avatarModel.GetComponent<PlayerAvatar>();
         
@@ -1313,6 +1367,8 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         {
             foreach (var tip in playerAvatarScript.fingerTips)
             {
+                tip.gameObject.SetActive(false);
+                
                 if (tip.GetComponent<MeshRenderer>())
                 {
                     tip.GetComponent<MeshRenderer>().enabled = false;
@@ -1325,6 +1381,11 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             foreach (Transform childTransform in playerAvatarScript.leftPalm)
             {
                 childTransform.gameObject.SetActive(false);
+
+                if (childTransform.GetComponent<MeshRenderer>())
+                {
+                    childTransform.GetComponent<MeshRenderer>().enabled = false;
+                }
             }
 
         }
@@ -1334,6 +1395,11 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             foreach (Transform childTransform in playerAvatarScript.rightPalm)
             {
                 childTransform.gameObject.SetActive(false);
+                
+                if (childTransform.GetComponent<MeshRenderer>())
+                {
+                    childTransform.GetComponent<MeshRenderer>().enabled = false;
+                }
             }
         }
         
@@ -1344,6 +1410,11 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             foreach (Transform childTransform in playerAvatarScript.avatarEyes)
             {
                 childTransform.gameObject.SetActive(false);
+                
+                if (childTransform.GetComponent<MeshRenderer>())
+                {
+                    childTransform.GetComponent<MeshRenderer>().enabled = false;
+                }
             }
         }
 
@@ -1354,7 +1425,14 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 foreach (var shape in handPoseCopierScript.leftHandWeaponShapes)
                 {
                     if(shape)
+                    {
                         shape.SetActive(false);
+
+                        if (shape.GetComponent<MeshRenderer>())
+                        {
+                            shape.GetComponent<MeshRenderer>().enabled = false;
+                        }
+                    }
                 }
             }
             
@@ -1363,7 +1441,14 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 foreach (var shape in handPoseCopierScript.rightHandWeaponShapes)
                 {
                     if(shape)
+                    {
                         shape.SetActive(false);
+                        
+                        if (shape.GetComponent<MeshRenderer>())
+                        {
+                            shape.GetComponent<MeshRenderer>().enabled = false;
+                        }
+                    }
                 }
             }
         }
@@ -1372,7 +1457,16 @@ public class ProjectDemiModAvatarExporter : EditorWindow
     
     public void OpenFolderAfterModsBuild()
     {
-        EditorUtility.RevealInFinder(dataHolder.lastAddressableBuildPath);
+        GetDataHolder();
+        
+        if(dataHolder.lastAddressableBuildPath != "")
+        {
+            EditorUtility.RevealInFinder(dataHolder.lastAddressableBuildPath);
+        }
+        else
+        {
+            EditorUtility.RevealInFinder(DemiModBase.exportPath);
+        }
     }
     
 }

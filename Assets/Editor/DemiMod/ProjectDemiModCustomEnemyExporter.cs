@@ -82,8 +82,22 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
                 SetDefaultModLocation();
             }
         }
+        
         if(dataHolder)
-            EditorGUILayout.HelpBox("Current Location: " + dataHolder.userDefinedModsLocation, MessageType.Info);
+        {
+            if (dataHolder.userDefinedModsLocation == "")
+            {
+                GUI.color = Color.red;
+                EditorGUILayout.HelpBox("Please choose a location to store built mods.", MessageType.Info);
+            }
+            else
+            {
+                GUI.color = Color.green;
+                EditorGUILayout.HelpBox("Current Location: " + dataHolder.userDefinedModsLocation, MessageType.Info);
+            }
+        }
+        
+        GUI.color = Color.white;
         
         
         if (avatarModel == null) 
@@ -212,6 +226,13 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             if (GUILayout.Button("Build for Android (Quest)", GUILayout.Height(20)))
             {
                 GetDataHolder();
+                
+                dataHolder.lastEnemyModel = avatarModel;
+                dataHolder.lastEnemyModelName = avatarModel.name;
+                
+                dataHolder.lastRagdollRoot = ragdoll;
+                dataHolder.lastRagdollRootName = ragdoll.name;
+                
                 dataHolder.lastEnemyAvatarPrefab = finalPrefab;
                 dataHolder.lastEnemyAvatarName = enemyModRoot.name;
                 
@@ -233,7 +254,7 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
 
         #endregion
 
-
+/*
         #region Finish Setup
 
         EditorGUILayout.HelpBox(" Use this button to Finish Setup AFTER building the Addressable.", MessageType.Info);
@@ -243,7 +264,7 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
         }
 
         #endregion
-
+*/
         
         DemiModBase.AddLineAndSpace();
         
@@ -286,10 +307,30 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
     {
         GetDataHolder();
         
-        finalPrefab = dataHolder.lastEnemyAvatarPrefab;
+        if(dataHolder.lastEnemyModel)
+            avatarModel = GameObject.Find(dataHolder.lastEnemyAvatarName);
+        else
+        {
+            avatarModel = GameObject.Find(dataHolder.lastEnemyModelName);
+        }
         
-        avatarModel = GameObject.Find(dataHolder.lastEnemyAvatarName);
+        
+        if(dataHolder.lastEnemyAvatarPrefab)
+            finalPrefab = dataHolder.lastEnemyAvatarPrefab;
+        else
+        {
+            finalPrefab = GameObject.Find(dataHolder.lastEnemyAvatarName);
+        }
+        
+        
+        if(dataHolder.lastRagdollRoot)
+            ragdoll = GameObject.Find(dataHolder.lastRagdollRootName);
+        else
+        {
+            ragdoll = GameObject.Find(dataHolder.lastRagdollRootName);
+        }
 
+        
         if (avatarModel)
         {
             Debug.Log("Avatar Model Found");
@@ -325,11 +366,11 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             Debug.Log("Creating Enemy Mod Root");
             
             enemyModRoot = new GameObject();
-            enemyModRoot.name = "Enemy Mod Root - " + avatarModel.name;
+            enemyModRoot.name = "Enemy Avatar - " + avatarModel.name;
         }
         else
         {
-            enemyModRoot.name = "Enemy Mod Root - " + avatarModel.name;
+            enemyModRoot.name = "Enemy Avatar - " + avatarModel.name;
         }
         
         
@@ -773,6 +814,7 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
         aimTransform.localRotation = Quaternion.identity;
         
         
+        /*
         Transform waistline = characterRoot.transform.FindChildRecursive("Waistline");
         if (waistline == null)
         {
@@ -788,7 +830,7 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             
             waistline.SetParent(characterRoot.transform);
         }
-        
+        */
         
         // Palm Forward Transforms
         Transform rightPalmForward = characterRoot.transform.FindChildRecursive("Right Palm Forward");
@@ -990,7 +1032,16 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
     
     public void OpenFolderAfterModsBuild()
     {
-        EditorUtility.RevealInFinder(DemiModBase.exportPath);
+        GetDataHolder();
+        
+        if(dataHolder.lastAddressableBuildPath != "")
+        {
+            EditorUtility.RevealInFinder(dataHolder.lastAddressableBuildPath);
+        }
+        else
+        {
+            EditorUtility.RevealInFinder(DemiModBase.exportPath);
+        }
     }
 }
 

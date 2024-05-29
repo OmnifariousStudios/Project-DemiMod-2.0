@@ -79,12 +79,40 @@ public class ProjectDemiModMapExporter : EditorWindow
                 SetDefaultModLocation();
             }
         }
+
         if(dataHolder)
-            EditorGUILayout.HelpBox("Current Location: " + dataHolder.userDefinedModsLocation, MessageType.Info);
+        {
+            if (dataHolder.userDefinedModsLocation == "")
+            {
+                GUI.color = Color.red;
+                EditorGUILayout.HelpBox("Please choose a location to store built mods.", MessageType.Info);
+            }
+            else
+            {
+                GUI.color = Color.green;
+                EditorGUILayout.HelpBox("Current Location: " + dataHolder.userDefinedModsLocation, MessageType.Info);
+            }
+        }
+        
+        GUI.color = Color.white;
 
-        #region SwitchPlatforms
 
+        if (currentSceneName == "")
+        {
+            GUI.color = Color.red;
+        }
+        else
+        {
+            GUI.color = Color.green;
+        }
+        
         EditorGUILayout.HelpBox("Scene: " + currentSceneName, MessageType.Info);
+        
+        GUI.color = Color.white;
+
+        
+        
+        #region SwitchPlatforms
         
         //currentScene = EditorGUILayout.ObjectField("Current Scene", currentScene, typeof(SceneInstance), true) as SceneInstance;
         DemiModBase.AddLineAndSpace();
@@ -147,16 +175,19 @@ public class ProjectDemiModMapExporter : EditorWindow
             if (GUILayout.Button("Bake Nav Mesh"))
             {
                 NavMeshBuilder.BuildNavMesh();
+                Debug.Log("Attempting to bake Nav Mesh");
             }
 
             if (GUILayout.Button("Bake Lighting"))
             {
                 Lightmapping.Bake();
+                Debug.Log("Attempting to bake Lighting");
             }
 
             if (GUILayout.Button("Bake Occlusion Culling"))
             {
                 StaticOcclusionCulling.Compute();
+                Debug.Log("Attempting to bake Occlusion Culling");
             }
         }
 
@@ -259,6 +290,7 @@ public class ProjectDemiModMapExporter : EditorWindow
         #endregion
 
 
+        /*
         #region Finish Setup
         
         EditorGUILayout.HelpBox(" Use this button to Finish Setup AFTER building the Addressable.", MessageType.Info);
@@ -275,7 +307,7 @@ public class ProjectDemiModMapExporter : EditorWindow
         }
 
         #endregion
-
+*/
         DemiModBase.AddLineAndSpace();
         
         #region Clear Data
@@ -590,7 +622,16 @@ public class ProjectDemiModMapExporter : EditorWindow
 
     public void OpenFolderAfterModsBuild()
     {
-        EditorUtility.RevealInFinder(DemiModBase.exportPath);
+        GetDataHolder();
+        
+        if(dataHolder.lastAddressableBuildPath != "")
+        {
+            EditorUtility.RevealInFinder(dataHolder.lastAddressableBuildPath);
+        }
+        else
+        {
+            EditorUtility.RevealInFinder(DemiModBase.exportPath);
+        }
     }
 }
 
