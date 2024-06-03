@@ -1,5 +1,5 @@
 # Project-Demi-Mod-SDK
 
-SDK Instructions Google Doc
+SDK Instructions - Setup and Player Avatar Modding
  
-https://docs.google.com/document/d/1tOTXvKptPqAowSRvtHLy7OXirleX0yG8HIRQjigEDPI/edit?usp=sharing
+https://docs.google.com/document/d/1DK02poQvn8eUXAHQmBMH3apVnIQatF2PFi-61ocrK7s/edit?usp=sharing
