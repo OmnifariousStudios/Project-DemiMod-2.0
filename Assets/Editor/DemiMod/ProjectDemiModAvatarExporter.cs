@@ -90,7 +90,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             if (dataHolder.userDefinedModsLocation == "")
             {
                 GUI.color = Color.red;
-                EditorGUILayout.HelpBox("Please choose a location to store built mods.", MessageType.Info);
+                EditorGUILayout.HelpBox("No location chosen.", MessageType.Info);
             }
             else
             {

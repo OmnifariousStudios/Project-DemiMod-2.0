@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -82,13 +83,13 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
                 SetDefaultModLocation();
             }
         }
-        
+
         if(dataHolder)
         {
             if (dataHolder.userDefinedModsLocation == "")
             {
                 GUI.color = Color.red;
-                EditorGUILayout.HelpBox("Please choose a location to store built mods.", MessageType.Info);
+                EditorGUILayout.HelpBox("No location chosen.", MessageType.Info);
             }
             else
             {
@@ -97,8 +98,10 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             }
         }
         
+        
         GUI.color = Color.white;
         
+        DemiModBase.AddLineAndSpace();
         
         if (avatarModel == null) 
         {
@@ -889,6 +892,9 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             
             // Rotate the grip to be along the middle and ring fingers.
             leftHandGrip.up = ringFinger - middleFinger;
+            
+            if(leftHandGrip.GetComponent<MeshRenderer>())
+                leftHandGrip.GetComponent<MeshRenderer>().enabled = false;
         }
         
         Transform rightHandGrip = characterRoot.transform.FindChildRecursive("Right Hand Grip");    
@@ -912,6 +918,9 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             
             // Rotate the grip to be along the middle and ring fingers.
             rightHandGrip.up = ringFinger - middleFinger;
+            
+            if(rightHandGrip.GetComponent<MeshRenderer>())
+                rightHandGrip.GetComponent<MeshRenderer>().enabled = false;
         }
             
         
@@ -971,6 +980,13 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             //if(puppetMaster)
                 //enemyComponentReference.puppetMaster = puppetMaster;
         }
+        
+    }
+
+
+    public void Finish()
+    {
+        // Turn off the shapes for hands/waistline.
         
     }
     

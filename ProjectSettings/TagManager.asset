@@ -12,7 +12,7 @@ TagManager:
   - Water
   - UI
   - 
-  - 
+  - Buildings
   - Player
   - Enemy
   - Terrain
@@ -22,16 +22,16 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - DestroyItDebris
   - 
   - 
   - Road
   - 
   - Ground
+  - Hand
   - 
   - 
-  - 
-  - 
+  - Grabbable
   - Close Range Objects
   - Medium Range Objects
   - Long Range Objects

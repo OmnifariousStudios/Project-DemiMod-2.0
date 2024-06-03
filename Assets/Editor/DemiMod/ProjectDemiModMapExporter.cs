@@ -85,7 +85,7 @@ public class ProjectDemiModMapExporter : EditorWindow
             if (dataHolder.userDefinedModsLocation == "")
             {
                 GUI.color = Color.red;
-                EditorGUILayout.HelpBox("Please choose a location to store built mods.", MessageType.Info);
+                EditorGUILayout.HelpBox("No location chosen.", MessageType.Info);
             }
             else
             {
@@ -93,20 +93,6 @@ public class ProjectDemiModMapExporter : EditorWindow
                 EditorGUILayout.HelpBox("Current Location: " + dataHolder.userDefinedModsLocation, MessageType.Info);
             }
         }
-        
-        GUI.color = Color.white;
-
-
-        if (currentSceneName == "")
-        {
-            GUI.color = Color.red;
-        }
-        else
-        {
-            GUI.color = Color.green;
-        }
-        
-        EditorGUILayout.HelpBox("Scene: " + currentSceneName, MessageType.Info);
         
         GUI.color = Color.white;
 
@@ -159,6 +145,19 @@ public class ProjectDemiModMapExporter : EditorWindow
             DestroyCamera();
             GetSceneLights();
         }
+        
+        if (currentSceneName == "")
+        {
+            GUI.color = Color.red;
+        }
+        else
+        {
+            GUI.color = Color.green;
+        }
+        
+        EditorGUILayout.HelpBox("Scene: " + currentSceneName, MessageType.Info);
+        
+        GUI.color = Color.white;
 
         
         DemiModBase.AddLineAndSpace();

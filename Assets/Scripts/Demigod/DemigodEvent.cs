@@ -11,13 +11,17 @@ public class DemigodEvent : MonoBehaviour
 
     public LayerMask eventLayerMask;
     
+    //public ActivationType activationType = ActivationType.Anything;
+    
     public List<UnityEvent> unityEvents = new List<UnityEvent>();
+    
+    private string mainCameraTag = "MainCamera";
     
     private void OnTriggerEnter(Collider other)
     {
         if (eventType == DemigodEventType.OnTriggerEnter)
         {
-            if (eventLayerMask == (eventLayerMask | (1 << other.gameObject.layer)))
+            if(IsViableCollider(other))
             {
                 foreach (UnityEvent unityEvent in unityEvents)
                 {
@@ -31,7 +35,7 @@ public class DemigodEvent : MonoBehaviour
     {
         if (eventType == DemigodEventType.OnTriggerExit)
         {
-            if (eventLayerMask == (eventLayerMask | (1 << other.gameObject.layer)))
+            if(IsViableCollider(other))
             {
                 foreach (UnityEvent unityEvent in unityEvents)
                 {
@@ -45,7 +49,7 @@ public class DemigodEvent : MonoBehaviour
     {
         if (eventType == DemigodEventType.OnTriggerStay)
         {
-            if (eventLayerMask == (eventLayerMask | (1 << other.gameObject.layer)))
+            if(IsViableCollider(other))
             {
                 foreach (UnityEvent unityEvent in unityEvents)
                 {
@@ -59,7 +63,7 @@ public class DemigodEvent : MonoBehaviour
     {
         if (eventType == DemigodEventType.OnCollisionEnter)
         {
-            if (eventLayerMask == (eventLayerMask | (1 << other.gameObject.layer)))
+            if(IsViableCollider(other))
             {
                 foreach (UnityEvent unityEvent in unityEvents)
                 {
@@ -73,7 +77,7 @@ public class DemigodEvent : MonoBehaviour
     {
         if (eventType == DemigodEventType.OnCollisionExit)
         {
-            if (eventLayerMask == (eventLayerMask | (1 << other.gameObject.layer)))
+            if(IsViableCollider(other))
             {
                 foreach (UnityEvent unityEvent in unityEvents)
                 {
@@ -87,7 +91,7 @@ public class DemigodEvent : MonoBehaviour
     {
         if (eventType == DemigodEventType.OnCollisionStay)
         {
-            if (eventLayerMask == (eventLayerMask | (1 << other.gameObject.layer)))
+            if(IsViableCollider(other))
             {
                 foreach (UnityEvent unityEvent in unityEvents)
                 {
@@ -96,6 +100,39 @@ public class DemigodEvent : MonoBehaviour
             }
         }
     }
+    
+    
+    private bool IsViableCollider(Collider other)
+    {
+        if (eventLayerMask == (eventLayerMask | (1 << other.gameObject.layer)))
+        {
+            if (other.GetComponent<HVRGrabbableBag>())
+                return false;
+                
+            return other.CompareTag(mainCameraTag);
+        }
+
+        return false;
+    }
+
+    private bool IsViableCollider(Collision other)
+    {
+        if (eventLayerMask == (eventLayerMask | (1 << other.gameObject.layer)))
+        {
+            if (other.collider.GetComponent<HVRGrabbableBag>())
+                return false;
+            
+            return other.collider.CompareTag(mainCameraTag);
+        }
+
+        return false;
+    }
+    
+}
+
+public enum ActivationType
+{
+    Anything, Player, LeftHand, RightHand
 }
 
 public enum DemigodEventType

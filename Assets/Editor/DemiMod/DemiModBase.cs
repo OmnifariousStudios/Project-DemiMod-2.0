@@ -150,7 +150,7 @@ public static class DemiModBase
             
             Debug.Log("Setting load path for windows");
             AddressableAssetSettingsDefaultObject.Settings.profileSettings
-                .SetValue(AddressableAssetSettingsDefaultObject.Settings.activeProfileId, "LocalLoadPath", editorBuildPath);
+                .SetValue(AddressableAssetSettingsDefaultObject.Settings.activeProfileId, "LocalLoadPath", windowsbuildPath); //editorBuildPath);
         }
         else if (buildTarget == BuildTarget.Android)
         {
