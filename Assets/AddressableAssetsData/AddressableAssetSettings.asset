@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: d45708f53d3c5454c91f6c211064d4ae
   m_currentHash:
     serializedVersion: 2
-    Hash: 4cf24ea4a61f8aaad2865828891c8e91
+    Hash: 00000000000000000000000000000000
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 1
   m_BundleLocalCatalog: 0
@@ -30,10 +30,10 @@ MonoBehaviour:
   m_StripUnityVersionFromBundleBuild: 0
   m_DisableVisibleSubAssetRepresentations: 0
   m_ShaderBundleNaming: 2
-  m_ShaderBundleCustomNaming: Grabbable Test SceneShaders4418
+  m_ShaderBundleCustomNaming: MaleDummyShaders4544
   m_MonoScriptBundleNaming: 3
   m_CheckForContentUpdateRestrictionsOption: 0
-  m_MonoScriptBundleCustomNaming: Grabbable Test SceneMono4418
+  m_MonoScriptBundleCustomNaming: MaleDummyMono4544
   m_RemoteCatalogBuildPath:
     m_Id: c583c98940729bc419d8ac3cfc0eeb33
   m_RemoteCatalogLoadPath:
@@ -75,9 +75,9 @@ MonoBehaviour:
       - m_Id: e1c32dc6ff918be46884b7c4a40aa8dc
         m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
       - m_Id: c583c98940729bc419d8ac3cfc0eeb33
-        m_Value: '[UnityEngine.Application.persistentDataPath]/mod.io/04747/data/mods/'
+        m_Value: D:/Unity Projects/MODS/MaleDummy - PCVR
       - m_Id: 1b69b53f21751aa4ba7b2a59706deb07
-        m_Value: '{UnityEngine.Application.persistentDataPath}/mod.io/04747/data/mods/{LOCAL_FILE_NAME}/'
+        m_Value: C:/Users/Public/mod.io/4747/mods/{LOCAL_FILE_NAME}/
       - m_Id: 715f36e8b43316a43962bfa40da67470
         m_Value: ServerData/[BuildTarget]
       - m_Id: 0bf2132bd24a8e640b52db8c840422a7
@@ -87,16 +87,16 @@ MonoBehaviour:
       m_Name: BuildTarget
       m_InlineUsage: 0
     - m_Id: c583c98940729bc419d8ac3cfc0eeb33
-      m_Name: LocalBuildPath
+      m_Name: Local.BuildPath
       m_InlineUsage: 0
     - m_Id: 1b69b53f21751aa4ba7b2a59706deb07
-      m_Name: LocalLoadPath
+      m_Name: Local.LoadPath
       m_InlineUsage: 0
     - m_Id: 715f36e8b43316a43962bfa40da67470
-      m_Name: RemoteBuildPath
+      m_Name: Remote.BuildPath
       m_InlineUsage: 0
     - m_Id: 0bf2132bd24a8e640b52db8c840422a7
-      m_Name: RemoteLoadPath
+      m_Name: Remote.LoadPath
       m_InlineUsage: 0
     m_ProfileVersion: 1
   m_LabelTable:
@@ -118,7 +118,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: edd08d9466b3aa94583c35f1c8c41984, type: 2}
   - {fileID: 11400000, guid: b9b6cd0489fd21748b7f9235d94d3c03, type: 2}
   - {fileID: 11400000, guid: 36bfc404a17bd424e843679ab4014d5f, type: 2}
-  m_ActiveProfileId: 99e8bc10806d7364eb3905d16108713c
+  m_ActiveProfileId: 9522eface15deab49b1c191ea0ff6752
   m_HostingServicesManager:
     m_HostingServiceInfos: []
     m_Settings: {fileID: 11400000}

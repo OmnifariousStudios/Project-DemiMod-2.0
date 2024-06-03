@@ -4356,7 +4356,7 @@ GameObject:
   - component: {fileID: 1093610552}
   - component: {fileID: 1093610551}
   m_Layer: 0
-  m_Name: Cube (7)
+  m_Name: Disappearing Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4854,7 +4854,7 @@ GameObject:
   - component: {fileID: 1289587881}
   - component: {fileID: 1289587880}
   m_Layer: 0
-  m_Name: Cube (6)
+  m_Name: Demigod Event - Trigger Cube Example
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

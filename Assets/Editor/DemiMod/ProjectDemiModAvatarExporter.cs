@@ -103,6 +103,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         
         
         avatarModel = EditorGUILayout.ObjectField("Avatar Model", avatarModel, typeof(GameObject), true) as GameObject;
+        //playerAvatarScript = EditorGUILayout.ObjectField("Player Avatar Script", playerAvatarScript, typeof(PlayerAvatar), true) as PlayerAvatar;
 
         if (avatarModel == null) 
         {
@@ -173,7 +174,10 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             
             if (GUILayout.Button("Setup Avatar", GUILayout.Height(20)))
             {
-                Debug.Log("Checking model");
+                Debug.Log("Checking model: " + avatarModel.name);
+                
+                GetDataHolder();
+                dataHolder.lastPlayerAvatarName = avatarModel.name;
                 
                 if (!avatarModel.GetComponentInChildren<PlayerAvatar>())
                 {
@@ -209,7 +213,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 }
                 else
                 {
-                    Debug.Log("Avatar found");
+                    Debug.Log("Animator's Avatar found");
                 }
                 
                 if (!animator.avatar.isHuman)
@@ -263,6 +267,11 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                     
                     finalPrefab = PrefabUtility.SaveAsPrefabAssetAndConnect(playerAvatarScript.gameObject,
                         DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, avatarNameString) + ".prefab", InteractionMode.UserAction);
+
+                    if (finalPrefab)
+                    {
+                        dataHolder.lastPlayerAvatarPrefab = finalPrefab;
+                    }
                 }
                 
                 AvatarSetupComplete = true;
@@ -365,7 +374,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 DisableDebugRenderers();
                 
                 // Save avatar before building addressable.
-                Debug.Log("Saving Avatar Prefab");
+                Debug.Log("Saving Avatar Prefab: " + avatarModel.name);
                 PrefabUtility.ApplyPrefabInstance(avatarModel, InteractionMode.UserAction);
                 
                 GetDataHolder();
@@ -535,7 +544,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         
         if(dataHolder.lastPlayerAvatarPrefab != null)
         {
-            finalPrefab = dataHolder.lastPlayerAvatarPrefab;
+            finalPrefab = null; //dataHolder.lastPlayerAvatarPrefab;
         }
         
         
@@ -550,7 +559,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         
         if (avatarModel)
         {
-            Debug.Log("Avatar Model Found");
+            Debug.Log("Avatar Model Found: " + avatarModel.name);
         }
     }
     

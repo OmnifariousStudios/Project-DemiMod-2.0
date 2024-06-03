@@ -17,11 +17,11 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: d45708f53d3c5454c91f6c211064d4ae
   m_SerializeEntries:
-  - m_GUID: 175734b95a7da3f42a48adc0e29289d8
-    m_Address: Assets/MODS/Avatars/Enemy Mod Root - MaleDummy.prefab
+  - m_GUID: cd73ee67632d47a4483c06d93e35f52f
+    m_Address: Assets/MODS/Avatars/Avatar Mod - MaleDummy.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Enemy Avatar
+    - Player Avatar
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: ab3ef46107c2bfb499cc177a1efc4d32, type: 2}

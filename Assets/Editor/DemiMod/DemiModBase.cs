@@ -115,10 +115,10 @@ public static class DemiModBase
         
         // Set the bundles' naming style to custom, and make the name as unique as possible to avoid cross-mod conflicts.
         AddressableAssetSettingsDefaultObject.Settings.ShaderBundleNaming = ShaderBundleNaming.Custom;
-        AddressableAssetSettingsDefaultObject.Settings.ShaderBundleCustomNaming = targetName + "Shaders" + DateTime.Now.Minute + DateTime.Now.Second;
+        AddressableAssetSettingsDefaultObject.Settings.ShaderBundleCustomNaming = targetName + "_Shaders" + DateTime.Now.Minute + DateTime.Now.Second;
         
         AddressableAssetSettingsDefaultObject.Settings.MonoScriptBundleNaming = MonoScriptBundleNaming.Custom;
-        AddressableAssetSettingsDefaultObject.Settings.MonoScriptBundleCustomNaming = targetName + "Mono" + DateTime.Now.Minute + DateTime.Now.Second;
+        AddressableAssetSettingsDefaultObject.Settings.MonoScriptBundleCustomNaming = targetName + "_Mono" + DateTime.Now.Minute + DateTime.Now.Second;
 
 
         if (group == null || guid == null)
@@ -138,27 +138,26 @@ public static class DemiModBase
         
 
         Debug.Log("Build target: " + buildTarget);
-
-        //string buildPath = modsFolderPath + "/" + targetName + " - PCVR";
         
         string buildPath = GetDataHolder().userDefinedModsLocation + "/" + targetName;
+        
         
         // We can dynamically change the LOAD path here, and replace the LOCAL_FILE_NAME with: MOD-ID/BUILD TARGET/AVATAR NAME
         if (buildTarget == BuildTarget.StandaloneWindows64)
         {
-            buildPath = GetDataHolder().userDefinedModsLocation + "/" + targetName + " - PCVR";
+            buildPath = GetDataHolder().userDefinedModsLocation + "/" + label + " - " + targetName + " - PCVR";
             
             Debug.Log("Setting load path for windows");
             AddressableAssetSettingsDefaultObject.Settings.profileSettings
-                .SetValue(AddressableAssetSettingsDefaultObject.Settings.activeProfileId, "LocalLoadPath", windowsbuildPath); //editorBuildPath);
+                .SetValue(AddressableAssetSettingsDefaultObject.Settings.activeProfileId, "Local.LoadPath", editorBuildPath); //editorBuildPath);
         }
         else if (buildTarget == BuildTarget.Android)
         {
-            buildPath = GetDataHolder().userDefinedModsLocation + "/" + targetName + " - Android";
+            buildPath = GetDataHolder().userDefinedModsLocation + "/" + label + " - " +  targetName + " - Android";
             
             Debug.Log("Setting load path for android");
             AddressableAssetSettingsDefaultObject.Settings.profileSettings
-                .SetValue(AddressableAssetSettingsDefaultObject.Settings.activeProfileId, "LocalLoadPath", "{UnityEngine.Application.persistentDataPath}/mod.io/4747/mods/{LOCAL_FILE_NAME}/");
+                .SetValue(AddressableAssetSettingsDefaultObject.Settings.activeProfileId, "Local.LoadPath", "{UnityEngine.Application.persistentDataPath}/mod.io/4747/mods/{LOCAL_FILE_NAME}/");
             
         }
 
@@ -186,7 +185,7 @@ public static class DemiModBase
 
         
         AddressableAssetSettingsDefaultObject.Settings.profileSettings
-            .SetValue(AddressableAssetSettingsDefaultObject.Settings.activeProfileId, "LocalBuildPath", buildPath);    //"[UnityEngine.Application.persistentDataPath]" + "/" + "mod.io/04747/data/mods/");
+            .SetValue(AddressableAssetSettingsDefaultObject.Settings.activeProfileId, "Local.BuildPath", buildPath);    //"[UnityEngine.Application.persistentDataPath]" + "/" + "mod.io/04747/data/mods/");
 
         
         AddressableAssetSettings.CleanPlayerContent(AddressableAssetSettingsDefaultObject.Settings.ActivePlayerDataBuilder);
