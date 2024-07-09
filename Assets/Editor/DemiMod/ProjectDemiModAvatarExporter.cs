@@ -87,7 +87,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         
         if(dataHolder)
         {
-            if (dataHolder.userDefinedModsLocation == "")
+            if (string.IsNullOrEmpty(dataHolder.userDefinedModsLocation))
             {
                 GUI.color = Color.red;
                 EditorGUILayout.HelpBox("No location chosen.", MessageType.Info);
@@ -244,7 +244,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                     if (playerAvatarScript)
                         handPoseCopierScript.playerAvatarScript = playerAvatarScript;
                     
-                    Debug.Log(Path.Combine(DemiModBase.unityAssetsAvatarModsFolderPath, playerAvatarScript.gameObject.name));
+                    //Debug.Log("Avatar's mod folder path in project is: " + Path.Combine(DemiModBase.unityAssetsAvatarModsFolderPath, playerAvatarScript.gameObject.name));
                     
                     handPoseCopierScript.avatarModFolderPath = Path.Combine(Path.Combine(DemiModBase.unityAssetsAvatarModsFolderPath, playerAvatarScript.gameObject.name), "AvatarModHandPoses.json");
                     
@@ -352,7 +352,10 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         
         DemiModBase.AddLineAndSpace();
         
-        
+        if(!finalPrefab && dataHolder.lastPlayerAvatarPrefab)
+        {
+            finalPrefab = dataHolder.lastPlayerAvatarPrefab;
+        }
         using (new EditorGUI.DisabledScope(finalPrefab == null))
         {
             finalPrefab = EditorGUILayout.ObjectField("Final Prefab", finalPrefab, typeof(GameObject), true) as GameObject;
@@ -378,9 +381,12 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 PrefabUtility.ApplyPrefabInstance(avatarModel, InteractionMode.UserAction);
                 
                 GetDataHolder();
-                dataHolder.lastAddressableBuildPath = DemiModBase.modsFolderPath + "/" + avatarModel.name + " - PCVR";
+                //dataHolder.lastAddressableBuildPath = DemiModBase.modsFolderPath + "/" + avatarModel.name + " - PCVR";
                 dataHolder.lastPlayerAvatarPrefab = finalPrefab;
                 dataHolder.lastPlayerAvatarName = playerAvatarScript.gameObject.name;
+                
+                AssetDatabase.Refresh();
+                EditorUtility.SetDirty(dataHolder);
                 
                 DemiModBase.ExportWindows(DemiModBase.ModType.Avatar, avatarModel);
                 
@@ -401,9 +407,12 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 PrefabUtility.ApplyPrefabInstance(avatarModel, InteractionMode.UserAction);
                 
                 GetDataHolder();
-                dataHolder.lastAddressableBuildPath = DemiModBase.modsFolderPath + "/" + avatarModel.name + " - Android";
+                //dataHolder.lastAddressableBuildPath = DemiModBase.modsFolderPath + "/" + avatarModel.name + " - Android";
                 dataHolder.lastPlayerAvatarPrefab = finalPrefab;
                 dataHolder.lastPlayerAvatarName = playerAvatarScript.gameObject.name;
+                
+                AssetDatabase.Refresh();
+                EditorUtility.SetDirty(dataHolder);
                 
                 DemiModBase.ExportAndroid(DemiModBase.ModType.Avatar, avatarModel);
                 
@@ -440,12 +449,28 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                         playerAvatarScript = avatarModel.GetComponentInChildren<PlayerAvatar>();
                 }
                 
-                if(dataHolder.handPoseBuildLocation != "")
+                if(string.IsNullOrEmpty(dataHolder.handPoseBuildLocation) == false)
                 {
-                    Debug.Log("Attempting to Copy file: " + dataHolder.handPoseBuildLocation + " to " 
-                          + dataHolder.lastAddressableBuildPath + "/AvatarModHandPoses.json");
-                
-                    FileUtil.CopyFileOrDirectory(dataHolder.handPoseBuildLocation, dataHolder.lastAddressableBuildPath + "/AvatarModHandPoses.json");
+                    if(true)// File.Exists(dataHolder.handPoseBuildLocation) && Directory.Exists(dataHolder.lastAddressableBuildPath))
+                    {
+                        Debug.Log("Attempting to Copy file: " + dataHolder.handPoseBuildLocation + " to " 
+                                  + dataHolder.lastAddressableBuildPath + "/AvatarModHandPoses.json");
+                        
+                        //File.Copy(dataHolder.handPoseBuildLocation, dataHolder.lastAddressableBuildPath);
+                        
+                        FileUtil.CopyFileOrDirectory(dataHolder.handPoseBuildLocation,
+                            Path.Combine(dataHolder.lastAddressableBuildPath + "/AvatarModHandPoses.json"));
+                        
+                        //File.Move(dataHolder.handPoseBuildLocation, Path.Combine(dataHolder.lastAddressableBuildPath, "AvatarModHandPoses.json"));
+                    }
+                    else
+                    {
+                        Debug.LogError("Hand Pose JSON file not found. Please create Hand Poses first.");
+                    }
+                }
+                else
+                {
+                    Debug.LogError("Hand Pose JSON file not found. Please create Hand Poses first.");
                 }
             }
         }

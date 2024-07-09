@@ -77,12 +77,14 @@ public class ProjectDemiModMapExporter : EditorWindow
             if (dataHolder)
             {
                 SetDefaultModLocation();
+                // save assets
+                EditorUtility.SetDirty(dataHolder);
             }
         }
 
         if(dataHolder)
         {
-            if (dataHolder.userDefinedModsLocation == "")
+            if (string.IsNullOrEmpty(dataHolder.userDefinedModsLocation))
             {
                 GUI.color = Color.red;
                 EditorGUILayout.HelpBox("No location chosen.", MessageType.Info);

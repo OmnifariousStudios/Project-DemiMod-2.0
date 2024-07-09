@@ -86,7 +86,7 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
 
         if(dataHolder)
         {
-            if (dataHolder.userDefinedModsLocation == "")
+            if (string.IsNullOrEmpty(dataHolder.userDefinedModsLocation))
             {
                 GUI.color = Color.red;
                 EditorGUILayout.HelpBox("No location chosen.", MessageType.Info);

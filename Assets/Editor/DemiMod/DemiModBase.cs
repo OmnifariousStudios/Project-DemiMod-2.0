@@ -24,8 +24,10 @@ public static class DemiModBase
     
     public static BuildTarget buildTarget = BuildTarget.StandaloneWindows64;
     
-    // Path 
-    public static string modsFolderPath => GetDataHolder().userDefinedModsLocation;
+    /// <summary>
+    /// ModsFolderPath is the location where mods are stored on the user's computer, chosen by the user.
+    /// </summary>
+    public static string modsFolderPath => GetDataHolder().GetUserDefinedModsLocation();
         //Application.persistentDataPath + "/mod.io/04747/data/mods";
     
     // Paths for storing mods prefabs once they've been created.
@@ -161,6 +163,10 @@ public static class DemiModBase
             
         }
 
+        GetDataHolder().lastAddressableBuildPath = buildPath;
+        AssetDatabase.Refresh();
+        EditorUtility.SetDirty(GetDataHolder());
+        
 
         // Create two different folders. One for Windows, and one for Android.
 
@@ -217,7 +223,7 @@ public static class DemiModBase
     /// <param name="modName"></param>
     public static string GetOrCreateModPath(ModType modType, string modName)
     {
-        Debug.Log("Checking folders for current mod target: " + modName);
+        Debug.Log("Checking project folders for current mod target: " + modName);
 
         string unityAssetModPath = Path.Combine(unityAssetsAvatarModsFolderPath, modName);
         
@@ -247,11 +253,11 @@ public static class DemiModBase
         
         if (Directory.Exists(unityAssetModPath))
         {
-            Debug.Log("Mod folder already exists: " + unityAssetModPath);
+            Debug.Log("Project folder already exists: " + unityAssetModPath);
         }
         else
         {
-            Debug.Log("Mod folder does not exist: " + unityAssetModPath);
+            Debug.Log("Project folder does not exist: " + unityAssetModPath + ". Creating folder now.");
             Directory.CreateDirectory(unityAssetModPath);
         }
         

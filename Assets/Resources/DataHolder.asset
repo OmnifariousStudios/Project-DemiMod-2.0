@@ -12,6 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 662e13b47a5c47e4e8187e8d8922dac1, type: 3}
   m_Name: DataHolder
   m_EditorClassIdentifier: 
-  handPoseBuildLocation: 
+  userDefinedModsLocation: D:/Unity Projects/MODS
+  lastAddressableBuildPath: D:/Unity Projects/MODS/Player Avatar - FreeCharacter_01
+    - PCVR
+  handPoseCopierGameObject: {fileID: 0}
+  handPoseBuildLocation: D:/Unity Projects/Project DemiMod 2.0/Assets/MODS/Avatars\FreeCharacter_01\AvatarModHandPoses.json
   lastPlayerAvatarPrefab: {fileID: 0}
+  lastPlayerAvatarName: FreeCharacter_01
+  lastEnemyModel: {fileID: 0}
+  lastEnemyModelName: 
+  lastRagdollRoot: {fileID: 0}
+  lastRagdollRootName: 
   lastEnemyAvatarPrefab: {fileID: 0}
+  lastEnemyAvatarName: 
