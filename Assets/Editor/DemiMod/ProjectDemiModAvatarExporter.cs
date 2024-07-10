@@ -356,6 +356,21 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         {
             finalPrefab = dataHolder.lastPlayerAvatarPrefab;
         }
+
+        if (!finalPrefab && !dataHolder.lastPlayerAvatarPrefab)
+        {
+            if (avatarModel)
+            {
+                //finalPrefab = PrefabUtility.GetCorrespondingObjectFromOriginalSource(avatarModel);
+                //dataHolder.lastPlayerAvatarPrefab = finalPrefab;
+                
+                // Save assets
+                //EditorUtility.SetDirty(dataHolder);
+                //AssetDatabase.SaveAssets();
+            }
+        }
+        
+            
         using (new EditorGUI.DisabledScope(finalPrefab == null))
         {
             finalPrefab = EditorGUILayout.ObjectField("Final Prefab", finalPrefab, typeof(GameObject), true) as GameObject;
@@ -387,6 +402,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 
                 AssetDatabase.Refresh();
                 EditorUtility.SetDirty(dataHolder);
+                AssetDatabase.SaveAssets();
                 
                 DemiModBase.ExportWindows(DemiModBase.ModType.Avatar, avatarModel);
                 
@@ -413,6 +429,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 
                 AssetDatabase.Refresh();
                 EditorUtility.SetDirty(dataHolder);
+                AssetDatabase.SaveAssets();
                 
                 DemiModBase.ExportAndroid(DemiModBase.ModType.Avatar, avatarModel);
                 
@@ -567,17 +584,20 @@ public class ProjectDemiModAvatarExporter : EditorWindow
     {
         GetDataHolder();
         
-        if(dataHolder.lastPlayerAvatarPrefab != null)
+        if(!finalPrefab && dataHolder.lastPlayerAvatarPrefab)
         {
-            finalPrefab = null; //dataHolder.lastPlayerAvatarPrefab;
+            finalPrefab = dataHolder.lastPlayerAvatarPrefab;
         }
         
         
-        if(dataHolder.lastPlayerAvatarName != "")
+        if(!avatarModel)
         {
-            if(GameObject.Find(dataHolder.lastPlayerAvatarName))
+            if (string.IsNullOrEmpty(dataHolder.lastPlayerAvatarName) == false)
             {
-                avatarModel = GameObject.Find(dataHolder.lastPlayerAvatarName);
+                if (GameObject.Find(dataHolder.lastPlayerAvatarName))
+                {
+                    avatarModel = GameObject.Find(dataHolder.lastPlayerAvatarName);
+                }
             }
         }
 
@@ -600,6 +620,13 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         animator = null;
         playerAvatarScript = null;
         avatarNameString = "";
+        
+        if(!dataHolder)
+            GetDataHolder();
+        
+        dataHolder.lastPlayerAvatarPrefab = null;
+        dataHolder.lastPlayerAvatarName = "";
+        
     }
 
     
