@@ -251,6 +251,8 @@ public class ProjectDemiModMapExporter : EditorWindow
                 DisableInterfaceSpawnPoints();
 
                 DisableShieldWallRenderers();
+                
+                RecordFogSettings();
 
                 DemiModBase.ExportWindows(DemiModBase.ModType.Map, null);
 
@@ -268,6 +270,8 @@ public class ProjectDemiModMapExporter : EditorWindow
                 DisableInterfaceSpawnPoints();
 
                 DisableShieldWallRenderers();
+                
+                RecordFogSettings();
 
                 DemiModBase.ExportAndroid(DemiModBase.ModType.Map, null);
 
@@ -352,6 +356,18 @@ public class ProjectDemiModMapExporter : EditorWindow
         else
         {
             currentSceneController = sceneController.GetComponent<SceneController>();
+        }
+    }
+    
+    public void RecordFogSettings()
+    {
+        if (currentSceneController)
+        {
+            currentSceneController.fogColor = RenderSettings.fogColor;
+            currentSceneController.fogDensity = RenderSettings.fogDensity;
+            currentSceneController.fogStart = RenderSettings.fogStartDistance;
+            currentSceneController.fogEnd = RenderSettings.fogEndDistance;
+            currentSceneController.fogMode = RenderSettings.fogMode;
         }
     }
 

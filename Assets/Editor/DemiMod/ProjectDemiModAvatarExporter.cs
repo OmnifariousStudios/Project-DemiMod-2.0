@@ -11,6 +11,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
     public DataHolder dataHolder;
     
     public HandPoseCopier handPoseCopierScript;
+    public WeblineRenderer weblineRendererScript;
     
     // Demi-Mod Variables
     private GameObject avatarModel;
@@ -232,6 +233,11 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 {
                     handPoseCopierScript = GameObject.Find("Hand Pose Copier").GetComponent<HandPoseCopier>();
                 }
+                
+                if(!weblineRendererScript)
+                {
+                    weblineRendererScript = GameObject.Find("Hand Pose Copier").GetComponent<WeblineRenderer>();
+                }
 
                 if(handPoseCopierScript)
                 {
@@ -252,7 +258,11 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                     
                     Debug.Log("Hand Pose Script should now be in Path: " + handPoseCopierScript.avatarModFolderPath);
                 }
-                
+
+                if (weblineRendererScript)
+                {
+                    weblineRendererScript.playerAvatar = playerAvatarScript;
+                }
                 
                 playerAvatarScript.animator = animator;
                 
@@ -799,14 +809,22 @@ public class ProjectDemiModAvatarExporter : EditorWindow
     }
     
 
+    public float webGrabDistanceAdjustment = -0.04f;
     private void SetupPalmsAndSpawnPoints()
     {
-
+        // Left Hand
         // Add Palm Transform if not already created.
         GameObject existingPalmLeft = null;
         Transform leftPalmTransform;
         bool foundPalmLeft = false;
-        
+
+        Vector3 leftHandToPointer = Vector3.zero;
+        Vector3 leftHandToMiddle = Vector3.zero;
+        Vector3 leftHandToRing = Vector3.zero;
+        Vector3 leftHandToPinky = Vector3.zero;
+
+        Vector3 leftPalmForward;
+        Vector3 leftPalmUpward;
         
         foreach (Transform handChild in playerAvatarScript.leftHand)
         {
@@ -821,6 +839,13 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 existingPalmLeft = null;
             }
         }
+        
+        // Find the approximate position & rotation of the avatar palm to make it easier for modders.
+        // Use the cross product of the hand to the pointer finger and the hand to the middle finger to get the palm forward direction.
+        leftHandToPointer = animator.GetBoneTransform(HumanBodyBones.LeftIndexProximal).position - animator.GetBoneTransform(HumanBodyBones.LeftHand).position;
+        leftHandToMiddle = animator.GetBoneTransform(HumanBodyBones.LeftMiddleProximal).position - animator.GetBoneTransform(HumanBodyBones.LeftHand).position;
+        leftHandToRing = animator.GetBoneTransform(HumanBodyBones.LeftRingProximal).position - animator.GetBoneTransform(HumanBodyBones.LeftHand).position;
+        leftHandToPinky = animator.GetBoneTransform(HumanBodyBones.LeftLittleProximal).position - animator.GetBoneTransform(HumanBodyBones.LeftHand).position;
         
         if (!foundPalmLeft)
         {
@@ -837,17 +862,13 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             leftPalmTransform.localRotation = Quaternion.identity;
  
             
-            // Find the approximate position & rotation of the avatar palm to make it easier for modders.
-            // Use the cross product of the hand to the pointer finger and the hand to the middle finger to get the palm forward direction.
-            Vector3 handToPointer = animator.GetBoneTransform(HumanBodyBones.LeftIndexProximal).position - animator.GetBoneTransform(HumanBodyBones.LeftHand).position;
-            Vector3 handToMiddle = animator.GetBoneTransform(HumanBodyBones.LeftMiddleProximal).position - animator.GetBoneTransform(HumanBodyBones.LeftHand).position;
             
             // Rotate the forward direction to the cross of the hand to the pointer and hand to the middle,
             // and rotate the upward direction to
-            Vector3 forward = Vector3.Cross(handToPointer, handToMiddle);
-            Vector3 upward = Vector3.Cross(handToMiddle, forward);
+            leftPalmForward = Vector3.Cross(leftHandToPointer, leftHandToMiddle);
+            leftPalmUpward = Vector3.Cross(leftHandToMiddle, leftPalmForward);
             
-            leftPalmTransform.rotation = Quaternion.LookRotation(forward, upward);
+            leftPalmTransform.rotation = Quaternion.LookRotation(leftPalmForward, leftPalmUpward);
 
             Vector3 middleOfPalm = (animator.GetBoneTransform(HumanBodyBones.LeftHand).position + animator.GetBoneTransform(HumanBodyBones.LeftMiddleProximal).position) / 2;
             leftPalmTransform.position = middleOfPalm + leftPalmTransform.forward * 0.03f;
@@ -879,6 +900,48 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         playerAvatarScript.leftHandSpawnPointParent = leftPalmTransform;
 
         
+        // Web Grab Hand Positions
+        if (playerAvatarScript.leftWebGrabHandPositionLower)
+        {
+            
+        }
+        else
+        {
+            var webPositionLower = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            webPositionLower.name = "Left Web Position Lower";
+            webPositionLower.GetComponent<SphereCollider>().enabled = false;
+            webPositionLower.transform.localScale = Vector3.one * 0.02f;
+            
+            webPositionLower.transform.SetParent(animator.GetBoneTransform(HumanBodyBones.LeftHand));
+            
+            playerAvatarScript.leftWebGrabHandPositionLower = webPositionLower.transform;
+            
+            playerAvatarScript.leftWebGrabHandPositionLower.position = animator.GetBoneTransform(HumanBodyBones.LeftLittleProximal).position + (leftPalmTransform.forward * 0.03f);
+            playerAvatarScript.leftWebGrabHandPositionLower.position += leftHandToPinky.normalized * -0.04f;;
+        }
+        
+        if (playerAvatarScript.leftWebGrabHandPositionUpper)
+        {
+            
+        }
+        else
+        {
+            var webPositionUpper = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            webPositionUpper.name = "Left Web Position Upper";
+            webPositionUpper.GetComponent<SphereCollider>().enabled = false;
+            webPositionUpper.transform.localScale = Vector3.one * 0.02f;
+            
+            webPositionUpper.transform.SetParent(animator.GetBoneTransform(HumanBodyBones.LeftHand));
+            
+            playerAvatarScript.leftWebGrabHandPositionUpper = webPositionUpper.transform;
+            
+            playerAvatarScript.leftWebGrabHandPositionUpper.position = animator.GetBoneTransform(HumanBodyBones.LeftIndexProximal).position + (leftPalmTransform.forward * 0.03f);
+            playerAvatarScript.leftWebGrabHandPositionUpper.position += leftHandToPointer.normalized * -0.04f;;
+        }
+        
+        
+        
+        // Right Hand
         // Add Palm Transform if not already created.
         GameObject existingPalmRight = null;
         Transform rightPalmTransform;
@@ -897,8 +960,22 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 existingPalmRight = null;
             }
         }
-        
 
+        Vector3 rightHandToPointer = Vector3.zero;
+        Vector3 rightHandToMiddle = Vector3.zero;
+        Vector3 rightHandToRing = Vector3.zero;
+        Vector3 rightHandToPinky = Vector3.zero;
+
+        Vector3 rightPalmForward;
+        Vector3 rightPalmUpward;
+        
+        // Find the approximate position & rotation of the avatar palm to make it easier for modders.
+        // Use the cross product of the hand to the pointer finger and the hand to the middle finger to get the palm forward direction.
+        rightHandToPointer = animator.GetBoneTransform(HumanBodyBones.RightIndexProximal).position - animator.GetBoneTransform(HumanBodyBones.RightHand).position;
+        rightHandToMiddle = animator.GetBoneTransform(HumanBodyBones.RightMiddleProximal).position - animator.GetBoneTransform(HumanBodyBones.RightHand).position;
+        rightHandToRing = animator.GetBoneTransform(HumanBodyBones.RightRingProximal).position - animator.GetBoneTransform(HumanBodyBones.RightHand).position;
+        rightHandToPinky = animator.GetBoneTransform(HumanBodyBones.RightLittleProximal).position - animator.GetBoneTransform(HumanBodyBones.RightHand).position;
+        
         if (!foundPalmRight)
         {
             //var tip = new GameObject("Tip");
@@ -913,20 +990,16 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             rightPalmTransform.localPosition = Vector3.zero;
             rightPalmTransform.localRotation = Quaternion.identity;
             
-            // Find the approximate position & rotation of the avatar palm to make it easier for modders.
-            // Use the cross product of the hand to the pointer finger and the hand to the middle finger to get the palm forward direction.
-            Vector3 handToPointer = animator.GetBoneTransform(HumanBodyBones.RightIndexProximal).position - animator.GetBoneTransform(HumanBodyBones.RightHand).position;
-            Vector3 handToMiddle = animator.GetBoneTransform(HumanBodyBones.RightMiddleProximal).position - animator.GetBoneTransform(HumanBodyBones.RightHand).position;
             
             // Rotate the forward direction to the cross of the hand to the pointer and hand to the middle,
             // and rotate the upward direction to 
-            Vector3 forward = Vector3.Cross(handToMiddle, handToPointer);
-            Vector3 upward = Vector3.Cross(forward, handToMiddle);
+            rightPalmForward = Vector3.Cross(rightHandToMiddle, rightHandToPointer);
+            rightPalmUpward = Vector3.Cross(rightPalmForward, rightHandToMiddle);
             
-            rightPalmTransform.rotation = Quaternion.LookRotation(forward, upward);
+            rightPalmTransform.rotation = Quaternion.LookRotation(rightPalmForward, rightPalmUpward);
 
-            Vector3 middleOfPalm = (animator.GetBoneTransform(HumanBodyBones.RightHand).position + animator.GetBoneTransform(HumanBodyBones.RightMiddleProximal).position) / 2;
-            rightPalmTransform.position = middleOfPalm + rightPalmTransform.forward * 0.03f;
+            Vector3 rightMiddleOfPalm = (animator.GetBoneTransform(HumanBodyBones.RightHand).position + animator.GetBoneTransform(HumanBodyBones.RightMiddleProximal).position) / 2;
+            rightPalmTransform.position = rightMiddleOfPalm + rightPalmTransform.forward * 0.03f;
             
             rightPalmTransform.position += rightPalmTransform.right * 0.02f;
             
@@ -952,6 +1025,56 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         
         playerAvatarScript.rightPalm = rightPalmTransform;
         playerAvatarScript.rightHandSpawnPointParent = rightPalmTransform;
+        
+        // Web Grab Hand Positions
+        if (playerAvatarScript.rightWebGrabHandPositionLower)
+        {
+            
+        }
+        else
+        {
+            var webPositionLower = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            webPositionLower.name = "Right Web Position Lower";
+            webPositionLower.GetComponent<SphereCollider>().enabled = false;
+            webPositionLower.transform.localScale = Vector3.one * 0.02f;
+            
+            webPositionLower.transform.SetParent(animator.GetBoneTransform(HumanBodyBones.RightHand));
+            
+            playerAvatarScript.rightWebGrabHandPositionLower = webPositionLower.transform;
+            
+            playerAvatarScript.rightWebGrabHandPositionLower.position = animator.GetBoneTransform(HumanBodyBones.RightLittleProximal).position + (rightPalmTransform.forward * 0.03f);
+            playerAvatarScript.rightWebGrabHandPositionLower.position += rightHandToPinky.normalized * -0.04f;;
+        }
+        
+        if (playerAvatarScript.rightWebGrabHandPositionUpper)
+        {
+            
+        }
+        else
+        {
+            var webPositionUpper = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            webPositionUpper.name = "Right Web Position Upper";
+            webPositionUpper.GetComponent<SphereCollider>().enabled = false;
+            webPositionUpper.transform.localScale = Vector3.one * 0.02f;
+            
+            webPositionUpper.transform.SetParent(animator.GetBoneTransform(HumanBodyBones.RightHand));
+            
+            playerAvatarScript.rightWebGrabHandPositionUpper = webPositionUpper.transform;
+            
+            playerAvatarScript.rightWebGrabHandPositionUpper.position = animator.GetBoneTransform(HumanBodyBones.RightIndexProximal).position + (rightPalmTransform.forward * 0.03f);
+            playerAvatarScript.rightWebGrabHandPositionUpper.position += rightHandToPointer.normalized * -0.04f;
+        }
+        
+        if (weblineRendererScript)
+        {
+            weblineRendererScript.leftWebGrabHandPositionLower = playerAvatarScript.leftWebGrabHandPositionLower;
+            weblineRendererScript.leftWebGrabHandPositionUpper = playerAvatarScript.leftWebGrabHandPositionUpper;
+            
+            weblineRendererScript.rightWebGrabHandPositionLower = playerAvatarScript.rightWebGrabHandPositionLower;
+            weblineRendererScript.rightWebGrabHandPositionUpper = playerAvatarScript.rightWebGrabHandPositionUpper;
+            
+            weblineRendererScript.SetPoints();
+        }
     }
     
     
@@ -1512,6 +1635,12 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                     }
                 }
             }
+        }
+
+        if (weblineRendererScript)
+        {
+            weblineRendererScript.leftLineRenderer.enabled = false;
+            weblineRendererScript.rightLineRenderer.enabled = false;
         }
     }
     

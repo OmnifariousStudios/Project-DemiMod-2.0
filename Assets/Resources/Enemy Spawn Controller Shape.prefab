@@ -23,13 +23,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 197918319924840140}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -1, z: -0, w: -0.00000035762784}
   m_LocalPosition: {x: -13.292, y: 202.858, z: -7.188}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7240812675956271930}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!1 &4206574522224686716
 GameObject:
@@ -44,7 +45,7 @@ GameObject:
   - component: {fileID: 643464199636249691}
   - component: {fileID: 2217690610217764570}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Cube - Do Not Move This
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57,12 +58,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4206574522224686716}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.08799142, y: -2.8421713e-14, z: -3.552714e-15, w: 0.9961213}
   m_LocalPosition: {x: 0.1911, y: -0.0198, z: -0.0064}
   m_LocalScale: {x: 3.4708023, y: 1.7667471, z: 0.06320361}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2029991761781942485}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 10.096, y: 0, z: 0}
 --- !u!33 &6328039466423590926
 MeshFilter:
@@ -83,6 +85,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -121,8 +124,16 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4206574522224686716}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}

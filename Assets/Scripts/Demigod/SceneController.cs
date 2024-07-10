@@ -16,5 +16,11 @@ public class SceneController : MonoBehaviour
     
     public List<Light> sceneLights;
     
+    public Color fogColor = new Color(128, 128, 128);
+    public float fogDensity;
+    public float fogStart;
+    public float fogEnd;
+    public FogMode fogMode;
+    
     public List<DemigodProp> propsInScene = new List<DemigodProp>();
 }

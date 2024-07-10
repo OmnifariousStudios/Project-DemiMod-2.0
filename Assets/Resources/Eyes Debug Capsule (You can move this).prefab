@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5047095830342910587}
   m_Layer: 0
-  m_Name: Eyes Debug Capsule
+  m_Name: Eyes Debug Capsule (You can move this)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
