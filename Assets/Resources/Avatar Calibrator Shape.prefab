@@ -115,7 +115,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1040115842540520233}
   m_Layer: 0
-  m_Name: Avatar Calibrator Shape (You can move this)
+  m_Name: Avatar Calibrator Shape
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
