@@ -249,8 +249,15 @@ public class ProjectDemiModMapExporter : EditorWindow
             if (GUILayout.Button("Build for Windows (PCVR)", GUILayout.Height(20)))
             {
                 DisableInterfaceSpawnPoints();
-
                 DisableShieldWallRenderers();
+                DisableEnemySpawnpointShapes();
+                
+                // Find and delete and EventSystem in the scene
+                GameObject eventSystem = GameObject.Find("EventSystem");
+                if (eventSystem)
+                {
+                    DestroyImmediate(eventSystem);
+                }
                 
                 RecordFogSettings();
 
@@ -268,8 +275,15 @@ public class ProjectDemiModMapExporter : EditorWindow
             if (GUILayout.Button("Build for Android (Quest)", GUILayout.Height(20)))
             {
                 DisableInterfaceSpawnPoints();
-
                 DisableShieldWallRenderers();
+                DisableEnemySpawnpointShapes();
+                
+                // Find and delete and EventSystem in the scene
+                GameObject eventSystem = GameObject.Find("EventSystem");
+                if (eventSystem)
+                {
+                    DestroyImmediate(eventSystem);
+                }
                 
                 RecordFogSettings();
 
@@ -293,26 +307,8 @@ public class ProjectDemiModMapExporter : EditorWindow
         DemiModBase.AddLineAndSpace();
 
         #endregion
-
-
-        /*
-        #region Finish Setup
         
-        EditorGUILayout.HelpBox(" Use this button to Finish Setup AFTER building the Addressable.", MessageType.Info);
-        
-        using (new EditorGUI.DisabledScope(currentSceneController == null))
-        {
-            if (GUILayout.Button("Finish Setup", GUILayout.Height(20)))
-            {
 
-                DisableInterfaceSpawnPoints();
-                DisableShieldWallRenderers();
-                DisableEnemySpawnpointShapes();
-            }
-        }
-
-        #endregion
-*/
         DemiModBase.AddLineAndSpace();
         
         #region Clear Data

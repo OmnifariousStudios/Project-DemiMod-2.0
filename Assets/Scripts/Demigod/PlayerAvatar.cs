@@ -107,9 +107,12 @@ public class PlayerAvatar : MonoBehaviour
     [Header("Material References")]
     public List<CustomMaterialSetting> customMaterialSettings = new List<CustomMaterialSetting>();
 
+    public Transform rightWeblineOriginPoint;
 
     public Transform rightWebGrabHandPositionUpper;
     public Transform rightWebGrabHandPositionLower;
+    
+    public Transform leftWeblineOriginPoint;
     
     public Transform leftWebGrabHandPositionUpper;
     public Transform leftWebGrabHandPositionLower;

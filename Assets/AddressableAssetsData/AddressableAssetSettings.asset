@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: AddressableAssetSettings
   m_EditorClassIdentifier: 
   m_DefaultGroup: d45708f53d3c5454c91f6c211064d4ae
-  m_currentHash:
+  m_CachedHash:
     serializedVersion: 2
-    Hash: d85971fa6525fa51f9c1a22e041344dd
+    Hash: e906f430866b51ca6172c6ac11bcf02e
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 1
   m_BundleLocalCatalog: 0
@@ -30,10 +30,10 @@ MonoBehaviour:
   m_StripUnityVersionFromBundleBuild: 0
   m_DisableVisibleSubAssetRepresentations: 0
   m_ShaderBundleNaming: 2
-  m_ShaderBundleCustomNaming: SCIFI_Trooper Red_Shaders557
+  m_ShaderBundleCustomNaming: SCIFI_Trooper Red_Shaders90
   m_MonoScriptBundleNaming: 3
   m_CheckForContentUpdateRestrictionsOption: 0
-  m_MonoScriptBundleCustomNaming: SCIFI_Trooper Red_Mono557
+  m_MonoScriptBundleCustomNaming: SCIFI_Trooper Red_Mono90
   m_RemoteCatalogBuildPath:
     m_Id: c583c98940729bc419d8ac3cfc0eeb33
   m_RemoteCatalogLoadPath:
@@ -60,9 +60,9 @@ MonoBehaviour:
       - m_Id: e1c32dc6ff918be46884b7c4a40aa8dc
         m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
       - m_Id: c583c98940729bc419d8ac3cfc0eeb33
-        m_Value: D:/Unity Projects/MODS/Player Avatar - SCIFI_Trooper Red - PCVR
+        m_Value: D:/Unity Projects/MODS/Player Avatar - SCIFI_Trooper Red - Android
       - m_Id: 1b69b53f21751aa4ba7b2a59706deb07
-        m_Value: C:/Users/Public/mod.io/4747/mods/{LOCAL_FILE_NAME}/
+        m_Value: '{UnityEngine.Application.persistentDataPath}/mod.io/4747/mods/{LOCAL_FILE_NAME}/'
       - m_Id: 715f36e8b43316a43962bfa40da67470
         m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
       - m_Id: 0bf2132bd24a8e640b52db8c840422a7
@@ -109,4 +109,3 @@ MonoBehaviour:
     m_Settings: {fileID: 11400000}
     m_NextInstanceId: 0
     m_RegisteredServiceTypeRefs: []
-    m_PingTimeoutInMilliseconds: 5000

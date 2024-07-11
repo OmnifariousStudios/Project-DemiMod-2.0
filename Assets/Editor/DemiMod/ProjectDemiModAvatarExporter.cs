@@ -1065,6 +1065,36 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             playerAvatarScript.rightWebGrabHandPositionUpper.position += rightHandToPointer.normalized * -0.04f;
         }
         
+        
+        if(playerAvatarScript.leftWeblineOriginPoint == null)
+        {
+            var weblineOrigin = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            weblineOrigin.name = "Left Webline Origin";
+            weblineOrigin.GetComponent<SphereCollider>().enabled = false;
+            weblineOrigin.transform.localScale = Vector3.one * 0.02f;
+            
+            weblineOrigin.transform.SetParent(playerAvatarScript.leftHand);
+            
+            playerAvatarScript.leftWeblineOriginPoint = weblineOrigin.transform;
+            
+            playerAvatarScript.leftWeblineOriginPoint.position = playerAvatarScript.leftHand.position;
+        }
+        
+        if(playerAvatarScript.rightWeblineOriginPoint == null)
+        {
+            var weblineOrigin = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            weblineOrigin.name = "Right Webline Origin";
+            weblineOrigin.GetComponent<SphereCollider>().enabled = false;
+            weblineOrigin.transform.localScale = Vector3.one * 0.02f;
+            
+            weblineOrigin.transform.SetParent(playerAvatarScript.rightHand);
+            
+            playerAvatarScript.rightWeblineOriginPoint = weblineOrigin.transform;
+            
+            playerAvatarScript.rightWeblineOriginPoint.position = playerAvatarScript.rightHand.position;
+        }
+        
+        
         if (weblineRendererScript)
         {
             weblineRendererScript.leftWebGrabHandPositionLower = playerAvatarScript.leftWebGrabHandPositionLower;
@@ -1072,6 +1102,9 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             
             weblineRendererScript.rightWebGrabHandPositionLower = playerAvatarScript.rightWebGrabHandPositionLower;
             weblineRendererScript.rightWebGrabHandPositionUpper = playerAvatarScript.rightWebGrabHandPositionUpper;
+            
+            weblineRendererScript.leftLineRenderer.enabled = true;
+            weblineRendererScript.rightLineRenderer.enabled = true;
             
             weblineRendererScript.SetPoints();
         }
@@ -1641,6 +1674,36 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         {
             weblineRendererScript.leftLineRenderer.enabled = false;
             weblineRendererScript.rightLineRenderer.enabled = false;
+
+            if (weblineRendererScript.leftWebGrabHandPositionLower)
+            {
+                weblineRendererScript.leftWebGrabHandPositionLower.GetComponent<MeshRenderer>().enabled = false;
+            }
+            
+            if (weblineRendererScript.leftWebGrabHandPositionUpper)
+            {
+                weblineRendererScript.leftWebGrabHandPositionUpper.GetComponent<MeshRenderer>().enabled = false;
+            }
+            
+            if (weblineRendererScript.rightWebGrabHandPositionLower)
+            {
+                weblineRendererScript.rightWebGrabHandPositionLower.GetComponent<MeshRenderer>().enabled = false;
+            }
+            
+            if (weblineRendererScript.rightWebGrabHandPositionUpper)
+            {
+                weblineRendererScript.rightWebGrabHandPositionUpper.GetComponent<MeshRenderer>().enabled = false;
+            }
+            
+            if (playerAvatarScript.leftWeblineOriginPoint)
+            {
+                playerAvatarScript.leftWeblineOriginPoint.GetComponent<MeshRenderer>().enabled = false;
+            }
+            
+            if (playerAvatarScript.rightWeblineOriginPoint)
+            {
+                playerAvatarScript.rightWeblineOriginPoint.GetComponent<MeshRenderer>().enabled = false;
+            }
         }
     }
     
