@@ -369,13 +369,20 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             Debug.Log("Creating Enemy Mod Root");
             
             enemyModRoot = new GameObject();
-            enemyModRoot.name = "Enemy Avatar - " + avatarModel.name;
+        }
+
+        /*
+        if(avatarModel.name.Contains("Enemy Avatar"))
+        {
+            enemyModRoot.name = avatarModel.name;
         }
         else
         {
             enemyModRoot.name = "Enemy Avatar - " + avatarModel.name;
         }
+        */
         
+        enemyModRoot.name = avatarModel.name;
         
         enemyComponentReference = enemyModRoot.GetComponent<EnemyComponentReference>();
          
