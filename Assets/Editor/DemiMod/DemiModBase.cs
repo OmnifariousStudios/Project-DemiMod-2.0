@@ -147,7 +147,14 @@ public static class DemiModBase
         // We can dynamically change the LOAD path here, and replace the LOCAL_FILE_NAME with: MOD-ID/BUILD TARGET/AVATAR NAME
         if (buildTarget == BuildTarget.StandaloneWindows64)
         {
-            buildPath = GetDataHolder().userDefinedModsLocation + "/" + label + " - " + targetName + " - PCVR";
+            if (buildPath.Contains(label))
+            {
+                buildPath = GetDataHolder().userDefinedModsLocation + "/" + targetName + " - PCVR";
+            }
+            else
+            {
+                buildPath = GetDataHolder().userDefinedModsLocation + "/" + label + " - " + targetName + " - PCVR";
+            }
             
             Debug.Log("Setting load path for windows");
             AddressableAssetSettingsDefaultObject.Settings.profileSettings
@@ -155,7 +162,14 @@ public static class DemiModBase
         }
         else if (buildTarget == BuildTarget.Android)
         {
-            buildPath = GetDataHolder().userDefinedModsLocation + "/" + label + " - " +  targetName + " - Android";
+            if (buildPath.Contains(label))
+            {
+                buildPath = GetDataHolder().userDefinedModsLocation + "/" + targetName + " - Android";
+            }
+            else
+            {
+                buildPath = GetDataHolder().userDefinedModsLocation + "/" + label + " - " + targetName + " - Android";
+            }
             
             Debug.Log("Setting load path for android");
             AddressableAssetSettingsDefaultObject.Settings.profileSettings
@@ -225,30 +239,23 @@ public static class DemiModBase
     {
         Debug.Log("Checking project folders for current mod target: " + modName);
 
-        string unityAssetModPath = Path.Combine(unityAssetsAvatarModsFolderPath, modName);
-        
-        /*
-        string modStandaloneWindows64FolderPath = Path.Combine(modName, Path.Combine(BuildTarget.StandaloneWindows64.ToString(), modName));
-        string modAndroidFolderPath = Path.Combine(modName, Path.Combine(BuildTarget.Android.ToString(), modName));
+        string unityAssetModPath = "";
         
         switch (modType)
         {
             case ModType.Avatar:
-                modStandaloneWindows64FolderPath = Path.Combine(unityAssetsAvatarModsFolderPath, modStandaloneWindows64FolderPath);
-                modAndroidFolderPath = Path.Combine(unityAssetsAvatarModsFolderPath, modAndroidFolderPath);
+                unityAssetModPath = Path.Combine(unityAssetsAvatarModsFolderPath, modName);
                 break;
             
-            case ModType.Map:
-                modStandaloneWindows64FolderPath = Path.Combine(unityAssetsMapModsFolderPath, modStandaloneWindows64FolderPath);
-                modAndroidFolderPath = Path.Combine(unityAssetsMapModsFolderPath, modAndroidFolderPath);
-                break;
+            // We don't need to create a folder for maps, as they are scenes and don't create new prefabs.
+            //case ModType.Map:
+                //unityAssetModPath = Path.Combine(unityAssetsMapModsFolderPath, modName);
+                //break;
             
             case ModType.Enemy:
-                modStandaloneWindows64FolderPath = Path.Combine(unityAssetsEnemyModsFolderPath, modStandaloneWindows64FolderPath);
-                modAndroidFolderPath = Path.Combine(unityAssetsEnemyModsFolderPath, modAndroidFolderPath);
+                unityAssetModPath = Path.Combine(unityAssetsEnemyModsFolderPath, modName);
                 break;
         }
-        */
         
         
         if (Directory.Exists(unityAssetModPath))

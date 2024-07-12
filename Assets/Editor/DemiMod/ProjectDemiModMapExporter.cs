@@ -263,7 +263,7 @@ public class ProjectDemiModMapExporter : EditorWindow
 
                 DemiModBase.ExportWindows(DemiModBase.ModType.Map, null);
 
-                DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Map, currentSceneName);
+                //DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Map, currentSceneName);
 
 
                 EditorApplication.delayCall += () =>
@@ -289,7 +289,7 @@ public class ProjectDemiModMapExporter : EditorWindow
 
                 DemiModBase.ExportAndroid(DemiModBase.ModType.Map, null);
 
-                DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Map, currentScene.name);
+                //DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Map, currentScene.name);
                 //CheckForMapModPath();
 
                 EditorApplication.delayCall += () =>

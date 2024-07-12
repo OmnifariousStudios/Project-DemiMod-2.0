@@ -211,9 +211,22 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             GUILayout.BeginHorizontal("Build the Mods", GUI.skin.window);
             if (GUILayout.Button("Build for Windows (PCVR)", GUILayout.Height(20)))
             {
+                Debug.Log("Saving Avatar Prefab: " + avatarModel.name);
+                PrefabUtility.ApplyPrefabInstance(avatarModel, InteractionMode.UserAction);
+                
                 GetDataHolder();
+                dataHolder.lastEnemyModel = avatarModel;
+                dataHolder.lastEnemyModelName = avatarModel.name;
+                
+                dataHolder.lastRagdollRoot = ragdoll;
+                dataHolder.lastRagdollRootName = ragdoll.name;
+                
                 dataHolder.lastEnemyAvatarPrefab = finalPrefab;
                 dataHolder.lastEnemyAvatarName = enemyModRoot.name;
+                
+                AssetDatabase.Refresh();
+                EditorUtility.SetDirty(dataHolder);
+                AssetDatabase.SaveAssets();
                 
                 //string name = enemyModRoot.name;
                 DemiModBase.ExportWindows(DemiModBase.ModType.Enemy, enemyModRoot);
@@ -228,8 +241,10 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
 
             if (GUILayout.Button("Build for Android (Quest)", GUILayout.Height(20)))
             {
-                GetDataHolder();
+                Debug.Log("Saving Avatar Prefab: " + avatarModel.name);
+                PrefabUtility.ApplyPrefabInstance(avatarModel, InteractionMode.UserAction);
                 
+                GetDataHolder();
                 dataHolder.lastEnemyModel = avatarModel;
                 dataHolder.lastEnemyModelName = avatarModel.name;
                 
@@ -238,6 +253,10 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
                 
                 dataHolder.lastEnemyAvatarPrefab = finalPrefab;
                 dataHolder.lastEnemyAvatarName = enemyModRoot.name;
+                
+                AssetDatabase.Refresh();
+                EditorUtility.SetDirty(dataHolder);
+                AssetDatabase.SaveAssets();
                 
                 DemiModBase.ExportAndroid(DemiModBase.ModType.Enemy, avatarModel);
 
@@ -256,18 +275,7 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
         DemiModBase.AddLineAndSpace();
 
         #endregion
-
-/*
-        #region Finish Setup
-
-        EditorGUILayout.HelpBox(" Use this button to Finish Setup AFTER building the Addressable.", MessageType.Info);
-        if (GUILayout.Button("Finish Setup", GUILayout.Height(20)))
-        {
-            DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Enemy, avatarModel.name);
-        }
-
-        #endregion
-*/
+        
         
         DemiModBase.AddLineAndSpace();
         
@@ -310,27 +318,56 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
     {
         GetDataHolder();
         
-        if(dataHolder.lastEnemyModel)
-            avatarModel = GameObject.Find(dataHolder.lastEnemyAvatarName);
-        else
+        if(!avatarModel)
         {
-            avatarModel = GameObject.Find(dataHolder.lastEnemyModelName);
+            if (dataHolder.lastEnemyModel)
+            {
+                avatarModel = GameObject.Find(dataHolder.lastEnemyAvatarName);
+            }
+            else
+            {
+                avatarModel = GameObject.Find(dataHolder.lastEnemyModelName);
+            }
+        }
+
+
+        if (!finalPrefab)
+        {
+            if(dataHolder.lastEnemyAvatarPrefab)
+            {
+                finalPrefab = dataHolder.lastEnemyAvatarPrefab;
+            }
+            else
+            {
+                finalPrefab = GameObject.Find(dataHolder.lastEnemyAvatarName);
+            }
         }
         
-        
-        if(dataHolder.lastEnemyAvatarPrefab)
-            finalPrefab = dataHolder.lastEnemyAvatarPrefab;
-        else
+        if(!enemyModRoot)
         {
-            finalPrefab = GameObject.Find(dataHolder.lastEnemyAvatarName);
+            if(finalPrefab)
+            {
+                enemyModRoot = finalPrefab;
+            }
         }
-        
-        
-        if(dataHolder.lastRagdollRoot)
-            ragdoll = GameObject.Find(dataHolder.lastRagdollRootName);
-        else
+
+        if (!characterRoot)
         {
-            ragdoll = GameObject.Find(dataHolder.lastRagdollRootName);
+            if(finalPrefab)
+            {
+                // Get child that has a name that contains "Character Root".
+                characterRoot = finalPrefab.transform.FindChildRecursive("Character Root").gameObject;
+            }
+        }
+
+        
+        if(!ragdoll)
+        {
+            if(finalPrefab)
+            {
+                // Get child that has a name that contains "Character Root".
+                characterRoot = finalPrefab.transform.FindChildRecursive("Ragdoll").gameObject;
+            }
         }
 
         
@@ -987,15 +1024,8 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             //if(puppetMaster)
                 //enemyComponentReference.puppetMaster = puppetMaster;
         }
-        
     }
-
-
-    public void Finish()
-    {
-        // Turn off the shapes for hands/waistline.
-        
-    }
+    
     
     
     // Removes all bones that don't have a Rigidbody or a Collider attached because they are not part of the simulation

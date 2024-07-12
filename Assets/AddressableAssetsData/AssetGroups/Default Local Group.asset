@@ -17,11 +17,11 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: d45708f53d3c5454c91f6c211064d4ae
   m_SerializeEntries:
-  - m_GUID: 808d53f657f36f84583b420169cba232
-    m_Address: Assets/MODS/Avatars/Avatar Mod - FreeCharacter_01.prefab
+  - m_GUID: e3e32f895672e244cb380e4bb817794b
+    m_Address: Assets/MODS/Enemies/SCIFI_Trooper Blue.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Player Avatar
+    - Enemy Avatar
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: ab3ef46107c2bfb499cc177a1efc4d32, type: 2}

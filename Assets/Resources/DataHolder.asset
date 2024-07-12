@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: DataHolder
   m_EditorClassIdentifier: 
   userDefinedModsLocation: D:/Unity Projects/MODS
-  lastAddressableBuildPath: D:/Unity Projects/MODS/Player Avatar - FreeCharacter_01
-    - PCVR
+  lastAddressableBuildPath: D:/Unity Projects/MODS/Enemy Avatar - SCIFI_Trooper Blue
+    - Android
   handPoseCopierGameObject: {fileID: 0}
   handPoseBuildLocation: D:/Unity Projects/Project DemiMod 2.0/Assets/MODS/Avatars\FreeCharacter_01\AvatarModHandPoses.json
   lastPlayerAvatarPrefab: {fileID: 1818983810612174709, guid: 808d53f657f36f84583b420169cba232, type: 3}
   lastPlayerAvatarName: FreeCharacter_01
   lastEnemyModel: {fileID: 0}
-  lastEnemyModelName: 
+  lastEnemyModelName: SCIFI_Trooper Blue
   lastRagdollRoot: {fileID: 0}
-  lastRagdollRootName: 
-  lastEnemyAvatarPrefab: {fileID: 0}
-  lastEnemyAvatarName: 
+  lastRagdollRootName: Ragdoll
+  lastEnemyAvatarPrefab: {fileID: 4698562503713522424, guid: e3e32f895672e244cb380e4bb817794b, type: 3}
+  lastEnemyAvatarName: SCIFI_Trooper Blue

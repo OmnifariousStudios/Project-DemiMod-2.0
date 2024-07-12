@@ -439,7 +439,7 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!1001 &7934320340264109133
+--- !u!1001 &1623153437
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -447,79 +447,116 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 681647279082061984, guid: f89c16d719c747b41a6e7411e01ce8f4, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2317831777678350288, guid: f89c16d719c747b41a6e7411e01ce8f4, type: 3}
-      propertyPath: m_Name
-      value: Enemy Avatar - MaleDummy
-      objectReference: {fileID: 0}
-    - target: {fileID: 3202986742040233101, guid: f89c16d719c747b41a6e7411e01ce8f4, type: 3}
-      propertyPath: spineBones.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3202986742040233101, guid: f89c16d719c747b41a6e7411e01ce8f4, type: 3}
-      propertyPath: spineBones.Array.data[1]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3202986742040233101, guid: f89c16d719c747b41a6e7411e01ce8f4, type: 3}
-      propertyPath: spineBones.Array.data[2]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3202986742040233101, guid: f89c16d719c747b41a6e7411e01ce8f4, type: 3}
-      propertyPath: spineBones.Array.data[3]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4552599397046739971, guid: f89c16d719c747b41a6e7411e01ce8f4, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6483416630315706249, guid: f89c16d719c747b41a6e7411e01ce8f4, type: 3}
+    - target: {fileID: 8342999874545051883, guid: 71000dbc26d95cc428ae8e6a2f2d56f8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6483416630315706249, guid: f89c16d719c747b41a6e7411e01ce8f4, type: 3}
+    - target: {fileID: 8342999874545051883, guid: 71000dbc26d95cc428ae8e6a2f2d56f8, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6483416630315706249, guid: f89c16d719c747b41a6e7411e01ce8f4, type: 3}
+    - target: {fileID: 8342999874545051883, guid: 71000dbc26d95cc428ae8e6a2f2d56f8, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6483416630315706249, guid: f89c16d719c747b41a6e7411e01ce8f4, type: 3}
+    - target: {fileID: 8342999874545051883, guid: 71000dbc26d95cc428ae8e6a2f2d56f8, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 6483416630315706249, guid: f89c16d719c747b41a6e7411e01ce8f4, type: 3}
+    - target: {fileID: 8342999874545051883, guid: 71000dbc26d95cc428ae8e6a2f2d56f8, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6483416630315706249, guid: f89c16d719c747b41a6e7411e01ce8f4, type: 3}
+    - target: {fileID: 8342999874545051883, guid: 71000dbc26d95cc428ae8e6a2f2d56f8, type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6483416630315706249, guid: f89c16d719c747b41a6e7411e01ce8f4, type: 3}
+    - target: {fileID: 8342999874545051883, guid: 71000dbc26d95cc428ae8e6a2f2d56f8, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6483416630315706249, guid: f89c16d719c747b41a6e7411e01ce8f4, type: 3}
+    - target: {fileID: 8342999874545051883, guid: 71000dbc26d95cc428ae8e6a2f2d56f8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6483416630315706249, guid: f89c16d719c747b41a6e7411e01ce8f4, type: 3}
+    - target: {fileID: 8342999874545051883, guid: 71000dbc26d95cc428ae8e6a2f2d56f8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6483416630315706249, guid: f89c16d719c747b41a6e7411e01ce8f4, type: 3}
+    - target: {fileID: 8342999874545051883, guid: 71000dbc26d95cc428ae8e6a2f2d56f8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8683954391009636945, guid: 71000dbc26d95cc428ae8e6a2f2d56f8, type: 3}
+      propertyPath: m_Name
+      value: SCIFI_Trooper Blue
+      objectReference: {fileID: 0}
+    - target: {fileID: 8683954391009636945, guid: 71000dbc26d95cc428ae8e6a2f2d56f8, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: f89c16d719c747b41a6e7411e01ce8f4, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: 71000dbc26d95cc428ae8e6a2f2d56f8, type: 3}
+--- !u!1001 &521765476767594825
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1652822553722364925, guid: e3e32f895672e244cb380e4bb817794b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1652822553722364925, guid: e3e32f895672e244cb380e4bb817794b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1652822553722364925, guid: e3e32f895672e244cb380e4bb817794b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1652822553722364925, guid: e3e32f895672e244cb380e4bb817794b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1652822553722364925, guid: e3e32f895672e244cb380e4bb817794b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1652822553722364925, guid: e3e32f895672e244cb380e4bb817794b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1652822553722364925, guid: e3e32f895672e244cb380e4bb817794b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1652822553722364925, guid: e3e32f895672e244cb380e4bb817794b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1652822553722364925, guid: e3e32f895672e244cb380e4bb817794b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1652822553722364925, guid: e3e32f895672e244cb380e4bb817794b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4698562503713522424, guid: e3e32f895672e244cb380e4bb817794b, type: 3}
+      propertyPath: m_Name
+      value: SCIFI_Trooper Blue
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e3e32f895672e244cb380e4bb817794b, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -527,4 +564,5 @@ SceneRoots:
   - {fileID: 756995227}
   - {fileID: 203677960}
   - {fileID: 165839350}
-  - {fileID: 7934320340264109133}
+  - {fileID: 1623153437}
+  - {fileID: 521765476767594825}
