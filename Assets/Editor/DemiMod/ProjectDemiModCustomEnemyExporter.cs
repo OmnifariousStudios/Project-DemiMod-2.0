@@ -211,6 +211,8 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             GUILayout.BeginHorizontal("Build the Mods", GUI.skin.window);
             if (GUILayout.Button("Build for Windows (PCVR)", GUILayout.Height(20)))
             {
+                DisableDebugRenderers();
+                
                 Debug.Log("Saving Avatar Prefab: " + avatarModel.name);
                 PrefabUtility.ApplyPrefabInstance(avatarModel, InteractionMode.UserAction);
                 
@@ -241,6 +243,8 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
 
             if (GUILayout.Button("Build for Android (Quest)", GUILayout.Height(20)))
             {
+                DisableDebugRenderers();
+                
                 Debug.Log("Saving Avatar Prefab: " + avatarModel.name);
                 PrefabUtility.ApplyPrefabInstance(avatarModel, InteractionMode.UserAction);
                 
@@ -772,10 +776,12 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
         }
         
         
-        Transform eyes = characterRoot.transform.FindChildRecursive("Eyes Forward Transform");
+        Transform eyes = characterRoot.transform.FindChildRecursive("Eyes Debug Capsule");
         if (eyes == null)
         {
-            eyes = new GameObject("Eyes Forward Transform").transform;
+            GameObject eyesObject = Instantiate(Resources.Load("Eyes Debug Capsule", typeof(GameObject))) as GameObject;
+            
+            eyes = eyesObject.transform;
             
             eyes.forward = characterRoot.transform.forward;
             
@@ -790,6 +796,13 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             
             eyes.localPosition = Vector3.zero;
         }
+        
+        if (eyes)
+        {
+            enemyComponentReference.eyes = characterAnimator.GetBoneTransform(HumanBodyBones.Head).FindChildRecursive("Eyes Debug Capsule");
+        }
+
+        
         
         
         
@@ -1023,6 +1036,19 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             
             //if(puppetMaster)
                 //enemyComponentReference.puppetMaster = puppetMaster;
+        }
+    }
+
+
+    private void DisableDebugRenderers()
+    {
+        if (enemyComponentReference && enemyComponentReference.eyes)
+        {
+            enemyComponentReference.eyes.gameObject.SetActive(false);
+        }
+        else if (characterRoot.transform.FindChildRecursive("Eyes Debug Capsule"))
+        {
+            characterRoot.transform.FindChildRecursive("Eyes Debug Capsule").gameObject.SetActive(false);
         }
     }
     

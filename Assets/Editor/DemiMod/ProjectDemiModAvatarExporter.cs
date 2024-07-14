@@ -1513,7 +1513,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
 
     private void EnableDebugRenderers()
     {
-        PostBuildCleanup();
+        //PostBuildCleanup();
         
         if (avatarModel)
             playerAvatarScript = avatarModel.GetComponent<PlayerAvatar>();
@@ -1575,7 +1575,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
 
     private void DisableDebugRenderers()
     {
-        PostBuildCleanup();
+        //PostBuildCleanup();
         
         if (avatarModel)
             playerAvatarScript = avatarModel.GetComponent<PlayerAvatar>();

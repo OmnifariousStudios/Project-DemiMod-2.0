@@ -12,7 +12,7 @@ public class ModIODemiMod : EditorWindow
     public string currentSecurityCode;
     
     // Creates a window that will let the user type in their username and password and log in to mod.io.
-    [MenuItem("Project Demigod/Mod.io Login")]
+    //[MenuItem("Project Demigod/Mod.io Login")]
     public static void ShowModIOLogin()
     {
         EditorWindow.GetWindow(typeof(ModIODemiMod));
