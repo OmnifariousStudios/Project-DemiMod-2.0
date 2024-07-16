@@ -213,8 +213,15 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             {
                 DisableDebugRenderers();
                 
-                Debug.Log("Saving Avatar Prefab: " + avatarModel.name);
-                PrefabUtility.ApplyPrefabInstance(avatarModel, InteractionMode.UserAction);
+                if(PrefabUtility.IsPartOfRegularPrefab(enemyModRoot))
+                {
+                    Debug.Log("Saving Avatar Prefab: " + enemyModRoot.name);
+                    PrefabUtility.ApplyPrefabInstance(enemyModRoot, InteractionMode.UserAction);
+                }
+                else
+                {
+                    PrefabUtility.SaveAsPrefabAsset(enemyModRoot, DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Enemy, enemyModRoot.name) + ".prefab");
+                }
                 
                 GetDataHolder();
                 dataHolder.lastEnemyModel = avatarModel;
@@ -245,8 +252,15 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             {
                 DisableDebugRenderers();
                 
-                Debug.Log("Saving Avatar Prefab: " + avatarModel.name);
-                PrefabUtility.ApplyPrefabInstance(avatarModel, InteractionMode.UserAction);
+                if(PrefabUtility.IsPartOfRegularPrefab(enemyModRoot))
+                {
+                    Debug.Log("Saving Avatar Prefab: " + enemyModRoot.name);
+                    PrefabUtility.ApplyPrefabInstance(enemyModRoot, InteractionMode.UserAction);
+                }
+                else
+                {
+                    PrefabUtility.SaveAsPrefabAsset(enemyModRoot, DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Enemy, enemyModRoot.name) + ".prefab");
+                }
                 
                 GetDataHolder();
                 dataHolder.lastEnemyModel = avatarModel;
@@ -291,8 +305,15 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             {
                 if (enemyModRoot)
                 {
-                    Debug.Log("Saving Enemy Prefab");
-                    PrefabUtility.ApplyPrefabInstance(enemyModRoot, InteractionMode.UserAction);
+                    if(PrefabUtility.IsPartOfRegularPrefab(enemyModRoot))
+                    {
+                        Debug.Log("Saving Avatar Prefab: " + enemyModRoot.name);
+                        PrefabUtility.ApplyPrefabInstance(enemyModRoot, InteractionMode.UserAction);
+                    }
+                    else
+                    {
+                        PrefabUtility.SaveAsPrefabAsset(enemyModRoot, DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Enemy, enemyModRoot.name) + ".prefab");
+                    }
                 }
             }
         }

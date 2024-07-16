@@ -366,19 +366,6 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         {
             finalPrefab = dataHolder.lastPlayerAvatarPrefab;
         }
-
-        if (!finalPrefab && !dataHolder.lastPlayerAvatarPrefab)
-        {
-            if (avatarModel)
-            {
-                //finalPrefab = PrefabUtility.GetCorrespondingObjectFromOriginalSource(avatarModel);
-                //dataHolder.lastPlayerAvatarPrefab = finalPrefab;
-                
-                // Save assets
-                //EditorUtility.SetDirty(dataHolder);
-                //AssetDatabase.SaveAssets();
-            }
-        }
         
             
         using (new EditorGUI.DisabledScope(finalPrefab == null))
@@ -515,8 +502,16 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             {
                 if (avatarModel)
                 {
-                    Debug.Log("Saving Avatar Prefab");
-                    PrefabUtility.ApplyPrefabInstance(avatarModel, InteractionMode.UserAction);
+                    if(PrefabUtility.IsPartOfRegularPrefab(avatarModel))
+                    {
+                        Debug.Log("Saving Avatar Prefab");
+                        PrefabUtility.ApplyPrefabInstance(avatarModel, InteractionMode.UserAction);
+                    }
+                    else
+                    {
+                        Debug.Log("Saving Avatar Prefab");
+                        PrefabUtility.SaveAsPrefabAssetAndConnect(avatarModel, DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, avatarModel.name) + ".prefab", InteractionMode.UserAction);
+                    }
                 }
             }
         }
@@ -531,8 +526,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         using (new EditorGUI.DisabledScope(avatarModel == null))
         {
             GUILayout.BeginHorizontal("Debug Shapes", GUI.skin.window);
-
-            //EditorGUILayout.HelpBox("Enables Debug shapes", MessageType.Info);
+            
             if (GUILayout.Button("Enable All Debug Shapes", GUILayout.Height(20)))
             {
                 // Turn on FingerTip and Palm Mesh Renderers.
@@ -541,8 +535,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                     EnableDebugRenderers();
                 }
             }
-
-            //EditorGUILayout.HelpBox("Disables Debug Shapes", MessageType.Info);
+            
             if (GUILayout.Button("Disable All Debug Shapes", GUILayout.Height(20)))
             {
                 // Turn off FingerTip and Palm Mesh Renderers.
@@ -551,9 +544,61 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                     DisableDebugRenderers();
                 }
             }
+            
+            GUILayout.EndHorizontal();
+            
+            
+            GUILayout.BeginHorizontal( GUI.skin.window);
+            
+
+            if (GUILayout.Button("Enable All Hand Shapes", GUILayout.Height(20)))
+            {
+                // Turn on FingerTip and Palm Mesh Renderers.
+                if (playerAvatarScript)
+                {
+                    EnableHandShapes();
+                }
+            }
+
+
+            if (GUILayout.Button("Disable All Hand Shapes", GUILayout.Height(20)))
+            {
+                // Turn off FingerTip and Palm Mesh Renderers.
+                if (playerAvatarScript)
+                {
+                    DisableHandShapes();
+                }
+            }
+            
+            GUILayout.EndHorizontal();
+            
+            
+            GUILayout.BeginHorizontal(GUI.skin.window);
+            
+
+            if (GUILayout.Button("Enable Web Shapes", GUILayout.Height(20)))
+            {
+                // Turn on FingerTip and Palm Mesh Renderers.
+                if (playerAvatarScript)
+                {
+                    EnableWebShapes();
+                }
+            }
+
+
+            if (GUILayout.Button("Disable Web Shapes", GUILayout.Height(20)))
+            {
+                // Turn off FingerTip and Palm Mesh Renderers.
+                if (playerAvatarScript)
+                {
+                    DisableWebShapes();
+                }
+            }
+            
+            GUILayout.EndHorizontal();
         }
         
-        GUILayout.EndHorizontal();
+        
         
         #endregion
 
@@ -1068,30 +1113,34 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         
         if(playerAvatarScript.leftWeblineOriginPoint == null)
         {
-            var weblineOrigin = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            weblineOrigin.name = "Left Webline Origin";
-            weblineOrigin.GetComponent<SphereCollider>().enabled = false;
-            weblineOrigin.transform.localScale = Vector3.one * 0.02f;
+            var weblineOrigin = Instantiate(Resources.Load<GameObject>("Webline Origin Point"));
             
             weblineOrigin.transform.SetParent(playerAvatarScript.leftHand);
             
-            playerAvatarScript.leftWeblineOriginPoint = weblineOrigin.transform;
+            weblineOrigin.transform.localPosition = Vector3.zero;
             
-            playerAvatarScript.leftWeblineOriginPoint.position = playerAvatarScript.leftHand.position;
+            Vector3 handToMiddle = animator.GetBoneTransform(HumanBodyBones.LeftMiddleProximal).position - animator.GetBoneTransform(HumanBodyBones.LeftHand).position;
+            
+            // Rotate the weblineOrigin so it points towards handToMiddle.
+            weblineOrigin.transform.rotation = Quaternion.LookRotation(handToMiddle);
+            
+            playerAvatarScript.leftWeblineOriginPoint = weblineOrigin.transform;
         }
         
         if(playerAvatarScript.rightWeblineOriginPoint == null)
         {
-            var weblineOrigin = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            weblineOrigin.name = "Right Webline Origin";
-            weblineOrigin.GetComponent<SphereCollider>().enabled = false;
-            weblineOrigin.transform.localScale = Vector3.one * 0.02f;
+            var weblineOrigin = Instantiate(Resources.Load<GameObject>("Webline Origin Point"));
             
             weblineOrigin.transform.SetParent(playerAvatarScript.rightHand);
             
-            playerAvatarScript.rightWeblineOriginPoint = weblineOrigin.transform;
+            weblineOrigin.transform.localPosition = Vector3.zero;
             
-            playerAvatarScript.rightWeblineOriginPoint.position = playerAvatarScript.rightHand.position;
+            Vector3 handToMiddle = animator.GetBoneTransform(HumanBodyBones.RightMiddleProximal).position - animator.GetBoneTransform(HumanBodyBones.RightHand).position;
+            
+            // Rotate the weblineOrigin so it points towards handToMiddle.
+            weblineOrigin.transform.rotation = Quaternion.LookRotation(handToMiddle);
+            
+            playerAvatarScript.rightWeblineOriginPoint = weblineOrigin.transform;
         }
         
         
@@ -1105,6 +1154,9 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             
             weblineRendererScript.leftLineRenderer.enabled = true;
             weblineRendererScript.rightLineRenderer.enabled = true;
+            
+            weblineRendererScript.leftWeblineOrigin = playerAvatarScript.leftWeblineOriginPoint;
+            weblineRendererScript.rightWeblineOrigin = playerAvatarScript.rightWeblineOriginPoint;
             
             weblineRendererScript.SetPoints();
         }
@@ -1518,6 +1570,69 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         if (avatarModel)
             playerAvatarScript = avatarModel.GetComponent<PlayerAvatar>();
         
+        EnableHandShapes();
+
+        EnableEyeShape();
+        
+        EnableWebShapes();
+    }
+
+    private void DisableDebugRenderers()
+    {
+        //PostBuildCleanup();
+        
+        if (avatarModel)
+            playerAvatarScript = avatarModel.GetComponent<PlayerAvatar>();
+        
+        DisableEyeShape();
+        
+        DisableHandShapes();
+
+        DisableWebShapes();
+    }
+
+    private void EnableEyeShape()
+    {
+        if (playerAvatarScript.avatarEyes)
+        {
+            playerAvatarScript.avatarEyes.gameObject.SetActive(true);
+            
+            foreach (Transform childTransform in playerAvatarScript.avatarEyes)
+            {
+                childTransform.gameObject.SetActive(true);
+                
+                if (childTransform.GetComponent<MeshRenderer>())
+                {
+                    childTransform.GetComponent<MeshRenderer>().enabled = true;
+                }
+            }
+        }
+    }
+    
+    private void DisableEyeShape()
+    {
+        if (playerAvatarScript.avatarEyes)
+        {
+            playerAvatarScript.avatarEyes.gameObject.SetActive(true);
+            
+            foreach (Transform childTransform in playerAvatarScript.avatarEyes)
+            {
+                childTransform.gameObject.SetActive(false);
+                
+                if (childTransform.GetComponent<MeshRenderer>())
+                {
+                    childTransform.GetComponent<MeshRenderer>().enabled = false;
+                }
+            }
+        }
+    }
+    
+
+    private void EnableHandShapes()
+    {
+        if (avatarModel)
+            playerAvatarScript = avatarModel.GetComponent<PlayerAvatar>();
+        
         if(playerAvatarScript.fingerTips != null)
         {
             foreach (var tip in playerAvatarScript.fingerTips)
@@ -1556,30 +1671,10 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 }
             }
         }
-        
-        if (playerAvatarScript.avatarEyes)
-        {
-            playerAvatarScript.avatarEyes.gameObject.SetActive(true);
-            
-            foreach (Transform childTransform in playerAvatarScript.avatarEyes)
-            {
-                childTransform.gameObject.SetActive(true);
-                
-                if (childTransform.GetComponent<MeshRenderer>())
-                {
-                    childTransform.GetComponent<MeshRenderer>().enabled = true;
-                }
-            }
-        }
     }
 
-    private void DisableDebugRenderers()
+    private void DisableHandShapes()
     {
-        //PostBuildCleanup();
-        
-        if (avatarModel)
-            playerAvatarScript = avatarModel.GetComponent<PlayerAvatar>();
-        
         if(playerAvatarScript.fingerTips != null)
         {
             foreach (var tip in playerAvatarScript.fingerTips)
@@ -1669,7 +1764,76 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 }
             }
         }
+    }
+    
+    private void EnableWebShapes()
+    {
+        if (weblineRendererScript)
+        {
+            weblineRendererScript.leftLineRenderer.enabled = true;
+            weblineRendererScript.rightLineRenderer.enabled = true;
 
+            if (weblineRendererScript.leftWebGrabHandPositionLower)
+            {
+                weblineRendererScript.leftWebGrabHandPositionLower.GetComponent<MeshRenderer>().enabled = true;
+            }
+            
+            if (weblineRendererScript.leftWebGrabHandPositionUpper)
+            {
+                weblineRendererScript.leftWebGrabHandPositionUpper.GetComponent<MeshRenderer>().enabled = true;
+            }
+            
+            if (weblineRendererScript.rightWebGrabHandPositionLower)
+            {
+                weblineRendererScript.rightWebGrabHandPositionLower.GetComponent<MeshRenderer>().enabled = true;
+            }
+            
+            if (weblineRendererScript.rightWebGrabHandPositionUpper)
+            {
+                weblineRendererScript.rightWebGrabHandPositionUpper.GetComponent<MeshRenderer>().enabled = true;
+            }
+            
+            if (playerAvatarScript.leftWeblineOriginPoint)
+            {
+                foreach (var renderer in playerAvatarScript.leftWeblineOriginPoint.GetComponentsInChildren<MeshRenderer>())
+                {
+                    renderer.enabled = true;
+                }
+            }
+            
+            if (playerAvatarScript.rightWeblineOriginPoint)
+            {
+                foreach (var renderer in playerAvatarScript.rightWeblineOriginPoint.GetComponentsInChildren<MeshRenderer>())
+                {
+                    renderer.enabled = true;
+                }
+            }
+            
+            
+            if (weblineRendererScript.leftLineRenderer)
+            {
+                weblineRendererScript.leftLineRenderer.enabled = true;
+            }
+            
+            if (weblineRendererScript.rightLineRenderer)
+            {
+                weblineRendererScript.rightLineRenderer.enabled = true;
+            }
+            
+            if (weblineRendererScript.leftWeblineOriginLineRenderer)
+            {
+                weblineRendererScript.leftWeblineOriginLineRenderer.enabled = true;
+            }
+            
+            if (weblineRendererScript.rightWeblineOriginLineRenderer)
+            {
+                weblineRendererScript.rightWeblineOriginLineRenderer.enabled = true;
+            }
+        }
+    }
+
+    private void DisableWebShapes()
+    {
         if (weblineRendererScript)
         {
             weblineRendererScript.leftLineRenderer.enabled = false;
@@ -1697,15 +1861,43 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             
             if (playerAvatarScript.leftWeblineOriginPoint)
             {
-                playerAvatarScript.leftWeblineOriginPoint.GetComponent<MeshRenderer>().enabled = false;
+                foreach (var renderer in playerAvatarScript.leftWeblineOriginPoint.GetComponentsInChildren<MeshRenderer>())
+                {
+                    renderer.enabled = false;
+                }
             }
             
             if (playerAvatarScript.rightWeblineOriginPoint)
             {
-                playerAvatarScript.rightWeblineOriginPoint.GetComponent<MeshRenderer>().enabled = false;
+                foreach (var renderer in playerAvatarScript.rightWeblineOriginPoint.GetComponentsInChildren<MeshRenderer>())
+                {
+                    renderer.enabled = false;
+                }
+            }
+
+            if (weblineRendererScript.leftLineRenderer)
+            {
+                weblineRendererScript.leftLineRenderer.enabled = false;
+            }
+            
+            if (weblineRendererScript.rightLineRenderer)
+            {
+                weblineRendererScript.rightLineRenderer.enabled = false;
+            }
+            
+            if (weblineRendererScript.leftWeblineOriginLineRenderer)
+            {
+                weblineRendererScript.leftWeblineOriginLineRenderer.enabled = false;
+            }
+            
+            if (weblineRendererScript.rightWeblineOriginLineRenderer)
+            {
+                weblineRendererScript.rightWeblineOriginLineRenderer.enabled = false;
             }
         }
     }
+    
+    
     
     
     public void OpenFolderAfterModsBuild()

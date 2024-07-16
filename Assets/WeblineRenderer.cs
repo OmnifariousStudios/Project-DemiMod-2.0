@@ -9,10 +9,16 @@ public class WeblineRenderer : MonoBehaviour
     public LineRenderer leftLineRenderer;
     public LineRenderer rightLineRenderer;
 
+    public Transform leftWeblineOrigin;
+    public LineRenderer leftWeblineOriginLineRenderer;
+    
     public Vector3 leftWeblineTrailPoint;
     public Transform leftWebGrabHandPositionLower;
     public Transform leftWebGrabHandPositionUpper;
     public Vector3 leftWeblineConnectionPoint;
+    
+    public Transform rightWeblineOrigin;
+    public LineRenderer rightWeblineOriginLineRenderer;
     
     public Vector3 rightWeblineTrailPoint;
     public Transform rightWebGrabHandPositionLower;
@@ -61,6 +67,20 @@ public class WeblineRenderer : MonoBehaviour
             rightLineRenderer.SetPosition(1, rightWebGrabHandPositionLower.position);
             rightLineRenderer.SetPosition(2, rightWebGrabHandPositionUpper.position);
             rightLineRenderer.SetPosition(3, rightWeblineConnectionPoint);
+        }
+        
+        if(leftWeblineOrigin && leftWeblineOriginLineRenderer)
+        {
+            leftWeblineOriginLineRenderer.positionCount = 2;
+            leftWeblineOriginLineRenderer.SetPosition(0, leftWeblineOrigin.position);
+            leftWeblineOriginLineRenderer.SetPosition(1, leftWeblineOrigin.position + leftWeblineOrigin.forward * 0.5f);
+        }
+        
+        if(rightWeblineOrigin && rightWeblineOriginLineRenderer)
+        {
+            rightWeblineOriginLineRenderer.positionCount = 2;
+            rightWeblineOriginLineRenderer.SetPosition(0, rightWeblineOrigin.position);
+            rightWeblineOriginLineRenderer.SetPosition(1, rightWeblineOrigin.position + rightWeblineOrigin.forward * 0.5f);
         }
     }
 }

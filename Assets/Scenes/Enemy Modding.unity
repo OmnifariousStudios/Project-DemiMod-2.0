@@ -500,7 +500,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5eb79bd432ffdf84a8f73e664571fc42, type: 3}
---- !u!1001 &8136852752502684151
+--- !u!1001 &7776243263677288329
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -512,13 +512,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: SCIFI_Trooper Red
       objectReference: {fileID: 0}
-    - target: {fileID: 3315185715813678819, guid: cf12afc69e760554ab4b3cb9773a78ea, type: 3}
-      propertyPath: m_IsActive
-      value: 0
+    - target: {fileID: 871693650190363000, guid: cf12afc69e760554ab4b3cb9773a78ea, type: 3}
+      propertyPath: spineBones.Array.data[0]
+      value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 4016404026531201422, guid: cf12afc69e760554ab4b3cb9773a78ea, type: 3}
-      propertyPath: m_IsActive
-      value: 0
+    - target: {fileID: 871693650190363000, guid: cf12afc69e760554ab4b3cb9773a78ea, type: 3}
+      propertyPath: spineBones.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 871693650190363000, guid: cf12afc69e760554ab4b3cb9773a78ea, type: 3}
+      propertyPath: spineBones.Array.data[2]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 871693650190363000, guid: cf12afc69e760554ab4b3cb9773a78ea, type: 3}
+      propertyPath: spineBones.Array.data[3]
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6558878695319490522, guid: cf12afc69e760554ab4b3cb9773a78ea, type: 3}
       propertyPath: m_LocalPosition.x
@@ -560,18 +568,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8657086384081271303, guid: cf12afc69e760554ab4b3cb9773a78ea, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.0463
-      objectReference: {fileID: 0}
-    - target: {fileID: 8657086384081271303, guid: cf12afc69e760554ab4b3cb9773a78ea, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.1295
-      objectReference: {fileID: 0}
-    - target: {fileID: 8657086384081271303, guid: cf12afc69e760554ab4b3cb9773a78ea, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -585,4 +581,4 @@ SceneRoots:
   - {fileID: 203677960}
   - {fileID: 165839350}
   - {fileID: 1871504817}
-  - {fileID: 8136852752502684151}
+  - {fileID: 7776243263677288329}
