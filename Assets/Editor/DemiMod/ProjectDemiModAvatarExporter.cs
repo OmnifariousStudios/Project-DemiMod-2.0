@@ -189,9 +189,9 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 
                 avatarNameString = avatarModel.name;
 
-                if (avatarNameString.Contains("Player Avatar - ") == false)
+                if (avatarNameString.Contains("Player Avatar") == false)
                 {
-                    avatarNameString = "Avatar Mod - " + avatarNameString;
+                    avatarNameString = "Player Avatar - " + avatarNameString;
                 }
                 
                 animator = avatarModel.GetComponent<Animator>();
@@ -450,7 +450,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         
         #region Finish Setup
         
-        using(new EditorGUI.DisabledScope(avatarModel == null))
+        using(new EditorGUI.DisabledScope(finalPrefab == null || avatarModel == null))
         {
             EditorGUILayout.HelpBox(" Use this button to Finish Setup for current Avatar AFTER building the Addressable. Adds the Hand Pose JSON to the folder before compression.", MessageType.Info);
             if (GUILayout.Button("Finish Setup", GUILayout.Height(20)))
@@ -509,8 +509,16 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                     }
                     else
                     {
+                        avatarNameString = avatarModel.name;
+
+                        if (avatarNameString.Contains("Player Avatar - ") == false)
+                        {
+                            avatarNameString = "Avatar Mod - " + avatarNameString;
+                        }
+                        
                         Debug.Log("Saving Avatar Prefab");
-                        PrefabUtility.SaveAsPrefabAssetAndConnect(avatarModel, DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, avatarModel.name) + ".prefab", InteractionMode.UserAction);
+                        PrefabUtility.SaveAsPrefabAssetAndConnect(avatarModel,
+                            DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, avatarNameString) + ".prefab", InteractionMode.UserAction);
                     }
                 }
             }
@@ -682,6 +690,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         dataHolder.lastPlayerAvatarPrefab = null;
         dataHolder.lastPlayerAvatarName = "";
         
+        finalPrefab = null;
     }
 
     

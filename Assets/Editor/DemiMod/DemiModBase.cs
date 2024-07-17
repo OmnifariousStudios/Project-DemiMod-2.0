@@ -117,10 +117,10 @@ public static class DemiModBase
         
         // Set the bundles' naming style to custom, and make the name as unique as possible to avoid cross-mod conflicts.
         AddressableAssetSettingsDefaultObject.Settings.ShaderBundleNaming = ShaderBundleNaming.Custom;
-        AddressableAssetSettingsDefaultObject.Settings.ShaderBundleCustomNaming = targetName + "_Shaders" + DateTime.Now.Minute + DateTime.Now.Second;
+        AddressableAssetSettingsDefaultObject.Settings.ShaderBundleCustomNaming = "_Shaders"; //targetName + "_Shaders" + DateTime.Now.Minute + DateTime.Now.Second;
         
         AddressableAssetSettingsDefaultObject.Settings.MonoScriptBundleNaming = MonoScriptBundleNaming.Custom;
-        AddressableAssetSettingsDefaultObject.Settings.MonoScriptBundleCustomNaming = targetName + "_Mono" + DateTime.Now.Minute + DateTime.Now.Second;
+        AddressableAssetSettingsDefaultObject.Settings.MonoScriptBundleCustomNaming = "_Mono"; //targetName + "_Mono" + DateTime.Now.Minute + DateTime.Now.Second;
 
 
         if (group == null || guid == null)
