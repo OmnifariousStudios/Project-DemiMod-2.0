@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using ModIO;
 using ModIO.Implementation;
@@ -115,12 +116,24 @@ public static class DemiModBase
         var guid = AssetDatabase.AssetPathToGUID(finalPath);
         
         
+        // if targetName is longer than 5 characters, we'll shorten it to 5 characters.
+        if (targetName.Length > 5)
+        {
+            targetName = targetName.Substring(0, 5);
+        }
+        
         // Set the bundles' naming style to custom, and make the name as unique as possible to avoid cross-mod conflicts.
         AddressableAssetSettingsDefaultObject.Settings.ShaderBundleNaming = ShaderBundleNaming.Custom;
-        AddressableAssetSettingsDefaultObject.Settings.ShaderBundleCustomNaming = "_Shaders"; //targetName + "_Shaders" + DateTime.Now.Minute + DateTime.Now.Second;
+        AddressableAssetSettingsDefaultObject.Settings.ShaderBundleCustomNaming = targetName + "_S_" + DateTime.Now.Day + DateTime.Now.Minute + DateTime.Now.Second;
         
         AddressableAssetSettingsDefaultObject.Settings.MonoScriptBundleNaming = MonoScriptBundleNaming.Custom;
-        AddressableAssetSettingsDefaultObject.Settings.MonoScriptBundleCustomNaming = "_Mono"; //targetName + "_Mono" + DateTime.Now.Minute + DateTime.Now.Second;
+        AddressableAssetSettingsDefaultObject.Settings.MonoScriptBundleCustomNaming = targetName + "_M_" + DateTime.Now.Day + DateTime.Now.Minute + DateTime.Now.Second;
+        
+        //AddressableAssetSettingsDefaultObject.Settings.DefaultGroup.Settings.ShaderBundleNaming = ShaderBundleNaming.Custom;
+        //AddressableAssetSettingsDefaultObject.Settings.DefaultGroup.Settings.ShaderBundleCustomNaming = targetName + "_S2_" + DateTime.Now.Day + DateTime.Now.Minute + DateTime.Now.Second;
+        
+        //AddressableAssetSettingsDefaultObject.Settings.DefaultGroup.Settings.MonoScriptBundleNaming = MonoScriptBundleNaming.Custom;
+        //AddressableAssetSettingsDefaultObject.Settings.DefaultGroup.Settings.MonoScriptBundleCustomNaming = targetName + "_M2_" + DateTime.Now.Day + DateTime.Now.Minute + DateTime.Now.Second;
 
 
         if (group == null || guid == null)

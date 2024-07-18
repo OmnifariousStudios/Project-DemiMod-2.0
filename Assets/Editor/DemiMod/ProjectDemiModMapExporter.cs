@@ -190,6 +190,11 @@ public class ProjectDemiModMapExporter : EditorWindow
                 StaticOcclusionCulling.Compute();
                 Debug.Log("Attempting to bake Occlusion Culling");
             }
+
+            if (GUILayout.Button("Collect All Props"))
+            {
+                CollectAllProps();
+            }
         }
 
         #endregion
@@ -367,6 +372,31 @@ public class ProjectDemiModMapExporter : EditorWindow
         }
     }
 
+
+    public void CollectAllProps()
+    {
+        if(!currentSceneController)
+            AddSceneController();
+        
+        // Find all instances of DemigodProp in the scene
+        DemigodProp[] allProps = FindObjectsOfType<DemigodProp>();
+        
+        if (allProps.Length > 0)
+        {
+            Debug.Log("Found " + allProps.Length + " props in the scene!");
+            
+            for (int i = 0; i < allProps.Length; i++)
+            {
+                // If scene controller's prop list does not contain this prop, add it
+                if (!currentSceneController.propsInScene.Contains(allProps[i]))
+                {
+                    currentSceneController.propsInScene.Add(allProps[i]);
+                }
+            }
+        }
+    }
+    
+    
     void AddPlayerSpawnPoint()
     {
         GameObject playerSpawnPoint = GameObject.Find("Player Spawnpoint");

@@ -275,8 +275,20 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 {
                     DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, playerAvatarScript.gameObject.name);
                     
-                    finalPrefab = PrefabUtility.SaveAsPrefabAssetAndConnect(playerAvatarScript.gameObject,
-                        DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, avatarNameString) + ".prefab", InteractionMode.UserAction);
+                    // If final prefab is already a prefab asset, save over. Otherwise, create a new prefab asset and connect.
+                    if(PrefabUtility.IsPartOfRegularPrefab(playerAvatarScript.gameObject))
+                    {
+                        //finalPrefab = PrefabUtility.SaveAsPrefabAsset(playerAvatarScript.gameObject,
+                        //DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, avatarNameString) + ".prefab");
+                            
+                        PrefabUtility.ApplyPrefabInstance(avatarModel, InteractionMode.UserAction);
+                    }
+                    else
+                    {
+                        finalPrefab = PrefabUtility.SaveAsPrefabAssetAndConnect(playerAvatarScript.gameObject,
+                            DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, avatarNameString) + ".prefab", InteractionMode.UserAction);
+                    }
+                    
 
                     if (finalPrefab)
                     {
@@ -504,7 +516,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 {
                     if(PrefabUtility.IsPartOfRegularPrefab(avatarModel))
                     {
-                        Debug.Log("Saving Avatar Prefab");
+                        Debug.Log("Overwriting Avatar Prefab");
                         PrefabUtility.ApplyPrefabInstance(avatarModel, InteractionMode.UserAction);
                     }
                     else
@@ -513,10 +525,10 @@ public class ProjectDemiModAvatarExporter : EditorWindow
 
                         if (avatarNameString.Contains("Player Avatar - ") == false)
                         {
-                            avatarNameString = "Avatar Mod - " + avatarNameString;
+                            avatarNameString = "Player Avatar - " + avatarNameString;
                         }
                         
-                        Debug.Log("Saving Avatar Prefab");
+                        Debug.Log("Saving Avatar Prefab as an Asset and Connecting to instance.");
                         PrefabUtility.SaveAsPrefabAssetAndConnect(avatarModel,
                             DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, avatarNameString) + ".prefab", InteractionMode.UserAction);
                     }
@@ -1838,6 +1850,9 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             {
                 weblineRendererScript.rightWeblineOriginLineRenderer.enabled = true;
             }
+            
+            
+            weblineRendererScript.SetPoints();
         }
     }
 
