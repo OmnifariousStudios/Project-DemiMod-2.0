@@ -1501,7 +1501,8 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         for (int i = 0; i < avatarRenderers.Count; i++)
         {
             if(avatarRenderers[i].name.Contains("FingerTip") || avatarRenderers[i].name.Contains("Palm") || avatarRenderers[i].name == "Cube" 
-               || avatarRenderers[i].name == "Capsule" || avatarRenderers[i].transform.parent.name.Contains("Palm Shape") || avatarRenderers[i].name.Contains("Don't Move"))
+               || avatarRenderers[i].name == "Capsule" || avatarRenderers[i].transform.parent.name.Contains("Palm Shape") || avatarRenderers[i].name.Contains("Don't Move") 
+               || avatarRenderers[i].name.Contains("Eyes Debug Capsule") || avatarRenderers[i].name.Contains("Webline Origin Point") || avatarRenderers[i].name.Contains("Web Position"))
             {
                 avatarRenderers.RemoveAt(i);
                 i--;
