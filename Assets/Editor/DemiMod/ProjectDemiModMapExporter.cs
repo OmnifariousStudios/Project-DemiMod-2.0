@@ -256,6 +256,7 @@ public class ProjectDemiModMapExporter : EditorWindow
                 DisableInterfaceSpawnPoints();
                 DisableShieldWallRenderers();
                 DisableEnemySpawnpointShapes();
+                CollectAllProps();
                 
                 // Find and delete and EventSystem in the scene
                 GameObject eventSystem = GameObject.Find("EventSystem");
@@ -282,6 +283,7 @@ public class ProjectDemiModMapExporter : EditorWindow
                 DisableInterfaceSpawnPoints();
                 DisableShieldWallRenderers();
                 DisableEnemySpawnpointShapes();
+                CollectAllProps();
                 
                 // Find and delete and EventSystem in the scene
                 GameObject eventSystem = GameObject.Find("EventSystem");

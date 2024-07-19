@@ -14,7 +14,8 @@ public class ProjectDemiModAvatarExporter : EditorWindow
     public WeblineRenderer weblineRendererScript;
     
     // Demi-Mod Variables
-    private GameObject avatarModel;
+    private GameObject originalAvatarModel;
+    public GameObject playerAvatar;
     public Animator animator;
     public PlayerAvatar playerAvatarScript;
     public string avatarNameString = "";
@@ -34,6 +35,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
     
     private GameObject finalPrefab;
     
+    private string playerAvatarName;
     
     [MenuItem("Project Demigod/Avatar Mod Exporter")]
     public static void ShowMapWindow() 
@@ -48,32 +50,23 @@ public class ProjectDemiModAvatarExporter : EditorWindow
 
         GetDataHolder();
     }
-
-    public void GetDataHolder()
-    {
-        if(!dataHolder)
-            dataHolder = Resources.Load<DataHolder>("DataHolder");
-    }
-    
-    public void SetDefaultModLocation()
-    {
-        if (dataHolder)
-        {
-            dataHolder.userDefinedModsLocation = EditorUtility.OpenFolderPanel("Select Directory", "", "");
-        }
-    }
     
     
     private void OnGUI()
     {
+        #region Opening GUI
+        
         EditorGUIUtility.labelWidth = 80;
         GUILayout.Label("Project Demigod Mod Exporter", EditorStyles.largeLabel);
         GUILayout.Space(10);
         
-        
         GUILayoutOption[] options = { GUILayout.MaxWidth(1000), GUILayout.MinWidth(250) };
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition, options);
 
+        #endregion
+        
+        #region Mod Storage Locations
+        
         if(!dataHolder)
             GetDataHolder();
         
@@ -99,25 +92,32 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 EditorGUILayout.HelpBox("Current Location: " + dataHolder.userDefinedModsLocation, MessageType.Info);
             }
         }
+
+        #endregion
+        
         
         GUI.color = Color.white;
         
         
-        avatarModel = EditorGUILayout.ObjectField("Avatar Model", avatarModel, typeof(GameObject), true) as GameObject;
-        //playerAvatarScript = EditorGUILayout.ObjectField("Player Avatar Script", playerAvatarScript, typeof(PlayerAvatar), true) as PlayerAvatar;
+        originalAvatarModel = EditorGUILayout.ObjectField("Original Avatar Model", originalAvatarModel, typeof(GameObject), true) as GameObject;
 
-        if (avatarModel == null) 
+        if (originalAvatarModel == null) 
         {
             EditorGUILayout.HelpBox("Drag the avatar model here to continue.", MessageType.Info);
         } 
-        else if (avatarModel) 
+       
+        if (originalAvatarModel || playerAvatar) 
         {
-            EditorGUILayout.HelpBox(avatarModel.name + " will be tested for correct settings.", MessageType.Info);
+            if(originalAvatarModel)
+                EditorGUILayout.HelpBox(originalAvatarModel.name + " will be tested for correct settings.", MessageType.Info);
+    
+            DemiModBase.AddLineAndSpace();
+            
+            playerAvatar = EditorGUILayout.ObjectField("Player Avatar", playerAvatar, typeof(GameObject), true) as GameObject;
         } 
         
         
         DemiModBase.AddLineAndSpace();
-        
         
         #region SwitchPlatforms
         
@@ -147,12 +147,13 @@ public class ProjectDemiModAvatarExporter : EditorWindow
 
         #endregion
         
-        
         DemiModBase.AddLineAndSpace();
 
 
-        using (new EditorGUI.DisabledScope(avatarModel == null))
+        using (new EditorGUI.DisabledScope(originalAvatarModel == null && playerAvatar == null))
         {
+            #region UI Colors
+            
             GUI.color = Color.white;
             
             DemiModBase.AddLineAndSpace();
@@ -173,132 +174,14 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 GUI.color = Color.white;
             }
             
+            #endregion
+            
             if (GUILayout.Button("Setup Avatar", GUILayout.Height(20)))
             {
-                Debug.Log("Checking model: " + avatarModel.name);
-                
-                GetDataHolder();
-                dataHolder.lastPlayerAvatarName = avatarModel.name;
-                
-                if (!avatarModel.GetComponentInChildren<PlayerAvatar>())
-                {
-                    playerAvatarScript = avatarModel.AddComponent<PlayerAvatar>();
-                }
-                
-                playerAvatarScript = avatarModel.GetComponentInChildren<PlayerAvatar>();
-                
-                avatarNameString = avatarModel.name;
-
-                if (avatarNameString.Contains("Player Avatar") == false)
-                {
-                    avatarNameString = "Player Avatar - " + avatarNameString;
-                }
-                
-                animator = avatarModel.GetComponent<Animator>();
-
-                if(animator == null)
-                {
-                    Debug.LogError("Animator not found. Adding Animator component.");
-                    avatarModel.AddComponent<Animator>();
-                    return;
-                }
-                else
-                {
-                    Debug.Log("Animator found");
-                }
-                
-                if(animator.avatar == null)
-                {
-                    Debug.LogError("Avatar not found");
-                    return;
-                }
-                else
-                {
-                    Debug.Log("Animator's Avatar found");
-                }
-                
-                if (!animator.avatar.isHuman)
-                {
-                    Debug.Log("Avatar Model is not humanoid! Please convert rig to humanoid in the inspector first.");
-                    EditorGUILayout.HelpBox("Avatar Model is not humanoid. Please convert rig to humanoid in the inspector first.", MessageType.Warning);
-                    return;
-                }
-                
-                if (avatarModel)
-                {
-                    animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Avatar Hand Animator");
-                }
-                
-                if (!handPoseCopierScript)
-                {
-                    handPoseCopierScript = GameObject.Find("Hand Pose Copier").GetComponent<HandPoseCopier>();
-                }
-                
-                if(!weblineRendererScript)
-                {
-                    weblineRendererScript = GameObject.Find("Hand Pose Copier").GetComponent<WeblineRenderer>();
-                }
-
-                if(handPoseCopierScript)
-                {
-                    GetDataHolder();
-                    dataHolder.handPoseCopierGameObject = handPoseCopierScript.gameObject;
-                    
-                    if (animator)
-                        handPoseCopierScript.avatarAnimator = animator;
-
-                    if (playerAvatarScript)
-                        handPoseCopierScript.playerAvatarScript = playerAvatarScript;
-                    
-                    //Debug.Log("Avatar's mod folder path in project is: " + Path.Combine(DemiModBase.unityAssetsAvatarModsFolderPath, playerAvatarScript.gameObject.name));
-                    
-                    handPoseCopierScript.avatarModFolderPath = Path.Combine(Path.Combine(DemiModBase.unityAssetsAvatarModsFolderPath, playerAvatarScript.gameObject.name), "AvatarModHandPoses.json");
-                    
-                    dataHolder.handPoseBuildLocation = handPoseCopierScript.avatarModFolderPath;
-                    
-                    Debug.Log("Hand Pose Script should now be in Path: " + handPoseCopierScript.avatarModFolderPath);
-                }
-
-                if (weblineRendererScript)
-                {
-                    weblineRendererScript.playerAvatar = playerAvatarScript;
-                }
-                
-                playerAvatarScript.animator = animator;
-                
-                MapAvatarBody();
-                
-                SetupHealthEnergyReadout();
-                
-                
-                if(playerAvatarScript && playerAvatarScript.gameObject)
-                {
-                    DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, playerAvatarScript.gameObject.name);
-                    
-                    // If final prefab is already a prefab asset, save over. Otherwise, create a new prefab asset and connect.
-                    if(PrefabUtility.IsPartOfRegularPrefab(playerAvatarScript.gameObject))
-                    {
-                        //finalPrefab = PrefabUtility.SaveAsPrefabAsset(playerAvatarScript.gameObject,
-                        //DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, avatarNameString) + ".prefab");
-                            
-                        PrefabUtility.ApplyPrefabInstance(avatarModel, InteractionMode.UserAction);
-                    }
-                    else
-                    {
-                        finalPrefab = PrefabUtility.SaveAsPrefabAssetAndConnect(playerAvatarScript.gameObject,
-                            DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, avatarNameString) + ".prefab", InteractionMode.UserAction);
-                    }
-                    
-
-                    if (finalPrefab)
-                    {
-                        dataHolder.lastPlayerAvatarPrefab = finalPrefab;
-                    }
-                }
-                
-                AvatarSetupComplete = true;
+                SetupAvatar();
             }
-            
+
+            #region UI Layout
             
             // Colors
             if (FolderSetupComplete)
@@ -331,6 +214,9 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 GUI.color = Color.white;
             }
             
+            #endregion
+            
+            
             if (GUILayout.Button("Create Custom Material Settings", GUILayout.Height(20)))
             {
                 GenerateCustomMaterialSettings();
@@ -341,11 +227,12 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             {
                 ClearCustomMaterialSettings();
             }
-            
+
+            #region UI Layout
+
             GUILayout.EndHorizontal();
             
             GUI.color = Color.white;
-            
             
             DemiModBase.AddLineAndSpace();
             
@@ -361,6 +248,9 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             {
                 GUI.color = Color.white;
             }
+            
+            #endregion
+            
 
             if (Application.isPlaying == false)
             {
@@ -374,7 +264,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         
         DemiModBase.AddLineAndSpace();
         
-        if(!finalPrefab && dataHolder.lastPlayerAvatarPrefab)
+        if(!finalPrefab && dataHolder && dataHolder.lastPlayerAvatarPrefab)
         {
             finalPrefab = dataHolder.lastPlayerAvatarPrefab;
         }
@@ -391,7 +281,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         
         #region Build Addressables
         
-        bool canBuild = avatarModel != null;
+        bool canBuild = finalPrefab != null;
         
         using (new EditorGUI.DisabledScope(!canBuild)) 
         {
@@ -399,13 +289,11 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             if (GUILayout.Button("Build for Windows (PCVR)", GUILayout.Height(20)))
             {
                 DisableDebugRenderers();
-                
-                // Save avatar before building addressable.
-                Debug.Log("Saving Avatar Prefab: " + avatarModel.name);
-                PrefabUtility.ApplyPrefabInstance(avatarModel, InteractionMode.UserAction);
+                CheckIfCustomMaterialSettingsExist();
+                SaveEnemyAvatarPrefab();
                 
                 GetDataHolder();
-                //dataHolder.lastAddressableBuildPath = DemiModBase.modsFolderPath + "/" + avatarModel.name + " - PCVR";
+
                 dataHolder.lastPlayerAvatarPrefab = finalPrefab;
                 dataHolder.lastPlayerAvatarName = playerAvatarScript.gameObject.name;
                 
@@ -413,7 +301,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 EditorUtility.SetDirty(dataHolder);
                 AssetDatabase.SaveAssets();
                 
-                DemiModBase.ExportWindows(DemiModBase.ModType.Avatar, avatarModel);
+                DemiModBase.ExportWindows(DemiModBase.ModType.Avatar, playerAvatar);
                 
                 PostBuildCleanup();
                 
@@ -426,13 +314,11 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             if (GUILayout.Button("Build for Android (Quest)", GUILayout.Height(20)))
             {
                 DisableDebugRenderers();
-                
-                // Save avatar before building addressable.
-                Debug.Log("Saving Avatar Prefab");
-                PrefabUtility.ApplyPrefabInstance(avatarModel, InteractionMode.UserAction);
+                CheckIfCustomMaterialSettingsExist();
+                SaveEnemyAvatarPrefab();
                 
                 GetDataHolder();
-                //dataHolder.lastAddressableBuildPath = DemiModBase.modsFolderPath + "/" + avatarModel.name + " - Android";
+
                 dataHolder.lastPlayerAvatarPrefab = finalPrefab;
                 dataHolder.lastPlayerAvatarName = playerAvatarScript.gameObject.name;
                 
@@ -440,7 +326,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 EditorUtility.SetDirty(dataHolder);
                 AssetDatabase.SaveAssets();
                 
-                DemiModBase.ExportAndroid(DemiModBase.ModType.Avatar, avatarModel);
+                DemiModBase.ExportAndroid(DemiModBase.ModType.Avatar, playerAvatar);
                 
                 PostBuildCleanup();
                 
@@ -462,7 +348,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         
         #region Finish Setup
         
-        using(new EditorGUI.DisabledScope(finalPrefab == null || avatarModel == null))
+        using(new EditorGUI.DisabledScope(finalPrefab == null))
         {
             EditorGUILayout.HelpBox(" Use this button to Finish Setup for current Avatar AFTER building the Addressable. Adds the Hand Pose JSON to the folder before compression.", MessageType.Info);
             if (GUILayout.Button("Finish Setup", GUILayout.Height(20)))
@@ -471,32 +357,28 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 
                 if (!playerAvatarScript)
                 {
-                    if(avatarModel)
-                        playerAvatarScript = avatarModel.GetComponentInChildren<PlayerAvatar>();
+                    if(playerAvatar)
+                        playerAvatarScript = playerAvatar.GetComponentInChildren<PlayerAvatar>();
                 }
                 
                 if(string.IsNullOrEmpty(dataHolder.handPoseBuildLocation) == false)
                 {
-                    if(true)// File.Exists(dataHolder.handPoseBuildLocation) && Directory.Exists(dataHolder.lastAddressableBuildPath))
+                    if(File.Exists(dataHolder.handPoseBuildLocation) && Directory.Exists(dataHolder.lastAddressableBuildPath))
                     {
                         Debug.Log("Attempting to Copy file: " + dataHolder.handPoseBuildLocation + " to " 
                                   + dataHolder.lastAddressableBuildPath + "/AvatarModHandPoses.json");
                         
-                        //File.Copy(dataHolder.handPoseBuildLocation, dataHolder.lastAddressableBuildPath);
-                        
                         FileUtil.CopyFileOrDirectory(dataHolder.handPoseBuildLocation,
                             Path.Combine(dataHolder.lastAddressableBuildPath + "/AvatarModHandPoses.json"));
-                        
-                        //File.Move(dataHolder.handPoseBuildLocation, Path.Combine(dataHolder.lastAddressableBuildPath, "AvatarModHandPoses.json"));
                     }
                     else
                     {
-                        Debug.LogError("Hand Pose JSON file not found. Please create Hand Poses first.");
+                        Debug.Log("Hand Pose JSON file not found. Please create Hand Poses first.");
                     }
                 }
                 else
                 {
-                    Debug.LogError("Hand Pose JSON file not found. Please create Hand Poses first.");
+                    Debug.Log("Hand Pose JSON file not found. Please create Hand Poses first.");
                 }
             }
         }
@@ -508,31 +390,11 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         
         
         // Save Avatar Prefab button
-        using (new EditorGUI.DisabledScope(avatarModel == null))
+        using (new EditorGUI.DisabledScope(playerAvatar == null))
         {
             if (GUILayout.Button("Save Avatar Prefab", GUILayout.Height(20)))
             {
-                if (avatarModel)
-                {
-                    if(PrefabUtility.IsPartOfRegularPrefab(avatarModel))
-                    {
-                        Debug.Log("Overwriting Avatar Prefab");
-                        PrefabUtility.ApplyPrefabInstance(avatarModel, InteractionMode.UserAction);
-                    }
-                    else
-                    {
-                        avatarNameString = avatarModel.name;
-
-                        if (avatarNameString.Contains("Player Avatar - ") == false)
-                        {
-                            avatarNameString = "Player Avatar - " + avatarNameString;
-                        }
-                        
-                        Debug.Log("Saving Avatar Prefab as an Asset and Connecting to instance.");
-                        PrefabUtility.SaveAsPrefabAssetAndConnect(avatarModel,
-                            DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, avatarNameString) + ".prefab", InteractionMode.UserAction);
-                    }
-                }
+                SaveEnemyAvatarPrefab();
             }
         }
 
@@ -543,7 +405,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         #region Debug Shapes
         
         GUI.color = Color.white;
-        using (new EditorGUI.DisabledScope(avatarModel == null))
+        using (new EditorGUI.DisabledScope(playerAvatar == null))
         {
             GUILayout.BeginHorizontal("Debug Shapes", GUI.skin.window);
             
@@ -652,60 +514,127 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         // End the scroll view that we began above.
         EditorGUILayout.EndScrollView();
     }
-    
-    
-    
-    public void PostBuildCleanup()
+
+
+    private void SetupAvatar()
     {
+        if(originalAvatarModel)
+            Debug.Log("Checking model: " + originalAvatarModel.name);
+
+        if (playerAvatar == null && originalAvatarModel)
+        {
+            playerAvatar = Instantiate(originalAvatarModel);
+            
+            // After creating a new character root, we shouldn't have any other references to the original model.
+            if(originalAvatarModel)
+                originalAvatarModel.SetActive(false);
+        }
+        
+        playerAvatarName = playerAvatar.name;
+        
         GetDataHolder();
+        dataHolder.lastPlayerAvatarName = playerAvatarName;
         
-        if(!finalPrefab && dataHolder.lastPlayerAvatarPrefab)
+        if (!playerAvatar.GetComponentInChildren<PlayerAvatar>())
         {
-            finalPrefab = dataHolder.lastPlayerAvatarPrefab;
+            playerAvatarScript = playerAvatar.AddComponent<PlayerAvatar>();
         }
         
+        playerAvatarScript = playerAvatar.GetComponentInChildren<PlayerAvatar>();
         
-        if(!avatarModel)
+        avatarNameString = playerAvatar.name;
+
+        if (avatarNameString.Contains("Player Avatar") == false)
         {
-            if (string.IsNullOrEmpty(dataHolder.lastPlayerAvatarName) == false)
-            {
-                if (GameObject.Find(dataHolder.lastPlayerAvatarName))
-                {
-                    avatarModel = GameObject.Find(dataHolder.lastPlayerAvatarName);
-                }
-            }
+            avatarNameString = "Player Avatar - " + avatarNameString;
+        }
+        
+        animator = playerAvatar.GetComponent<Animator>();
+
+        if(animator == null)
+        {
+            Debug.LogError("Animator not found. Adding Animator component.");
+            playerAvatar.AddComponent<Animator>();
+            return;
+        }
+        else
+        {
+            Debug.Log("Animator found");
+        }
+        
+        if(animator.avatar == null)
+        {
+            Debug.LogError("Avatar not found");
+            return;
+        }
+        else
+        {
+            Debug.Log("Animator's Avatar found");
+        }
+        
+        if (!animator.avatar.isHuman)
+        {
+            Debug.Log("Avatar Model is not humanoid! Please convert rig to humanoid in the inspector first.");
+            EditorGUILayout.HelpBox("Avatar Model is not humanoid. Please convert rig to humanoid in the inspector first.", MessageType.Warning);
+            return;
+        }
+        
+        if (playerAvatar)
+        {
+            animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Avatar Hand Animator");
+        }
+        
+        if (!handPoseCopierScript)
+        {
+            handPoseCopierScript = GameObject.Find("Hand Pose Copier").GetComponent<HandPoseCopier>();
+        }
+        
+        if(!weblineRendererScript)
+        {
+            weblineRendererScript = GameObject.Find("Hand Pose Copier").GetComponent<WeblineRenderer>();
         }
 
-        
-        if (avatarModel)
+        if(handPoseCopierScript)
         {
-            Debug.Log("Avatar Model Found: " + avatarModel.name);
-        }
-    }
-    
-
-    private void ResetButtonCompletionStatus()
-    {
-        AvatarSetupComplete = false;
-        CustomMaterialSettingsComplete = false;
-        FolderSetupComplete = false;
-        CustomHandPoseSettingsComplete = false;
-        
-        avatarModel = null;
-        animator = null;
-        playerAvatarScript = null;
-        avatarNameString = "";
-        
-        if(!dataHolder)
             GetDataHolder();
+            dataHolder.handPoseCopierGameObject = handPoseCopierScript.gameObject;
+            
+            if (animator)
+                handPoseCopierScript.avatarAnimator = animator;
+
+            if (playerAvatarScript)
+                handPoseCopierScript.playerAvatarScript = playerAvatarScript;
+            
+            handPoseCopierScript.avatarModFolderPath = 
+                Path.Combine(Path.Combine(DemiModBase.unityAssetsAvatarModsFolderPath, playerAvatarScript.gameObject.name), "AvatarModHandPoses.json");
+            
+            dataHolder.handPoseBuildLocation = handPoseCopierScript.avatarModFolderPath;
+            
+            Debug.Log("Hand Pose Script should now be in Path: " + handPoseCopierScript.avatarModFolderPath);
+        }
+
+        if (weblineRendererScript)
+        {
+            weblineRendererScript.playerAvatar = playerAvatarScript;
+        }
         
-        dataHolder.lastPlayerAvatarPrefab = null;
-        dataHolder.lastPlayerAvatarName = "";
+        playerAvatarScript.animator = animator;
         
-        finalPrefab = null;
+        MapAvatarBody();
+        
+        SetupHealthEnergyReadout();
+        
+        GenerateCustomMaterialSettings();
+        
+        if(playerAvatarScript && playerAvatar)
+        {
+            SaveEnemyAvatarPrefab();
+        }
+        
+        AvatarSetupComplete = true;
     }
 
-    
+    #region Map Avatar Body and Setup References
     
     private void MapAvatarBody()
     {
@@ -739,32 +668,6 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 eyes.transform.SetParent(playerAvatarScript.avatarHead, true);
                 
                 playerAvatarScript.avatarEyes = eyes.transform;
-                
-                /*
-                if (animator.GetBoneTransform(HumanBodyBones.LeftEye) != null && animator.GetBoneTransform(HumanBodyBones.RightEye) != null)
-                {
-                    // Create a new gameobject to hold the eyes (so we can rotate them
-                    GameObject eyes = new GameObject("Eyes");
-                    eyes.transform.parent = playerAvatarScript.avatarHead;
-
-                    Transform leftEye = animator.GetBoneTransform(HumanBodyBones.LeftEye);
-                    Transform rightEye = animator.GetBoneTransform(HumanBodyBones.RightEye);
-
-                    eyes.transform.position = (leftEye.position + rightEye.position) / 2;
-                    eyes.transform.rotation = Quaternion.LookRotation(Vector3.forward);
-                
-                    playerAvatarScript.avatarEyes = eyes.transform;
-                }
-                else
-                {
-                    Debug.Log("No Eye Bones Found. Eyes Debug Shape created. Please the Eyes Debug Shape to the eyes position.");
-                
-                    GameObject eyes = Instantiate(Resources.Load("Eyes Debug Capsule", typeof(GameObject))) as GameObject;
-                    eyes.transform.SetParent(playerAvatarScript.avatarHead, true);
-                
-                    playerAvatarScript.avatarEyes = eyes.transform;
-                }
-                */
             }
         }
                 
@@ -874,8 +777,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         playerAvatarScript.rightThumbEnd = animator.GetBoneTransform(HumanBodyBones.RightThumbDistal);
     }
     
-
-    public float webGrabDistanceAdjustment = -0.04f;
+    
     private void SetupPalmsAndSpawnPoints()
     {
         // Left Hand
@@ -1442,7 +1344,6 @@ public class ProjectDemiModAvatarExporter : EditorWindow
 
     }
 
-
     private void SetupHealthEnergyReadout()
     {
         EnergyHealthBar energyHealthBar = playerAvatarScript.GetComponentInChildren<EnergyHealthBar>();
@@ -1489,14 +1390,26 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             playerAvatarScript.energySlider = energyHealthBar.energySlider;
         }
     }
-    
 
+    #endregion
+
+    
+    #region Custom Material Settings
+    
+    private void CheckIfCustomMaterialSettingsExist()
+    {
+        if (playerAvatarScript && playerAvatarScript.customMaterialSettings.Count == 0)
+        {
+            GenerateCustomMaterialSettings();
+        }
+    }
+    
     private void GenerateCustomMaterialSettings()
     {
-        if(!avatarModel || !playerAvatarScript)
+        if(!playerAvatar || !playerAvatarScript)
             return;
                 
-        List<Renderer> avatarRenderers = avatarModel.GetComponentsInChildren<Renderer>().ToList();
+        List<Renderer> avatarRenderers = playerAvatar.GetComponentsInChildren<Renderer>().ToList();
 
         for (int i = 0; i < avatarRenderers.Count; i++)
         {
@@ -1583,14 +1496,18 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         
         CustomMaterialSettingsComplete = false;
     }
+    
+    #endregion
 
-
+    
+    #region Debug Shapes and Renderers
+    
     private void EnableDebugRenderers()
     {
         //PostBuildCleanup();
         
-        if (avatarModel)
-            playerAvatarScript = avatarModel.GetComponent<PlayerAvatar>();
+        if (playerAvatar)
+            playerAvatarScript = playerAvatar.GetComponent<PlayerAvatar>();
         
         EnableHandShapes();
 
@@ -1603,8 +1520,8 @@ public class ProjectDemiModAvatarExporter : EditorWindow
     {
         //PostBuildCleanup();
         
-        if (avatarModel)
-            playerAvatarScript = avatarModel.GetComponent<PlayerAvatar>();
+        if (playerAvatar)
+            playerAvatarScript = playerAvatar.GetComponent<PlayerAvatar>();
         
         DisableEyeShape();
         
@@ -1652,8 +1569,8 @@ public class ProjectDemiModAvatarExporter : EditorWindow
 
     private void EnableHandShapes()
     {
-        if (avatarModel)
-            playerAvatarScript = avatarModel.GetComponent<PlayerAvatar>();
+        if (playerAvatar)
+            playerAvatarScript = playerAvatar.GetComponent<PlayerAvatar>();
         
         if(playerAvatarScript.fingerTips != null)
         {
@@ -1922,7 +1839,127 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         }
     }
     
+    #endregion
     
+    
+    // If finalPrefab already exists, save the enemyModRoot changes to finalPrefab.
+    // Otherwise, save the enemyModRoot as a new prefab.
+    public void SaveEnemyAvatarPrefab()
+    {
+        /*
+        if (playerAvatar && finalPrefab)
+        {
+            if (finalPrefab.name.Contains(playerAvatar.name) == false)
+            {
+                finalPrefab = null;
+            }
+        }
+        */
+        
+        if (finalPrefab)
+        {
+            Debug.Log("Saving Avatar Prefab: " + finalPrefab.name);
+            PrefabUtility.ApplyPrefabInstance(playerAvatar, InteractionMode.UserAction);
+        }
+        else if (playerAvatar)
+        {
+            if(PrefabUtility.IsPartOfRegularPrefab(playerAvatar))
+            {
+                Debug.Log("Saving Avatar Prefab: " + playerAvatar.name);
+                PrefabUtility.ApplyPrefabInstance(playerAvatar, InteractionMode.UserAction);
+                
+                finalPrefab = PrefabUtility.GetCorrespondingObjectFromSource(playerAvatar);
+            }
+            else
+            {
+                if(playerAvatarName.Contains("(Clone)"))
+                {
+                    playerAvatarName = playerAvatarName.Replace("(Clone)", "");
+                }
+                
+                if (playerAvatarName.Contains("Player Avatar - ") == false)
+                {
+                    playerAvatarName = "Player Avatar - " + playerAvatarName;
+                }
+                        
+                Debug.Log("Saving Avatar Prefab as an Asset and Connecting to instance.");
+                finalPrefab = PrefabUtility.SaveAsPrefabAssetAndConnect(playerAvatar,
+                    DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, playerAvatarName) + ".prefab", InteractionMode.UserAction);
+            }
+        }
+        
+        if (finalPrefab && dataHolder)
+        {
+            dataHolder.lastPlayerAvatarPrefab = finalPrefab;
+        }
+    }
+    
+    
+    private void ResetButtonCompletionStatus()
+    {
+        AvatarSetupComplete = false;
+        CustomMaterialSettingsComplete = false;
+        FolderSetupComplete = false;
+        CustomHandPoseSettingsComplete = false;
+        
+        originalAvatarModel = null;
+        playerAvatar = null;
+        animator = null;
+        playerAvatarScript = null;
+        avatarNameString = "";
+        playerAvatarName = "";
+        
+        if(!dataHolder)
+            GetDataHolder();
+        
+        dataHolder.lastPlayerAvatarPrefab = null;
+        dataHolder.lastPlayerAvatarName = "";
+        
+        finalPrefab = null;
+    }
+    
+    public void PostBuildCleanup()
+    {
+        GetDataHolder();
+        
+        if(!finalPrefab && dataHolder.lastPlayerAvatarPrefab)
+        {
+            finalPrefab = dataHolder.lastPlayerAvatarPrefab;
+        }
+        
+
+        if (!playerAvatar && dataHolder)
+        {
+            playerAvatar = GameObject.Find(dataHolder.lastPlayerAvatarName);
+        }
+
+        if (!finalPrefab)
+        {
+            if (playerAvatar)
+            {
+                finalPrefab = PrefabUtility.GetCorrespondingObjectFromSource(playerAvatar);
+            }
+        }
+        
+        if (originalAvatarModel)
+        {
+            Debug.Log("Avatar Model Found: " + originalAvatarModel.name);
+        }
+    }
+    
+    public void GetDataHolder()
+    {
+        if(!dataHolder)
+            dataHolder = Resources.Load<DataHolder>("DataHolder");
+    }
+    
+    public void SetDefaultModLocation()
+    {
+        if (dataHolder)
+        {
+            dataHolder.userDefinedModsLocation = EditorUtility.OpenFolderPanel("Select Directory", "", "");
+        }
+    }
     
     
     public void OpenFolderAfterModsBuild()

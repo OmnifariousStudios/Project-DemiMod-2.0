@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu (fileName = "DataHolder", menuName = "Data Holder")]
 public class DataHolder : ScriptableObject
@@ -28,8 +29,8 @@ public class DataHolder : ScriptableObject
     public GameObject lastRagdollRoot;
     public string lastRagdollRootName;
     
-    public GameObject lastEnemyAvatarPrefab;
-    public string lastEnemyAvatarName;
+    [FormerlySerializedAs("lastEnemyAvatarPrefab")] public GameObject lastEnemyAvatarFinalPrefab;
+    [FormerlySerializedAs("lastEnemyAvatarName")] public string lastEnemyAvatarRootName;
     
     public string GetUserDefinedModsLocation()
     {

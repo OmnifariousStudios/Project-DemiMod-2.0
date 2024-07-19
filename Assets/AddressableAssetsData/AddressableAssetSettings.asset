@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: d45708f53d3c5454c91f6c211064d4ae
   m_CachedHash:
     serializedVersion: 2
-    Hash: b2f8c275891ee9ef6c44d9fdec0d6ebb
+    Hash: 7fdc87252764abbda6d7509994222769
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 1
   m_BundleLocalCatalog: 0
@@ -30,10 +30,10 @@ MonoBehaviour:
   m_StripUnityVersionFromBundleBuild: 0
   m_DisableVisibleSubAssetRepresentations: 0
   m_ShaderBundleNaming: 2
-  m_ShaderBundleCustomNaming: FreeC_S2_174723
+  m_ShaderBundleCustomNaming: MaleD_S_183142
   m_MonoScriptBundleNaming: 3
   m_CheckForContentUpdateRestrictionsOption: 0
-  m_MonoScriptBundleCustomNaming: FreeC_M2_174723
+  m_MonoScriptBundleCustomNaming: MaleD_M_183142
   m_RemoteCatalogBuildPath:
     m_Id: c583c98940729bc419d8ac3cfc0eeb33
   m_RemoteCatalogLoadPath:
@@ -60,9 +60,9 @@ MonoBehaviour:
       - m_Id: e1c32dc6ff918be46884b7c4a40aa8dc
         m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
       - m_Id: c583c98940729bc419d8ac3cfc0eeb33
-        m_Value: D:/Unity Projects/MODS/Player Avatar - FreeC - PCVR
+        m_Value: D:/Unity Projects/MODS/Enemy Avatar - MaleD - Android
       - m_Id: 1b69b53f21751aa4ba7b2a59706deb07
-        m_Value: C:/Users/Public/mod.io/4747/mods/{LOCAL_FILE_NAME}/
+        m_Value: '{UnityEngine.Application.persistentDataPath}/mod.io/4747/mods/{LOCAL_FILE_NAME}/'
       - m_Id: 715f36e8b43316a43962bfa40da67470
         m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
       - m_Id: 0bf2132bd24a8e640b52db8c840422a7

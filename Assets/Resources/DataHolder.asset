@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: DataHolder
   m_EditorClassIdentifier: 
   userDefinedModsLocation: D:/Unity Projects/MODS
-  lastAddressableBuildPath: D:/Unity Projects/MODS/Player Avatar - FreeC - PCVR
+  lastAddressableBuildPath: D:/Unity Projects/MODS/Player Avatar - MaleD - PCVR
   handPoseCopierGameObject: {fileID: 0}
-  handPoseBuildLocation: D:/Unity Projects/Project DemiMod 2.0/Assets/MODS/Avatars\FreeCharacter_01\AvatarModHandPoses.json
-  lastPlayerAvatarPrefab: {fileID: 6918021266677276469, guid: a5a79053c1a62e0499fb1f21a13a3294, type: 3}
-  lastPlayerAvatarName: FreeCharacter_01
+  handPoseBuildLocation: D:/Unity Projects/Project DemiMod 2.0/Assets/MODS/Avatars\MaleDummy(Clone)\AvatarModHandPoses.json
+  lastPlayerAvatarPrefab: {fileID: 0}
+  lastPlayerAvatarName: MaleDummy(Clone)
   lastEnemyModel: {fileID: 0}
-  lastEnemyModelName: SCIFI_Trooper Blue
+  lastEnemyModelName: MaleDummy
   lastRagdollRoot: {fileID: 0}
   lastRagdollRootName: Ragdoll
-  lastEnemyAvatarPrefab: {fileID: 4698562503713522424, guid: e3e32f895672e244cb380e4bb817794b, type: 3}
-  lastEnemyAvatarName: SCIFI_Trooper Blue
+  lastEnemyAvatarFinalPrefab: {fileID: 7976772319497905118, guid: dd59f1a4253a91e4c892d1b093eec1fb, type: 3}
+  lastEnemyAvatarRootName: MaleDummy
