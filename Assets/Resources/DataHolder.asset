@@ -15,9 +15,10 @@ MonoBehaviour:
   userDefinedModsLocation: D:/Unity Projects/MODS
   lastAddressableBuildPath: D:/Unity Projects/MODS/Player Avatar - MaleD - PCVR
   handPoseCopierGameObject: {fileID: 0}
-  handPoseBuildLocation: D:/Unity Projects/Project DemiMod 2.0/Assets/MODS/Avatars\MaleDummy(Clone)\AvatarModHandPoses.json
-  lastPlayerAvatarPrefab: {fileID: 0}
-  lastPlayerAvatarName: MaleDummy(Clone)
+  handPoseBuildLocation: D:/Unity Projects/Project DemiMod 2.0/Assets/MODS/Avatars\Player
+    Avatar - MaleDummy\AvatarModHandPoses.json
+  lastPlayerAvatarPrefab: {fileID: 1103373135527017791, guid: 803a7410e6275c6459793faeddaeb093, type: 3}
+  lastPlayerAvatarName: Player Avatar - MaleDummy
   lastEnemyModel: {fileID: 0}
   lastEnemyModelName: MaleDummy
   lastRagdollRoot: {fileID: 0}

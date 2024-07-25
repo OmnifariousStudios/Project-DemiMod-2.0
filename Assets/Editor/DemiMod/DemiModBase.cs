@@ -107,8 +107,19 @@ public static class DemiModBase
                 label = "Enemy Avatar";
                 break;
         }
+        
+        // Create string that is the targetName but without the label
+        string targetNameWithoutLabel = targetName.Replace(label + " - ", "");
 
-
+        
+        // if targetName is longer than 5 characters, we'll shorten it to 5 characters.
+        if (targetNameWithoutLabel.Length > 5)
+        {
+            targetNameWithoutLabel = targetNameWithoutLabel.Substring(0, 5);
+        }
+        
+        targetName = label + " - " + targetNameWithoutLabel;
+        
         
         Debug.Log("Prefab/Scene relative to project path: " + finalPath);
         
@@ -116,18 +127,12 @@ public static class DemiModBase
         var guid = AssetDatabase.AssetPathToGUID(finalPath);
         
         
-        // if targetName is longer than 5 characters, we'll shorten it to 5 characters.
-        if (targetName.Length > 5)
-        {
-            targetName = targetName.Substring(0, 5);
-        }
-        
         // Set the bundles' naming style to custom, and make the name as unique as possible to avoid cross-mod conflicts.
         AddressableAssetSettingsDefaultObject.Settings.ShaderBundleNaming = ShaderBundleNaming.Custom;
-        AddressableAssetSettingsDefaultObject.Settings.ShaderBundleCustomNaming = targetName + "_S_" + DateTime.Now.Day + DateTime.Now.Minute + DateTime.Now.Second;
+        AddressableAssetSettingsDefaultObject.Settings.ShaderBundleCustomNaming = targetNameWithoutLabel + "_S_" + DateTime.Now.Day + DateTime.Now.Minute + DateTime.Now.Second;
         
         AddressableAssetSettingsDefaultObject.Settings.MonoScriptBundleNaming = MonoScriptBundleNaming.Custom;
-        AddressableAssetSettingsDefaultObject.Settings.MonoScriptBundleCustomNaming = targetName + "_M_" + DateTime.Now.Day + DateTime.Now.Minute + DateTime.Now.Second;
+        AddressableAssetSettingsDefaultObject.Settings.MonoScriptBundleCustomNaming = targetNameWithoutLabel + "_M_" + DateTime.Now.Day + DateTime.Now.Minute + DateTime.Now.Second;
         
         //AddressableAssetSettingsDefaultObject.Settings.DefaultGroup.Settings.ShaderBundleNaming = ShaderBundleNaming.Custom;
         //AddressableAssetSettingsDefaultObject.Settings.DefaultGroup.Settings.ShaderBundleCustomNaming = targetName + "_S2_" + DateTime.Now.Day + DateTime.Now.Minute + DateTime.Now.Second;
@@ -151,23 +156,17 @@ public static class DemiModBase
         group.SetDirty(AddressableAssetSettings.ModificationEvent.EntryMoved, entriesAdded, false, true);
         AddressableAssetSettingsDefaultObject.Settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryMoved, entriesAdded, true, false);
         
+        
 
         Debug.Log("Build target: " + buildTarget);
         
         string buildPath = GetDataHolder().userDefinedModsLocation + "/" + targetName;
         
         
-        // We can dynamically change the LOAD path here, and replace the LOCAL_FILE_NAME with: MOD-ID/BUILD TARGET/AVATAR NAME
+        // We can dynamically change the LOAD path here, and replace the LOCAL_FILE_NAME
         if (buildTarget == BuildTarget.StandaloneWindows64)
         {
-            if (buildPath.Contains(label))
-            {
-                buildPath = GetDataHolder().userDefinedModsLocation + "/" + targetName + " - PCVR";
-            }
-            else
-            {
-                buildPath = GetDataHolder().userDefinedModsLocation + "/" + label + " - " + targetName + " - PCVR";
-            }
+            buildPath = GetDataHolder().userDefinedModsLocation + "/" + targetName + " - PCVR";
             
             Debug.Log("Setting load path for windows");
             AddressableAssetSettingsDefaultObject.Settings.profileSettings
@@ -175,14 +174,7 @@ public static class DemiModBase
         }
         else if (buildTarget == BuildTarget.Android)
         {
-            if (buildPath.Contains(label))
-            {
-                buildPath = GetDataHolder().userDefinedModsLocation + "/" + targetName + " - Android";
-            }
-            else
-            {
-                buildPath = GetDataHolder().userDefinedModsLocation + "/" + label + " - " + targetName + " - Android";
-            }
+            buildPath = GetDataHolder().userDefinedModsLocation + "/" + targetName + " - Android";
             
             Debug.Log("Setting load path for android");
             AddressableAssetSettingsDefaultObject.Settings.profileSettings
