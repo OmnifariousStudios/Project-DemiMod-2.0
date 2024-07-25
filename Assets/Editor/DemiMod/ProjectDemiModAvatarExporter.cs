@@ -530,6 +530,22 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 originalAvatarModel.SetActive(false);
         }
         
+        
+        if (playerAvatar)
+        {
+            if (playerAvatar.name.Contains("(Clone)"))
+            {
+                // Remove the (Clone) from the name.
+                playerAvatar.name = playerAvatar.name.Replace("(Clone)", "");
+            }
+                
+            if(playerAvatar.name.Contains("Player Avatar") == false)
+            {
+                playerAvatar.name = "Player Avatar - " + playerAvatar.name;
+            }
+        }
+        
+        
         playerAvatarName = playerAvatar.name;
         
         GetDataHolder();
@@ -610,7 +626,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             
             dataHolder.handPoseBuildLocation = handPoseCopierScript.avatarModFolderPath;
             
-            Debug.Log("Hand Pose Script should now be in Path: " + handPoseCopierScript.avatarModFolderPath);
+            Debug.Log("Hand Pose Script location should now be: " + handPoseCopierScript.avatarModFolderPath);
         }
 
         if (weblineRendererScript)
@@ -788,7 +804,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
 
         Vector3 leftHandToPointer = Vector3.zero;
         Vector3 leftHandToMiddle = Vector3.zero;
-        Vector3 leftHandToRing = Vector3.zero;
+        //Vector3 leftHandToRing = Vector3.zero;
         Vector3 leftHandToPinky = Vector3.zero;
 
         Vector3 leftPalmForward;
@@ -812,7 +828,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         // Use the cross product of the hand to the pointer finger and the hand to the middle finger to get the palm forward direction.
         leftHandToPointer = animator.GetBoneTransform(HumanBodyBones.LeftIndexProximal).position - animator.GetBoneTransform(HumanBodyBones.LeftHand).position;
         leftHandToMiddle = animator.GetBoneTransform(HumanBodyBones.LeftMiddleProximal).position - animator.GetBoneTransform(HumanBodyBones.LeftHand).position;
-        leftHandToRing = animator.GetBoneTransform(HumanBodyBones.LeftRingProximal).position - animator.GetBoneTransform(HumanBodyBones.LeftHand).position;
+        //leftHandToRing = animator.GetBoneTransform(HumanBodyBones.LeftRingProximal).position - animator.GetBoneTransform(HumanBodyBones.LeftHand).position;
         leftHandToPinky = animator.GetBoneTransform(HumanBodyBones.LeftLittleProximal).position - animator.GetBoneTransform(HumanBodyBones.LeftHand).position;
         
         if (!foundPalmLeft)
@@ -931,7 +947,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
 
         Vector3 rightHandToPointer = Vector3.zero;
         Vector3 rightHandToMiddle = Vector3.zero;
-        Vector3 rightHandToRing = Vector3.zero;
+        //Vector3 rightHandToRing = Vector3.zero;
         Vector3 rightHandToPinky = Vector3.zero;
 
         Vector3 rightPalmForward;
@@ -941,7 +957,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         // Use the cross product of the hand to the pointer finger and the hand to the middle finger to get the palm forward direction.
         rightHandToPointer = animator.GetBoneTransform(HumanBodyBones.RightIndexProximal).position - animator.GetBoneTransform(HumanBodyBones.RightHand).position;
         rightHandToMiddle = animator.GetBoneTransform(HumanBodyBones.RightMiddleProximal).position - animator.GetBoneTransform(HumanBodyBones.RightHand).position;
-        rightHandToRing = animator.GetBoneTransform(HumanBodyBones.RightRingProximal).position - animator.GetBoneTransform(HumanBodyBones.RightHand).position;
+        //rightHandToRing = animator.GetBoneTransform(HumanBodyBones.RightRingProximal).position - animator.GetBoneTransform(HumanBodyBones.RightHand).position;
         rightHandToPinky = animator.GetBoneTransform(HumanBodyBones.RightLittleProximal).position - animator.GetBoneTransform(HumanBodyBones.RightHand).position;
         
         if (!foundPalmRight)
@@ -1413,10 +1429,17 @@ public class ProjectDemiModAvatarExporter : EditorWindow
 
         for (int i = 0; i < avatarRenderers.Count; i++)
         {
-            if(avatarRenderers[i].name.Contains("FingerTip") || avatarRenderers[i].name.Contains("Palm") || avatarRenderers[i].name == "Cube" 
-               || avatarRenderers[i].name == "Capsule" || avatarRenderers[i].transform.parent.name.Contains("Palm Shape") || avatarRenderers[i].name.Contains("Don't Move") 
-               || avatarRenderers[i].name.Contains("Eyes Debug Capsule") || avatarRenderers[i].name.Contains("Webline Origin Point") || avatarRenderers[i].name.Contains("Web Position"))
+            if(avatarRenderers[i].name.Contains("FingerTip") 
+               || avatarRenderers[i].name.Contains("Palm") 
+               || avatarRenderers[i].name.Contains("Don't move this")
+               || avatarRenderers[i].name.Contains("Capsule")
+               || avatarRenderers[i].transform.parent.name.Contains("Palm Shape") 
+               || avatarRenderers[i].name.Contains("Don't Move") 
+               || avatarRenderers[i].name.Contains("Eyes Debug Capsule") 
+               || avatarRenderers[i].name.Contains("Webline Origin Point") 
+               || avatarRenderers[i].name.Contains("Web Position"))
             {
+                //Debug.Log("Removing " + avatarRenderers[i].name + " from custom material settings.");
                 avatarRenderers.RemoveAt(i);
                 i--;
             }
@@ -1846,16 +1869,6 @@ public class ProjectDemiModAvatarExporter : EditorWindow
     // Otherwise, save the enemyModRoot as a new prefab.
     public void SaveEnemyAvatarPrefab()
     {
-        /*
-        if (playerAvatar && finalPrefab)
-        {
-            if (finalPrefab.name.Contains(playerAvatar.name) == false)
-            {
-                finalPrefab = null;
-            }
-        }
-        */
-        
         if (finalPrefab)
         {
             Debug.Log("Saving Avatar Prefab: " + finalPrefab.name);
@@ -1892,6 +1905,8 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         {
             dataHolder.lastPlayerAvatarPrefab = finalPrefab;
         }
+        
+        DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Avatar, playerAvatarName);
     }
     
     

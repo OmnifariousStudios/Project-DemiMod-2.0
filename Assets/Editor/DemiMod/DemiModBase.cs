@@ -285,8 +285,132 @@ public static class DemiModBase
         
         return unityAssetModPath;
     }
+    
+    
+        
+    // Mod Process
+    // 1. Add a Humanoid Model to the project.
+    
+    
+    // Upload mods process:
+    // 1. User must sign in to mod.io.
+    // 2. User must assign a logo, name, and summary for the mod.
+    // 3. User must assign a mod type (Avatar, Map, Enemy).
+    
+    
+    static ModId newMod;
+    static Texture2D logo;
+    static CreationToken token;
+    
+    static void CreateModProfile()
+    {
+        token = ModIOUnity.GenerateCreationToken();
+    
+        ModProfileDetails profile = new ModProfileDetails();
+        profile.name = "mod name";
+        profile.summary = "a brief summary about this mod being submitted";
+        profile.logo = logo;
+    
+        ModIOUnity.CreateModProfile(token, profile, CreateProfileCallback);
+    }
+    
+    static void CreateProfileCallback(ResultAnd<ModId> response)
+    {
+        if (response.result.Succeeded())
+        {
+            newMod = response.value;
+            Debug.Log("created new mod profile with id " + response.value.ToString());
+        }
+        else
+        {
+            Debug.Log("failed to create new mod profile");
+        }
+    }
+    
+    
+    
+    // Variables for Uploading Mods
+    public static ModId modId;
+    
+    private static void UploadMod(string fileDirectory)
+    {
+        ModfileDetails modfile = new ModfileDetails();
+        modfile.modId = modId;
+         
+        //modfile.directory = "files/mods/mod_123";
+        modfile.directory = fileDirectory;
+         
+        ModIOUnity.UploadModfile(modfile, UploadModCallback);
+    }
+    
+    static void UploadModCallback(Result result)
+    {
+        if (result.Succeeded())
+        {
+            Debug.Log("uploaded mod file");
+        }
+        else
+        {
+            Debug.Log("failed to upload mod file");
+        }
+    }
 
+    
+    
+    
+    public static async Task ZipFolder(string sourceFolder, string targetPath)
+    {
+        CompressOperationDirectory compressOperation = new CompressOperationDirectory(sourceFolder);
 
+        try
+        {
+           // await compressOperation.Compress();
+        }
+        catch (Exception e)
+        {
+            Debug.Log($"error : {e.Message}");
+        }
+        
+    }
+    
+    
+    private static string Screenshot(string modName) 
+    {
+        var timestamp = System.DateTime.Now;
+        var stampString = string.Format("_{0}-{1:00}-{2:00}_{3:00}-{4:00}-{5:00}", timestamp.Year, timestamp.Month, timestamp.Day, timestamp.Hour, timestamp.Minute, timestamp.Second);
+        
+        string screenshotFolder = Application.dataPath + "/Thumbnails/" + modName + "/";
+        if (Directory.Exists(screenshotFolder))
+        {
+            //Directory.Delete(screenshotFolder, true);
+        }
+        else
+        {
+            Directory.CreateDirectory(screenshotFolder);
+        }
+        
+        string screenshotPath = screenshotFolder + "/Screenshot" + stampString + ".png";
+
+        RenderTexture screenTexture = new RenderTexture(1920, 1080, 16);
+        Camera.allCameras[0].targetTexture = screenTexture;
+        RenderTexture.active = screenTexture;
+        Camera.allCameras[0].Render();
+        Texture2D renderedTexture = new Texture2D(1920, 1080);
+        renderedTexture.ReadPixels(new Rect(0, 0, 1920, 1080), 0, 0);
+        RenderTexture.active = null;
+        byte[] byteArray = renderedTexture.EncodeToPNG();
+        System.IO.File.WriteAllBytes(screenshotPath, byteArray);
+
+        AssetDatabase.Refresh();
+
+        return screenshotPath;
+    }
+    
+    
+
+    /*
+     
+     
     // Move all mods from the child folders to the parent folder before we start new ones.
     [ContextMenu("Move Old Mods To Parent Folder")]
     public static void MoveOldModsToParentFolder(string modName)
@@ -460,131 +584,11 @@ public static class DemiModBase
         
         AssetDatabase.Refresh();
     }
-    
-    
-    
-        
-    // Mod Process
-    // 1. Add a Humanoid Model to the project.
-    
-    
-    // Upload mods process:
-    // 1. User must sign in to mod.io.
-    // 2. User must assign a logo, name, and summary for the mod.
-    // 3. User must assign a mod type (Avatar, Map, Enemy).
-    
-    
-    static ModId newMod;
-    static Texture2D logo;
-    static CreationToken token;
-    
-    static void CreateModProfile()
-    {
-        token = ModIOUnity.GenerateCreationToken();
-    
-        ModProfileDetails profile = new ModProfileDetails();
-        profile.name = "mod name";
-        profile.summary = "a brief summary about this mod being submitted";
-        profile.logo = logo;
-    
-        ModIOUnity.CreateModProfile(token, profile, CreateProfileCallback);
-    }
-    
-    static void CreateProfileCallback(ResultAnd<ModId> response)
-    {
-        if (response.result.Succeeded())
-        {
-            newMod = response.value;
-            Debug.Log("created new mod profile with id " + response.value.ToString());
-        }
-        else
-        {
-            Debug.Log("failed to create new mod profile");
-        }
-    }
-    
-    
-    
-    // Variables for Uploading Mods
-    public static ModId modId;
-    
-    private static void UploadMod(string fileDirectory)
-    {
-        ModfileDetails modfile = new ModfileDetails();
-        modfile.modId = modId;
-         
-        //modfile.directory = "files/mods/mod_123";
-        modfile.directory = fileDirectory;
-         
-        ModIOUnity.UploadModfile(modfile, UploadModCallback);
-    }
-    
-    static void UploadModCallback(Result result)
-    {
-        if (result.Succeeded())
-        {
-            Debug.Log("uploaded mod file");
-        }
-        else
-        {
-            Debug.Log("failed to upload mod file");
-        }
-    }
-
-    
-    
-    
-    public static async Task ZipFolder(string sourceFolder, string targetPath)
-    {
-        CompressOperationDirectory compressOperation = new CompressOperationDirectory(sourceFolder);
-
-        try
-        {
-           // await compressOperation.Compress();
-        }
-        catch (Exception e)
-        {
-            Debug.Log($"error : {e.Message}");
-        }
-        
-    }
-    
-    
-    private static string Screenshot(string modName) 
-    {
-        var timestamp = System.DateTime.Now;
-        var stampString = string.Format("_{0}-{1:00}-{2:00}_{3:00}-{4:00}-{5:00}", timestamp.Year, timestamp.Month, timestamp.Day, timestamp.Hour, timestamp.Minute, timestamp.Second);
-        
-        string screenshotFolder = Application.dataPath + "/Thumbnails/" + modName + "/";
-        if (Directory.Exists(screenshotFolder))
-        {
-            //Directory.Delete(screenshotFolder, true);
-        }
-        else
-        {
-            Directory.CreateDirectory(screenshotFolder);
-        }
-        
-        string screenshotPath = screenshotFolder + "/Screenshot" + stampString + ".png";
-
-        RenderTexture screenTexture = new RenderTexture(1920, 1080, 16);
-        Camera.allCameras[0].targetTexture = screenTexture;
-        RenderTexture.active = screenTexture;
-        Camera.allCameras[0].Render();
-        Texture2D renderedTexture = new Texture2D(1920, 1080);
-        renderedTexture.ReadPixels(new Rect(0, 0, 1920, 1080), 0, 0);
-        RenderTexture.active = null;
-        byte[] byteArray = renderedTexture.EncodeToPNG();
-        System.IO.File.WriteAllBytes(screenshotPath, byteArray);
-
-        AssetDatabase.Refresh();
-
-        return screenshotPath;
-    }
-    
-    
-
-    /*
+     
+     
+     
+     
+     
         static void UploadToServer() 
         {
             isAwaitingServerResponse = true;

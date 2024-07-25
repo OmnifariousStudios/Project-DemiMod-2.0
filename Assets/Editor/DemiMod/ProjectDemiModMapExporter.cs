@@ -269,8 +269,7 @@ public class ProjectDemiModMapExporter : EditorWindow
 
                 DemiModBase.ExportWindows(DemiModBase.ModType.Map, null);
 
-                //DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Map, currentSceneName);
-
+                PostBuildCleanup();
 
                 EditorApplication.delayCall += () =>
                 {
@@ -296,8 +295,7 @@ public class ProjectDemiModMapExporter : EditorWindow
 
                 DemiModBase.ExportAndroid(DemiModBase.ModType.Map, null);
 
-                //DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Map, currentScene.name);
-                //CheckForMapModPath();
+                PostBuildCleanup();
 
                 EditorApplication.delayCall += () =>
                 {
@@ -678,21 +676,11 @@ public class ProjectDemiModMapExporter : EditorWindow
             EditorUtility.RevealInFinder(DemiModBase.exportPath);
         }
     }
+
+    public void PostBuildCleanup()
+    {
+        GetCurrentScene();
+    }
 }
-
-/*
-        #region Setup Folders
-
-        using (new EditorGUI.DisabledScope(currentSceneController == null))
-        {
-            EditorGUILayout.HelpBox("Create folders to store your mod in the project.", MessageType.Info);
-            if (GUILayout.Button("Setup Folder Structure", GUILayout.Height(20)))
-            {
-                DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Map, currentScene.name);
-            }
-        }
-
-        #endregion
- */
 
 #endif

@@ -327,7 +327,8 @@ public class HandPoseCopier : MonoBehaviour
         {
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore
         });
-
+        
+        
         
         // Check if the AvatarModHandPoses.json file exists in Avatar Mod Folder and overwrite it. If not, create one.
         string handPoseCachePath = avatarModFolderPath;

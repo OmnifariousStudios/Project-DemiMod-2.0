@@ -324,12 +324,19 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             
             characterRoot = Instantiate(originalAvatarModel);
             
+            if(characterRoot.name.Contains("(Clone)"))
+            {
+                characterRoot.name = characterRoot.name.Replace("(Clone)", "");
+            }
+            
             // After creating a new character root, we shouldn't have any other references to the original model.
             if(originalAvatarModel)
                 originalAvatarModel.SetActive(false);
         }
 
         enemyModName = originalAvatarModel.name;
+        
+        
         
         characterRoot.name = enemyModName + " Character Root";
         
@@ -352,7 +359,19 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             enemyModRoot = new GameObject();
         }
         
+        
+        
         enemyModRoot.name = enemyModName;
+        
+        if(enemyModRoot.name.Contains("(Clone)"))
+        {
+            enemyModRoot.name = enemyModRoot.name.Replace("(Clone)", "");
+        }
+        
+        if(enemyModRoot.name.Contains("Enemy Avatar") == false)
+        {
+            enemyModRoot.name = "Enemy Avatar - " + enemyModRoot.name;
+        }
         
         enemyComponentReference = enemyModRoot.GetComponent<EnemyComponentReference>();
          
@@ -418,10 +437,10 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
         
         foreach (Rigidbody rigidbody in rigidbodies)
         {
-            HVRGrabbablePlaceHolder grabbable = rigidbody.GetComponent<HVRGrabbablePlaceHolder>();
+            GrabbableMod grabbable = rigidbody.GetComponent<GrabbableMod>();
             
             if (grabbable == null)
-                grabbable = rigidbody.gameObject.AddComponent<HVRGrabbablePlaceHolder>();
+                grabbable = rigidbody.gameObject.AddComponent<GrabbableMod>();
             
             GrabberHelper grabberHelper = rigidbody.GetComponent<GrabberHelper>();
             
@@ -944,6 +963,8 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
                     DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Enemy, enemyModName) + ".prefab", InteractionMode.UserAction);
             }
         }
+        
+        DemiModBase.GetOrCreateModPath(DemiModBase.ModType.Enemy, enemyModName);
     }
     
         

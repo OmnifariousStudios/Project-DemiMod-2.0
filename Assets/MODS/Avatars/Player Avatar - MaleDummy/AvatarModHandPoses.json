@@ -1,0 +1,70 @@
+{
+  "avatarName": "Player Avatar - MaleDummy",
+  "avatarHandPoses": [],
+  "rightHandIKRotation": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0,
+    "w": 0.0,
+    "eulerAngles": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "magnitude": 0.0,
+      "sqrMagnitude": 0.0
+    },
+    "normalized": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "w": 1.0,
+      "eulerAngles": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "magnitude": 0.0,
+        "sqrMagnitude": 0.0
+      }
+    }
+  },
+  "leftHandIKRotation": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0,
+    "w": 0.0,
+    "eulerAngles": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "magnitude": 0.0,
+      "sqrMagnitude": 0.0
+    },
+    "normalized": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "w": 1.0,
+      "eulerAngles": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "magnitude": 0.0,
+        "sqrMagnitude": 0.0
+      }
+    }
+  },
+  "rightHandIKRotationEuler": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0,
+    "magnitude": 0.0,
+    "sqrMagnitude": 0.0
+  },
+  "leftHandIKRotationEuler": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0,
+    "magnitude": 0.0,
+    "sqrMagnitude": 0.0
+  }
+}
