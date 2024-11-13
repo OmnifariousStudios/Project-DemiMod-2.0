@@ -1470,6 +1470,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 612026792647839099}
+  - component: {fileID: 8137305473113156510}
   m_Layer: 15
   m_Name: Avatar Right Palm Spawnpoints Prefab
   m_TagString: Untagged
@@ -1485,8 +1486,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3727888508649597499}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6188554, y: -0.38913345, z: -0.069548406, w: 0.67879015}
-  m_LocalPosition: {x: 0.5657209, y: 0.99537283, z: 0.061635606}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1501,7 +1502,20 @@ Transform:
   - {fileID: 6890758765099522914}
   - {fileID: 7417906642889435840}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 51.815, y: -96.391, z: -68.72}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8137305473113156510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3727888508649597499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71d480099ce1d9a469fd53f479dcf243, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debugShapeMeshRenderers: []
 --- !u!1 &4030503517820835383
 GameObject:
   m_ObjectHideFlags: 0

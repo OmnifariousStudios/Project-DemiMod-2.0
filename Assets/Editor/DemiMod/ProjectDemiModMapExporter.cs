@@ -492,25 +492,25 @@ public class ProjectDemiModMapExporter : EditorWindow
         
         if(!avatarCalibratorShape)
         {
-            avatarCalibratorShape = Instantiate(Resources.Load("Avatar Calibrator Shape", typeof(GameObject))) as GameObject;
+            avatarCalibratorShape = Instantiate(Resources.Load("Interface Shapes/Shapes for Scenes/Avatar Calibrator Shape", typeof(GameObject))) as GameObject;
             avatarCalibratorShape.name = "Avatar Calibrator Shape";
         }
         
         if(!levelSelectShape)
         {
-            levelSelectShape = Instantiate(Resources.Load("Level Select Shape", typeof(GameObject))) as GameObject;
+            levelSelectShape = Instantiate(Resources.Load("Interface Shapes/Shapes for Scenes/Map Interface Shape", typeof(GameObject))) as GameObject;
             levelSelectShape.name = "Level Select Shape";
         }
     
         if(!playerArmoryShape)
         {
-            playerArmoryShape = Instantiate(Resources.Load("Player Armory Shape", typeof(GameObject))) as GameObject;
+            playerArmoryShape = Instantiate(Resources.Load("Interface Shapes/Shapes for Scenes/Armory Interface Shape", typeof(GameObject))) as GameObject;
             playerArmoryShape.name = "Player Armory Shape";
         }
         
         if(!enemySpawnerShape)
         {
-            enemySpawnerShape = Instantiate(Resources.Load("Enemy Spawn Controller Shape", typeof(GameObject))) as GameObject;
+            enemySpawnerShape = Instantiate(Resources.Load("Interface Shapes/Shapes for Scenes/Enemy Spawn Shape", typeof(GameObject))) as GameObject;
             enemySpawnerShape.name = "Enemy Spawn Controller Shape";
         }
 

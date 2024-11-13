@@ -1,6 +1,5 @@
 #if UNITY_EDITOR
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEditor;
 using BzKovSoft.RagdollHelper.Editor;
@@ -198,6 +197,7 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
         using (new EditorGUI.DisabledScope(!canBuild))
         {
             GUILayout.BeginHorizontal("Build the Mods", GUI.skin.window);
+            
             if (GUILayout.Button("Build for Windows (PCVR)", GUILayout.Height(20)))
             {
                 DisableDebugRenderers();
@@ -405,7 +405,27 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
                 characterAnimator = characterRoot.GetComponent<Animator>();
             
             // Set collider to be the same size as the character.
-            float characterHeight = characterAnimator.GetBoneTransform(HumanBodyBones.Head).position.y - characterAnimator.GetBoneTransform(HumanBodyBones.LeftToes).position.y;
+
+            Transform lowestPoint;
+            if (characterAnimator.GetBoneTransform(HumanBodyBones.LeftToes))
+            {
+                lowestPoint = characterAnimator.GetBoneTransform(HumanBodyBones.LeftToes);
+            }
+            else if (characterAnimator.GetBoneTransform(HumanBodyBones.RightToes))
+            {
+                lowestPoint = characterAnimator.GetBoneTransform(HumanBodyBones.RightToes);
+            }
+            else if(characterAnimator.GetBoneTransform(HumanBodyBones.LeftFoot))
+            {
+                lowestPoint = characterAnimator.GetBoneTransform(HumanBodyBones.LeftFoot);
+            }
+            else
+            {
+                lowestPoint = characterRoot.transform;
+            }
+            
+            
+            float characterHeight = characterAnimator.GetBoneTransform(HumanBodyBones.Head).position.y - lowestPoint.position.y;
             characterCapsuleCollider.center = new Vector3(0, characterHeight / 2, 0);
             characterCapsuleCollider.height = characterHeight;
         }

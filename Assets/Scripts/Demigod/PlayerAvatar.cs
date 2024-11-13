@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using RootMotion;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -117,6 +118,9 @@ public class PlayerAvatar : MonoBehaviour
     public Transform leftWebGrabHandPositionUpper;
     public Transform leftWebGrabHandPositionLower;
     
+    [Space(10)]
+    
+    [LargeHeader("Player Avatar Events")]
     
     public List<UnityEvent> OnSlowMotionActivatedEvents = new List<UnityEvent>();
     public List<UnityEvent> OnSlowMotionDeactivatedEvents = new List<UnityEvent>();
@@ -141,6 +145,48 @@ public class PlayerAvatar : MonoBehaviour
     public List<UnityEvent> OnJumpActivatedEvents = new List<UnityEvent>();
     
     public List<UnityEvent> OnKickActivatedEvents = new List<UnityEvent>();
+    
+    
+    [Space(10)]
+    
+    [LargeHeader("Power Activation Events")]
+    
+    public List<UnityEvent> OnLeftWebPowerSetDeactivatedEvents = new List<UnityEvent>();
+    public List<UnityEvent> OnRightWebPowerSetDeactivatedEvents = new List<UnityEvent>();
+    
+    
+    public List<UnityEvent> OnLeftWebPowerSetActivatedEvents = new List<UnityEvent>();
+    public List<UnityEvent> OnRightWebPowerSetActivatedEvents = new List<UnityEvent>();
+    
+    public List<UnityEvent> OnLeftFirePowerSetActivatedEvents = new List<UnityEvent>();
+    public List<UnityEvent> OnRightFirePowerSetActivatedEvents = new List<UnityEvent>();
+    
+    public List<UnityEvent> OnLeftEnergyPowerSetActivatedEvents = new List<UnityEvent>();
+    public List<UnityEvent> OnRightEnergyPowerSetActivatedEvents = new List<UnityEvent>();
+    
+    public List<UnityEvent> OnLeftWeaponPowerSetActivatedEvents = new List<UnityEvent>();
+    public List<UnityEvent> OnRightWeaponPowerSetActivatedEvents = new List<UnityEvent>();
+    
+    public List<UnityEvent> OnLeftSuperStrengthPowerSetActivatedEvents = new List<UnityEvent>();
+    public List<UnityEvent> OnRightSuperStrengthPowerSetActivatedEvents = new List<UnityEvent>();
+    
+    public List<UnityEvent> OnLeftEarthControlPowerSetActivatedEvents = new List<UnityEvent>();
+    public List<UnityEvent> OnRightEarthControlPowerSetActivatedEvents = new List<UnityEvent>();
+    
+    public List<UnityEvent> OnLeftSuperSpeedPowerSetActivatedEvents = new List<UnityEvent>();
+    public List<UnityEvent> OnRightSuperSpeedPowerSetActivatedEvents = new List<UnityEvent>();
+    
+    public List<UnityEvent> OnLeftStretchPowerSetActivatedEvents = new List<UnityEvent>();
+    public List<UnityEvent> OnRightStretchPowerSetActivatedEvents = new List<UnityEvent>();
+    
+    public List<UnityEvent> OnGiantModeActivatedEvents = new List<UnityEvent>();
+    public List<UnityEvent> OnGiantModeDeactivatedEvents = new List<UnityEvent>();
+    
+    public List<UnityEvent> OnLeftWaterControlPowerSetActivatedEvents = new List<UnityEvent>();
+    public List<UnityEvent> OnRightWaterControlPowerSetActivatedEvents = new List<UnityEvent>();
+    
+    public List<UnityEvent> OnLeftLightningPowerSetActivatedEvents = new List<UnityEvent>();
+    public List<UnityEvent> OnRightLightningPowerSetActivatedEvents = new List<UnityEvent>();
 }
 
 

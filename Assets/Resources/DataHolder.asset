@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DataHolder
   m_EditorClassIdentifier: 
   userDefinedModsLocation: D:/Unity Projects/MODS
-  lastAddressableBuildPath: D:/Unity Projects/MODS/Player Avatar - MaleD - PCVR
+  lastAddressableBuildPath: D:/Unity Projects/MODS/Weapon - Arc W - PCVR
   handPoseCopierGameObject: {fileID: 0}
   handPoseBuildLocation: D:/Unity Projects/Project DemiMod 2.0/Assets/MODS/Avatars\Player
     Avatar - MaleDummy\AvatarModHandPoses.json
@@ -25,3 +25,10 @@ MonoBehaviour:
   lastRagdollRootName: Ragdoll
   lastEnemyAvatarFinalPrefab: {fileID: 7976772319497905118, guid: dd59f1a4253a91e4c892d1b093eec1fb, type: 3}
   lastEnemyAvatarRootName: MaleDummy
+  lastWeaponModel: {fileID: 0}
+  lastWeaponModelName: ArcaneStaff
+  lastWeaponModScript: {fileID: 0}
+  lastWeaponModRoot: {fileID: 0}
+  lastWeaponModRootName: Arc Wave Staff
+  lastWeaponFinalPrefab: {fileID: 3797926708065247342, guid: bf9cdbdbf9d763841aaeb4b3506d3e98, type: 3}
+  lastWeaponPrefabName: 

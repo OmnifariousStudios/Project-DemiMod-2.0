@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09f7a09024da0ea4bb2513253c92995b, type: 3}
+  m_Name: HeroBaton
+  m_EditorClassIdentifier: 
+  UnpinOnHit: 1
+  UnpinPuppetAmount: 450
+  ForceToApplyToPuppet: 200
+  MaximumForceToApplyToPuppet: 1000
+  AddForceMultiplier: 1
+  ForceMultiplier: 1.5
+  doesAdditionalDamage: 0
+  additionalDamage: 1
+  DestructibleDamageMultiplier: 4
+  ForceEnemyDamageReaction: 1
+  ForceEnemyDamageReactionInt: 1

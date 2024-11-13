@@ -2396,6 +2396,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8366569296623441628}
+  - component: {fileID: 6966509009186755689}
   m_Layer: 15
   m_Name: Avatar Left Palm Spawnpoints Prefab
   m_TagString: Untagged
@@ -2428,6 +2429,19 @@ Transform:
   - {fileID: 6241352751592333645}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 51.815, y: 96.392, z: 68.72}
+--- !u!114 &6966509009186755689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5297221463860417704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71d480099ce1d9a469fd53f479dcf243, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debugShapeMeshRenderers: []
 --- !u!1 &5529280475426511730
 GameObject:
   m_ObjectHideFlags: 0

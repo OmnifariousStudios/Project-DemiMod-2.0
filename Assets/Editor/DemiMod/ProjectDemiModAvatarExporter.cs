@@ -15,6 +15,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
     
     // Demi-Mod Variables
     private GameObject originalAvatarModel;
+    public GameObject lastOriginalAvatarModel;
     public GameObject playerAvatar;
     public Animator animator;
     public PlayerAvatar playerAvatarScript;
@@ -104,7 +105,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         if (originalAvatarModel == null) 
         {
             EditorGUILayout.HelpBox("Drag the avatar model here to continue.", MessageType.Info);
-        } 
+        }
        
         if (originalAvatarModel || playerAvatar) 
         {
@@ -114,10 +115,21 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             DemiModBase.AddLineAndSpace();
             
             playerAvatar = EditorGUILayout.ObjectField("Player Avatar", playerAvatar, typeof(GameObject), true) as GameObject;
-        } 
+        }
+
+        if (originalAvatarModel != null && lastOriginalAvatarModel != null)
+        {
+            if(originalAvatarModel != lastOriginalAvatarModel)
+            {
+                ResetAllData();
+            }
+        }
+        
+        lastOriginalAvatarModel = originalAvatarModel;
         
         
         DemiModBase.AddLineAndSpace();
+        
         
         #region SwitchPlatforms
         
@@ -146,6 +158,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         GUILayout.EndHorizontal();
 
         #endregion
+        
         
         DemiModBase.AddLineAndSpace();
 
@@ -458,22 +471,16 @@ public class ProjectDemiModAvatarExporter : EditorWindow
             GUILayout.BeginHorizontal(GUI.skin.window);
             
 
-            if (GUILayout.Button("Enable Web Shapes", GUILayout.Height(20)))
+            using (new EditorGUI.DisabledScope(playerAvatar == null))
             {
-                // Turn on FingerTip and Palm Mesh Renderers.
-                if (playerAvatarScript)
+                if (GUILayout.Button("Enable Debug Shapes", GUILayout.Height(20)))
                 {
-                    EnableWebShapes();
+                    EnableDebugShapes();
                 }
-            }
-
-
-            if (GUILayout.Button("Disable Web Shapes", GUILayout.Height(20)))
-            {
-                // Turn off FingerTip and Palm Mesh Renderers.
-                if (playerAvatarScript)
+            
+                if (GUILayout.Button("Disable Debug Shapes", GUILayout.Height(20)))
                 {
-                    DisableWebShapes();
+                    DisableDebugShapes();
                 }
             }
             
@@ -491,7 +498,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         GUI.color = Color.red;
         if (GUILayout.Button("Clear Mod Exporter", GUILayout.Height(20)))
         {
-            ResetButtonCompletionStatus();
+            ResetAllData();
         }
         
         GUI.color = Color.white;
@@ -518,9 +525,6 @@ public class ProjectDemiModAvatarExporter : EditorWindow
 
     private void SetupAvatar()
     {
-        if(originalAvatarModel)
-            Debug.Log("Checking model: " + originalAvatarModel.name);
-
         if (playerAvatar == null && originalAvatarModel)
         {
             playerAvatar = Instantiate(originalAvatarModel);
@@ -1437,6 +1441,8 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                || avatarRenderers[i].name.Contains("Don't Move") 
                || avatarRenderers[i].name.Contains("Eyes Debug Capsule") 
                || avatarRenderers[i].name.Contains("Webline Origin Point") 
+               || avatarRenderers[i].name.Contains("Webline Origin") 
+               || avatarRenderers[i].name.Contains("WeblineOrigin") 
                || avatarRenderers[i].name.Contains("Web Position"))
             {
                 //Debug.Log("Removing " + avatarRenderers[i].name + " from custom material settings.");
@@ -1862,6 +1868,36 @@ public class ProjectDemiModAvatarExporter : EditorWindow
         }
     }
     
+    public void EnableDebugShapes()
+    {
+        if(!playerAvatar)
+            return;
+        
+        // Find all debug shapes in the weapon's hierarchy and enable them.
+        DebugShape[] debugShapes = playerAvatar.GetComponentsInChildren<DebugShape>();
+        
+        foreach (var shape in debugShapes)
+        {
+            if(shape)
+                shape.EnableShapes();
+        }
+    }
+
+    public void DisableDebugShapes()
+    {
+        if(!playerAvatar)
+            return;
+        
+        // Find all debug shapes in the weapon's hierarchy and disable them.
+        DebugShape[] debugShapes = playerAvatar.GetComponentsInChildren<DebugShape>();
+        
+        foreach (var shape in debugShapes)
+        {
+            if(shape)
+                shape.DisableShapes();
+        }
+    }
+    
     #endregion
     
     
@@ -1910,7 +1946,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
     }
     
     
-    private void ResetButtonCompletionStatus()
+    private void ResetAllData()
     {
         AvatarSetupComplete = false;
         CustomMaterialSettingsComplete = false;

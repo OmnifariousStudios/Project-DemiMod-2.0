@@ -11,6 +11,7 @@ public class DataHolder : ScriptableObject
     
     public string lastAddressableBuildPath;
     
+    
     [Header("Avatar Mod Data")]
     
     // Avatar Mod Data
@@ -20,6 +21,8 @@ public class DataHolder : ScriptableObject
     public GameObject lastPlayerAvatarPrefab;
     public string lastPlayerAvatarName;
 
+    
+    
     [Header("Enemy Mod Data")]
     
     // Enemy Mod Data
@@ -31,6 +34,24 @@ public class DataHolder : ScriptableObject
     
     [FormerlySerializedAs("lastEnemyAvatarPrefab")] public GameObject lastEnemyAvatarFinalPrefab;
     [FormerlySerializedAs("lastEnemyAvatarName")] public string lastEnemyAvatarRootName;
+    
+    
+    
+    [Header("Weapon Mod Data")]
+    // Weapon Mod Data
+    public GameObject lastWeaponModel;
+    public string lastWeaponModelName;
+    
+    
+    public WeaponMod lastWeaponModScript;
+    public GameObject lastWeaponModRoot;
+    public string lastWeaponModRootName;
+    
+    public GameObject lastWeaponFinalPrefab;
+    public string lastWeaponPrefabName;
+    
+    
+    
     
     public string GetUserDefinedModsLocation()
     {

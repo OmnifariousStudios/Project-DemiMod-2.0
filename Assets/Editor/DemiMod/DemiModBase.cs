@@ -3,11 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 using ModIO;
 using ModIO.Implementation;
-using Unity.SharpZipLib.Utils;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Build;
@@ -36,6 +34,8 @@ public static class DemiModBase
     public static string unityAssetsAvatarModsFolderPath => unityAssetsModsFolderPath + "/Avatars";
     public static string unityAssetsMapModsFolderPath => unityAssetsModsFolderPath + "/Maps";
     public static string unityAssetsEnemyModsFolderPath => unityAssetsModsFolderPath + "/Enemies";
+    
+    public static string unityAssetsWeaponModsFolderPath => unityAssetsModsFolderPath + "/Weapons";
     
     
     
@@ -105,6 +105,16 @@ public static class DemiModBase
                 targetName = target.name;
                 
                 label = "Enemy Avatar";
+                break;
+            
+            case ModType.Weapon:
+                finalPath = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(target);
+                
+                Debug.Log("Final path: " + finalPath);
+                
+                targetName = target.name;
+                
+                label = "Weapon";
                 break;
         }
         
@@ -259,6 +269,10 @@ public static class DemiModBase
             
             case ModType.Enemy:
                 unityAssetModPath = Path.Combine(unityAssetsEnemyModsFolderPath, modName);
+                break;
+            
+            case ModType.Weapon:
+                unityAssetModPath = Path.Combine(unityAssetsWeaponModsFolderPath, modName);
                 break;
         }
         
@@ -758,7 +772,8 @@ public static class DemiModBase
     {
         Avatar,
         Map,
-        Enemy
+        Enemy,
+        Weapon
     }
 }
 
