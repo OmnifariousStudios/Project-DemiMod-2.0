@@ -2051,7 +2051,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1919635734}
   m_CullTransparentMesh: 1
---- !u!1001 &3195628167546698992
+--- !u!1001 &4215355819131073518
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -2059,77 +2059,112 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 274346784577322375, guid: 456fde166d5314245b605f2413d79659, type: 3}
+    - target: {fileID: 2851503637447685612, guid: 90b6e074a7bfa2546b7f0cbd2cd2a948, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.0823197
+      value: -2.12
       objectReference: {fileID: 0}
-    - target: {fileID: 274346784577322375, guid: 456fde166d5314245b605f2413d79659, type: 3}
+    - target: {fileID: 2851503637447685612, guid: 90b6e074a7bfa2546b7f0cbd2cd2a948, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.8902
+      value: 1.331
       objectReference: {fileID: 0}
-    - target: {fileID: 274346784577322375, guid: 456fde166d5314245b605f2413d79659, type: 3}
+    - target: {fileID: 2851503637447685612, guid: 90b6e074a7bfa2546b7f0cbd2cd2a948, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.5027337
+      value: 3.421
       objectReference: {fileID: 0}
-    - target: {fileID: 274346784577322375, guid: 456fde166d5314245b605f2413d79659, type: 3}
+    - target: {fileID: 2851503637447685612, guid: 90b6e074a7bfa2546b7f0cbd2cd2a948, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
-    - target: {fileID: 274346784577322375, guid: 456fde166d5314245b605f2413d79659, type: 3}
+    - target: {fileID: 2851503637447685612, guid: 90b6e074a7bfa2546b7f0cbd2cd2a948, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 274346784577322375, guid: 456fde166d5314245b605f2413d79659, type: 3}
+    - target: {fileID: 2851503637447685612, guid: 90b6e074a7bfa2546b7f0cbd2cd2a948, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.70710677
       objectReference: {fileID: 0}
-    - target: {fileID: 274346784577322375, guid: 456fde166d5314245b605f2413d79659, type: 3}
+    - target: {fileID: 2851503637447685612, guid: 90b6e074a7bfa2546b7f0cbd2cd2a948, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 274346784577322375, guid: 456fde166d5314245b605f2413d79659, type: 3}
+    - target: {fileID: 2851503637447685612, guid: 90b6e074a7bfa2546b7f0cbd2cd2a948, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 274346784577322375, guid: 456fde166d5314245b605f2413d79659, type: 3}
+    - target: {fileID: 2851503637447685612, guid: 90b6e074a7bfa2546b7f0cbd2cd2a948, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 274346784577322375, guid: 456fde166d5314245b605f2413d79659, type: 3}
+    - target: {fileID: 2851503637447685612, guid: 90b6e074a7bfa2546b7f0cbd2cd2a948, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1930759728808718567, guid: 456fde166d5314245b605f2413d79659, type: 3}
+    - target: {fileID: 5301477810277637454, guid: 90b6e074a7bfa2546b7f0cbd2cd2a948, type: 3}
       propertyPath: m_Name
-      value: Basketball Root
+      value: Arc Wave Staff Root
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1930759728808718567, guid: 456fde166d5314245b605f2413d79659, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3195628167546698994}
-  m_SourcePrefab: {fileID: 100100000, guid: 456fde166d5314245b605f2413d79659, type: 3}
---- !u!1 &3195628167546698993 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1930759728808718567, guid: 456fde166d5314245b605f2413d79659, type: 3}
-  m_PrefabInstance: {fileID: 3195628167546698992}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &3195628167546698994
-MonoBehaviour:
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 90b6e074a7bfa2546b7f0cbd2cd2a948, type: 3}
+--- !u!1001 &4788020932378174797
+PrefabInstance:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3195628167546698993}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92471cc1733c49042be56cd39b4b6e5e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  text: When charged, this weapon can bounce off of enemies and objects, and then
-    return to the player's hand.
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5711472734816169224, guid: a57cd3b7e02115447a45fabf9d2614f1, type: 3}
+      propertyPath: m_Name
+      value: Basketball Root
+      objectReference: {fileID: 0}
+    - target: {fileID: 6815367275885685183, guid: a57cd3b7e02115447a45fabf9d2614f1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.0823197
+      objectReference: {fileID: 0}
+    - target: {fileID: 6815367275885685183, guid: a57cd3b7e02115447a45fabf9d2614f1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.886
+      objectReference: {fileID: 0}
+    - target: {fileID: 6815367275885685183, guid: a57cd3b7e02115447a45fabf9d2614f1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.509
+      objectReference: {fileID: 0}
+    - target: {fileID: 6815367275885685183, guid: a57cd3b7e02115447a45fabf9d2614f1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 6815367275885685183, guid: a57cd3b7e02115447a45fabf9d2614f1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.70710677
+      objectReference: {fileID: 0}
+    - target: {fileID: 6815367275885685183, guid: a57cd3b7e02115447a45fabf9d2614f1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6815367275885685183, guid: a57cd3b7e02115447a45fabf9d2614f1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6815367275885685183, guid: a57cd3b7e02115447a45fabf9d2614f1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6815367275885685183, guid: a57cd3b7e02115447a45fabf9d2614f1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6815367275885685183, guid: a57cd3b7e02115447a45fabf9d2614f1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a57cd3b7e02115447a45fabf9d2614f1, type: 3}
 --- !u!1001 &5082014216251326417
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2265,93 +2300,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text: When charged, this weapon can return to the player's hand after being thrown.
---- !u!1001 &7502110034350304202
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 3797926708065247342, guid: bf9cdbdbf9d763841aaeb4b3506d3e98, type: 3}
-      propertyPath: m_Name
-      value: Arc Wave Staff Root
-      objectReference: {fileID: 0}
-    - target: {fileID: 3797926708065247342, guid: bf9cdbdbf9d763841aaeb4b3506d3e98, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8352507035775122665, guid: bf9cdbdbf9d763841aaeb4b3506d3e98, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -2.12
-      objectReference: {fileID: 0}
-    - target: {fileID: 8352507035775122665, guid: bf9cdbdbf9d763841aaeb4b3506d3e98, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.331
-      objectReference: {fileID: 0}
-    - target: {fileID: 8352507035775122665, guid: bf9cdbdbf9d763841aaeb4b3506d3e98, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 3.421
-      objectReference: {fileID: 0}
-    - target: {fileID: 8352507035775122665, guid: bf9cdbdbf9d763841aaeb4b3506d3e98, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 8352507035775122665, guid: bf9cdbdbf9d763841aaeb4b3506d3e98, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8352507035775122665, guid: bf9cdbdbf9d763841aaeb4b3506d3e98, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.70710677
-      objectReference: {fileID: 0}
-    - target: {fileID: 8352507035775122665, guid: bf9cdbdbf9d763841aaeb4b3506d3e98, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8352507035775122665, guid: bf9cdbdbf9d763841aaeb4b3506d3e98, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8352507035775122665, guid: bf9cdbdbf9d763841aaeb4b3506d3e98, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8352507035775122665, guid: bf9cdbdbf9d763841aaeb4b3506d3e98, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3797926708065247342, guid: bf9cdbdbf9d763841aaeb4b3506d3e98, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7502110034350304204}
-  m_SourcePrefab: {fileID: 100100000, guid: bf9cdbdbf9d763841aaeb4b3506d3e98, type: 3}
---- !u!1 &7502110034350304203 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3797926708065247342, guid: bf9cdbdbf9d763841aaeb4b3506d3e98, type: 3}
-  m_PrefabInstance: {fileID: 7502110034350304202}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &7502110034350304204
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7502110034350304203}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92471cc1733c49042be56cd39b4b6e5e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  text: 'When charged, the player can swing this weapon to fire a wave of energy.
-
-
-    This
-    weapon also has the GrabbableObjectCustomFunction script, which can be used to
-    fire Unity Events when the object is held and the chosen buttons are pushed.'
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -2364,11 +2312,11 @@ SceneRoots:
   - {fileID: 396677429}
   - {fileID: 408822755}
   - {fileID: 1724182923}
-  - {fileID: 3195628167546698992}
+  - {fileID: 4788020932378174797}
   - {fileID: 100688973}
   - {fileID: 5572649185132834252}
   - {fileID: 317307022}
   - {fileID: 5082014216251326417}
   - {fileID: 1053154236}
-  - {fileID: 7502110034350304202}
+  - {fileID: 4215355819131073518}
   - {fileID: 1136951535}

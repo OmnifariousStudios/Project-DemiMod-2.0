@@ -148,7 +148,7 @@ public class ProjectDemiModWeaponExporter : EditorWindow
         if (weaponAbility != lastWeaponAbility)
         {
             //Debug.Log("Weapon Ability has changed. Resetting all data.");
-            UpdateWeaponAbility();
+           // UpdateWeaponAbility();
         }
         
         
@@ -1003,6 +1003,8 @@ public class ProjectDemiModWeaponExporter : EditorWindow
         {
             weaponModScript.weaponAbility = weaponAbility;
         }
+        
+        
         
         switch (weaponAbility)
         {

@@ -151,8 +151,8 @@ public class PlayerAvatar : MonoBehaviour
     
     [LargeHeader("Power Activation Events")]
     
-    public List<UnityEvent> OnLeftWebPowerSetDeactivatedEvents = new List<UnityEvent>();
-    public List<UnityEvent> OnRightWebPowerSetDeactivatedEvents = new List<UnityEvent>();
+    public List<UnityEvent> OnLeftPowerSetDeactivatedEvents = new List<UnityEvent>();
+    public List<UnityEvent> OnRightPowerSetDeactivatedEvents = new List<UnityEvent>();
     
     
     public List<UnityEvent> OnLeftWebPowerSetActivatedEvents = new List<UnityEvent>();
