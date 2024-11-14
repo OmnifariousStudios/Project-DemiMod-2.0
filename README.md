@@ -13,3 +13,8 @@ https://docs.google.com/document/d/18GK06eFi3x7t5BdG-HPT9BuH4IQcVJIb4H5QhdoLhs4/
 Enemy Avatar Modding
 
 https://docs.google.com/document/d/12H4rMOs_G7M5rMh-kj8g5qmKnYApyivT9plb7-XlFiU/edit#heading=h.ezwxnkqzlkm1
+
+
+Weapon Modding
+
+https://docs.google.com/document/d/1jtZvHDfOyDuNFfxPO5Pm-ggEdxADwkNDuUcambgPpaY/edit?tab=t.0
