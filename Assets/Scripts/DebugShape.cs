@@ -10,6 +10,7 @@ public class DebugShape : MonoBehaviour
     public List<MeshRenderer> debugShapeMeshRenderers = new List<MeshRenderer>();
     
     
+    [ContextMenu("Disable Shapes")]
     public void EnableShapes()
     {
         foreach (var meshRenderer in debugShapeMeshRenderers)
@@ -18,6 +19,7 @@ public class DebugShape : MonoBehaviour
         }
     }
     
+    [ContextMenu("Disable Shapes")]
     public void DisableShapes()
     {
         foreach (var meshRenderer in debugShapeMeshRenderers)

@@ -32,54 +32,8 @@ Transform:
   - {fileID: 3389210592638190491}
   - {fileID: 2854733118057971263}
   - {fileID: 381007617213246851}
-  - {fileID: 8879060980178854586}
   m_Father: {fileID: 6815367275885685183}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &978862039669959852
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8800595427622257932}
-  - component: {fileID: 5944836844026628716}
-  m_Layer: 0
-  m_Name: ModPosableGrabPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8800595427622257932
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 978862039669959852}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8879060980178854586}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5944836844026628716
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 978862039669959852}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b98fe2b992f1a32488cb0ff38362bc97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HvrPosableGrabPoint: {fileID: 0}
 --- !u!1 &3296994814194170633
 GameObject:
   m_ObjectHideFlags: 0
@@ -369,6 +323,7 @@ MonoBehaviour:
   damageCollider: {fileID: 1380359607335216030}
   colliders:
   - {fileID: 3884240817920029089}
+  weaponModel: {fileID: 0}
   isStabbingWeapon: 0
   stabColliders: []
   stabTip: {fileID: 0}
@@ -377,9 +332,9 @@ MonoBehaviour:
   arcWaveTracker: {fileID: 0}
   flyingForwardTransform: {fileID: 381007617213246851}
   dynamicGrabbable: 1
-  modGrabPoints: {fileID: 6855442173069311655}
   modPosableGrabPoints:
-  - {fileID: 5944836844026628716}
+  - {fileID: 0}
+  mainGrabPoints: []
   infusionMesh: {fileID: 4302416081741795663}
   UnpinOnHit: 1
   UnpinPuppetAmount: 500
@@ -392,6 +347,18 @@ MonoBehaviour:
   DestructibleDamageMultiplier: 1
   ForceEnemyDamageReaction: 1
   ForceEnemyDamageReactionInt: 1
+  OnSocketedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnUnsocketedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnGrabbedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnReleasedEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!54 &7209010698729890086
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -464,49 +431,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   text: When charged, this weapon can bounce off of enemies and objects, and then
     return to the player's hand.
---- !u!1 &6480981781504565780
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8879060980178854586}
-  - component: {fileID: 6855442173069311655}
-  m_Layer: 0
-  m_Name: GrabPoints
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8879060980178854586
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6480981781504565780}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 8800595427622257932}
-  m_Father: {fileID: 7894397630957488030}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6855442173069311655
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6480981781504565780}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5dbcc05c342f12943b255e80972ae8d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  grabPoints: {fileID: 0}

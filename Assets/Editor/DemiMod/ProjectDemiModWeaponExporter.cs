@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ProjectDemiModWeaponExporter : EditorWindow
 {
@@ -10,8 +11,12 @@ public class ProjectDemiModWeaponExporter : EditorWindow
     
     // GameObject/mesh that the modder places into the export window.
     public GameObject originalWeaponModel;
-    public GameObject lastWeaponModel;
-    public GameObject weaponToMod;
+    [FormerlySerializedAs("lastWeaponModel")] public GameObject lastOriginalWeaponModel;
+    
+    
+    [Space(30)]
+    [FormerlySerializedAs("weaponToMod")]  public GameObject weaponModel;
+    
     public GameObject infusionMesh;
     public GameObject scaler;
     
@@ -49,7 +54,7 @@ public class ProjectDemiModWeaponExporter : EditorWindow
     {
         #region Opening GUI
         
-        EditorGUIUtility.labelWidth = 80;
+        EditorGUIUtility.labelWidth = 160;
         GUILayout.Label("Project Demigod Mod Exporter", EditorStyles.largeLabel);
         GUILayout.Space(10);
 
@@ -97,14 +102,22 @@ public class ProjectDemiModWeaponExporter : EditorWindow
         
         DemiModBase.AddLineAndSpace();
         
-        originalWeaponModel = EditorGUILayout.ObjectField("Original Weapon Model", originalWeaponModel, typeof(GameObject), true, options) as GameObject;
+        using (new EditorGUI.DisabledScope(weaponModel != null))
+        {
+            originalWeaponModel = EditorGUILayout.ObjectField("Original Weapon Model", originalWeaponModel, typeof(GameObject), true, options) as GameObject;
+        }
         
-        using (new EditorGUI.DisabledScope(originalWeaponModel == null))
+        using (new EditorGUI.DisabledScope(originalWeaponModel == null && weaponModel == null))
+        {
+            weaponModel = EditorGUILayout.ObjectField("Weapon Model", weaponModel, typeof(GameObject), true, options) as GameObject;
+        }
+        
+        using (new EditorGUI.DisabledScope(weaponModel == null))
         {
             weaponType = (WeaponType)EditorGUILayout.EnumPopup("Weapon Type", weaponType);
         }
 
-        using (new EditorGUI.DisabledScope(originalWeaponModel == null))
+        using (new EditorGUI.DisabledScope(weaponModel == null))
         {
             weaponAbility = (WeaponAbility)EditorGUILayout.EnumPopup("Weapon Ability", weaponAbility);
         }
@@ -113,7 +126,7 @@ public class ProjectDemiModWeaponExporter : EditorWindow
         
         #region Mod Process
 
-        using (new EditorGUI.DisabledScope(originalWeaponModel == null))
+        using (new EditorGUI.DisabledScope(originalWeaponModel == null && weaponModel == null && weaponToModRoot == null))
         {
             if (GUILayout.Button("Start Mod Process", GUILayout.Height(20)))
             {
@@ -132,12 +145,12 @@ public class ProjectDemiModWeaponExporter : EditorWindow
         
         if(weaponType != lastWeaponType)
         {
-            UpdateWeaponType();
+            //UpdateWeaponType();
         }
 
-        if (originalWeaponModel != null && lastWeaponModel != null)
+        if (originalWeaponModel != null && lastOriginalWeaponModel != null)
         {
-            if (originalWeaponModel != lastWeaponModel)
+            if (originalWeaponModel != lastOriginalWeaponModel)
             {
                 Debug.Log("Original Weapon Model has changed. Resetting all data.");
                 ResetAllData(false);
@@ -152,7 +165,7 @@ public class ProjectDemiModWeaponExporter : EditorWindow
         }
         
         
-        lastWeaponModel = originalWeaponModel;
+        lastOriginalWeaponModel = originalWeaponModel;
         lastWeaponType = weaponType;
         lastWeaponAbility = weaponAbility;
         
@@ -160,14 +173,16 @@ public class ProjectDemiModWeaponExporter : EditorWindow
         DemiModBase.AddLineAndSpace();
         
         
-        
-        //using(new EditorGUI.DisabledScope(weaponToModRoot == null))
+        /*
+        using(new EditorGUI.DisabledScope(weaponToModRoot == null))
         {
-            //if (GUILayout.Button("Auto-Add Colliders", GUILayout.Height(20)))
+            if (GUILayout.Button("Auto-Add Colliders", GUILayout.Height(20)))
             {
-                //AutoAddColliders();
+                AutoAddColliders();
             }
         }
+        */
+        
         
         using(new EditorGUI.DisabledScope(weaponToModRoot == null))
         {
@@ -193,7 +208,7 @@ public class ProjectDemiModWeaponExporter : EditorWindow
             }
         }
 
-        using(new EditorGUI.DisabledScope((weaponModScript == null || weaponModScript.damageCollider == null) || weaponType != WeaponType.None))
+        using(new EditorGUI.DisabledScope((weaponModScript == null || weaponModScript.damageCollider == null) || weaponType == WeaponType.None))
         {
             if (GUILayout.Button("Copy Premade Stats From Weapon Type", GUILayout.Height(20)))
             {
@@ -309,7 +324,10 @@ public class ProjectDemiModWeaponExporter : EditorWindow
                 if(weaponToModRoot)
                 {
                     dataHolder.lastWeaponModRoot = weaponToModRoot;
-                    dataHolder.lastWeaponModScript = weaponToModRoot.GetComponent<WeaponMod>();
+                    dataHolder.lastWeaponModScript = weaponModScript;
+                    dataHolder.lastWeaponModRootName = weaponToModRoot.name;
+                    
+                    Debug.Log("Data Holder Weapon Mod Root: " + dataHolder.lastWeaponModRoot.name);
                 }
                 
                 dataHolder.lastWeaponFinalPrefab = finalPrefab;
@@ -389,6 +407,8 @@ public class ProjectDemiModWeaponExporter : EditorWindow
     
     private void SetupWeapon()
     {
+        FindExistingComponents();
+        
         CreateCopiesFromOriginalModel();
         SetupWeaponModRoot();
         SetupScaler();
@@ -399,43 +419,141 @@ public class ProjectDemiModWeaponExporter : EditorWindow
         UpdateWeaponAbility();
     }
 
-    private void CreateCopiesFromOriginalModel()
+    public void FindExistingComponents()
     {
-        if (!weaponToMod)
+        if(originalWeaponModel)
         {
-            if(scaler)
+            if (originalWeaponModel.TryGetComponent(out WeaponMod weaponMod))
             {
-                foreach (var child in scaler.transform.GetComponentsInChildren<Transform>())
+                // This is the root of the weapon but placed into the originalWeaponModel.
+                weaponToModRoot = originalWeaponModel;
+
+                if (weaponMod.weaponModel)
                 {
-                    if (child.name.Contains(weaponModName))
+                    weaponModel = weaponMod.weaponModel.gameObject;
+                }
+
+                originalWeaponModel = null;
+            }
+        }
+        
+        
+        if (!weaponToModRoot && weaponModel)
+        {
+            weaponToModRoot = weaponModel.transform.root.gameObject;
+        }
+        
+        if (weaponToModRoot)
+        {
+            if(!weaponModScript)
+            {
+                weaponModScript = weaponToModRoot.GetComponent<WeaponMod>();
+            }
+            
+            if(!scaler)
+            {
+                if(weaponToModRoot.transform.Find("Scaler"))
+                {
+                    scaler = weaponToModRoot.transform.Find("Scaler").gameObject;
+                }
+            }
+            
+            if (!weaponModel)
+            {
+                if (weaponModScript)
+                {
+                    if (weaponModScript.weaponModel)
                     {
-                        Debug.Log("Found WeaponMod: " + child.name);
-                        weaponToMod = child.gameObject;
-                        break;
+                        weaponModel = weaponModScript.weaponModel.gameObject;
+                    }
+                }
+            }
+
+            if (!weaponModel)
+            {
+                // Find weaponModel in children of weaponToModRoot
+                WeaponModel weaponModelScript = weaponToModRoot.GetComponentInChildren<WeaponModel>();
+                if (weaponModelScript)
+                {
+                    weaponModel = weaponModelScript.gameObject;
+                }
+            }
+            
+            
+            Debug.Log("Weapon Model Name: " + weaponModName);
+            
+            if (!weaponModel)
+            {
+                if(string.IsNullOrEmpty(weaponModName))
+                    return;
+                
+                if(scaler)
+                {
+                    foreach (var child in scaler.transform.GetComponentsInChildren<Transform>())
+                    {
+                        if (child.name.Contains(weaponModName))
+                        {
+                            Debug.Log("Found WeaponMod: " + child.name);
+                            weaponModel = child.gameObject;
+                            break;
+                        }
                     }
                 }
             }
         }
+    }
+
+    private void CreateCopiesFromOriginalModel()
+    {
         
-        if(!weaponToMod)
-            weaponToMod = Instantiate(originalWeaponModel);
-        
-        meshesToAutoAddColliders = weaponToMod.GetComponentsInChildren<MeshFilter>().Select(mf => mf.gameObject).ToList();
-        
-        if(PrefabUtility.IsPartOfPrefabInstance(originalWeaponModel))
+        if(!weaponModel && originalWeaponModel)
         {
-            originalWeaponModel.SetActive(false);
+            weaponModel = Instantiate(originalWeaponModel);
             
-            Debug.Log("Original Weapon Model is a prefab instance. Setting to inactive.");
+            if(weaponModel.TryGetComponent(out WeaponModel weaponModelScript) == false)
+            {
+                weaponModelScript = weaponModel.AddComponent<WeaponModel>();
+            }
+
+            
+            //meshesToAutoAddColliders = weaponToMod.GetComponentsInChildren<MeshFilter>().Select(mf => mf.gameObject).ToList();
+
+            if (PrefabUtility.IsPartOfPrefabInstance(originalWeaponModel))
+            {
+                originalWeaponModel.SetActive(false);
+
+                Debug.Log("Original Weapon Model is a prefab instance. Setting to inactive.");
+            }
+            else
+            {
+                originalWeaponModel.SetActive(false);
+                Debug.Log("Original Weapon Model is not a prefab instance.");
+            }
         }
-        else
+        
+        
+        if(originalWeaponModel)
         {
-            originalWeaponModel.SetActive(false);
-            Debug.Log("Original Weapon Model is not a prefab instance.");
+            if(originalWeaponModel.name.Contains("(Clone)"))
+            {
+                originalWeaponModel.name = originalWeaponModel.name.Replace("(Clone)", "");
+            }
+            
+            weaponModName = originalWeaponModel.name;
         }
-        
-        
-        weaponModName = originalWeaponModel.name;
+        else if(weaponModel)
+        {
+            if(weaponModel.name.Contains("(Clone)"))
+            {
+                weaponModel.name = weaponModel.name.Replace("(Clone)", "");
+            }
+            
+            weaponModName = weaponModel.name;
+        }
+        else if(weaponToModRoot)
+        {
+            weaponModName = weaponToModRoot.name;
+        }
         
         if(weaponModName.Contains("(Clone)"))
         {
@@ -445,12 +563,12 @@ public class ProjectDemiModWeaponExporter : EditorWindow
 
     private void SetupWeaponModRoot()
     {
-        if (weaponToMod)
+        if (weaponModel)
         {
-            if (weaponToMod.TryGetComponent(out WeaponMod weaponMod))
+            if (weaponModel.TryGetComponent(out WeaponMod weaponMod))
             {
                 // This is the root of the weapon.
-                weaponToModRoot = weaponToMod;
+                weaponToModRoot = weaponModel;
             }
         }
 
@@ -463,9 +581,9 @@ public class ProjectDemiModWeaponExporter : EditorWindow
         if(!weaponToModRoot)
         {
             // Create a root for the weapon to be parented to.
-            weaponToModRoot = new GameObject(weaponToMod.name + " Root");
-            weaponToModRoot.transform.position = weaponToMod.transform.position;
-            weaponToModRoot.transform.rotation = weaponToMod.transform.rotation;
+            weaponToModRoot = new GameObject(weaponModel.name + " Root");
+            weaponToModRoot.transform.position = weaponModel.transform.position;
+            weaponToModRoot.transform.rotation = weaponModel.transform.rotation;
         }
         
         weaponToModRoot.name = weaponModName + " Root";
@@ -475,7 +593,10 @@ public class ProjectDemiModWeaponExporter : EditorWindow
     {
         if(!scaler)
         {
-            scaler = weaponToModRoot.transform.Find("Scaler")?.gameObject;
+            if(weaponToModRoot.transform.Find("Scaler"))
+            {
+                scaler = weaponToModRoot.transform.Find("Scaler").gameObject;
+            }
         }
         
         if(!scaler)
@@ -487,9 +608,9 @@ public class ProjectDemiModWeaponExporter : EditorWindow
             scaler.transform.localScale = Vector3.one;
         }
         
-        if (weaponToMod)
+        if (weaponModel && weaponModel.transform.parent != scaler.transform)
         {
-            weaponToMod.transform.SetParent(scaler.transform);
+            weaponModel.transform.SetParent(scaler.transform);
         }
     }
 
@@ -672,15 +793,21 @@ public class ProjectDemiModWeaponExporter : EditorWindow
                 weaponModScript.weaponType = weaponType;
                 weaponModScript.Rigidbody = rb;
                 weaponModScript.damageCollider = dc;
-                
             }
-            
-            
+
+
+
             // Get all ModPosableGrabPoints and add them to the weaponMod list.
             ModPosableGrabPoint[] posableGrabPoints = objectToAddComponentsTo.GetComponentsInChildren<ModPosableGrabPoint>();
+            
+            if (weaponModScript.modPosableGrabPoints == null)
+            {
+                weaponModScript.modPosableGrabPoints = new List<ModPosableGrabPoint>();
+            }
+            
             weaponModScript.modPosableGrabPoints = posableGrabPoints.ToList();
             
-            
+            /*
             if(weaponModScript.modGrabPoints == null)
             {
                 GameObject grabPoints = new GameObject("GrabPoints");
@@ -689,11 +816,7 @@ public class ProjectDemiModWeaponExporter : EditorWindow
                 grabPoints.transform.localRotation = Quaternion.identity;
                 weaponModScript.modGrabPoints = grabPoints.AddComponent<ModGrabPoints>();
             }
-
-            if (weaponModScript.modPosableGrabPoints == null)
-            {
-                weaponModScript.modPosableGrabPoints = new List<ModPosableGrabPoint>();
-            }
+            
             
             // Add the grab points to the weapon.
             if(weaponModScript.modPosableGrabPoints.Count == 0)
@@ -704,6 +827,7 @@ public class ProjectDemiModWeaponExporter : EditorWindow
                 grabPoint.transform.localRotation = Quaternion.identity;
                 weaponModScript.modPosableGrabPoints.Add(grabPoint.AddComponent<ModPosableGrabPoint>());
             }
+            */
         }
     }
     
@@ -714,6 +838,11 @@ public class ProjectDemiModWeaponExporter : EditorWindow
     private void AddWeaponHandle()
     {
         GameObject weaponHandle = Instantiate(Resources.Load<GameObject>("Weapon Mod Handles/Weapon Handle"));
+        
+        if(!scaler)
+        {
+            SetupScaler();
+        }
         
         weaponHandle.transform.SetParent(scaler.transform);
         weaponHandle.transform.localPosition = Vector3.zero;
@@ -825,6 +954,19 @@ public class ProjectDemiModWeaponExporter : EditorWindow
             {
                 weaponModScript.modPosableGrabPoints.Add(posableGrabPoints[i]);
                 Debug.Log("Adding Grab Point: " + posableGrabPoints[i].name);
+            }
+        }
+        
+        if(weaponModScript.mainGrabPoints == null)
+        {
+            weaponModScript.mainGrabPoints = new List<ModPosableGrabPoint>();
+        }
+        
+        if(weaponModScript.mainGrabPoints.Count == 0)
+        {
+            if(weaponModScript.modPosableGrabPoints.Count > 0)
+            {
+                weaponModScript.mainGrabPoints.Add(weaponModScript.modPosableGrabPoints[0]);
             }
         }
     }
@@ -1050,6 +1192,9 @@ public class ProjectDemiModWeaponExporter : EditorWindow
             {
                 Debug.Log("Saving Weapon Mod Prefab: " + weaponToModRoot.name);
                 PrefabUtility.ApplyPrefabInstance(weaponToModRoot, InteractionMode.UserAction);
+                
+                if(!finalPrefab)
+                    finalPrefab = PrefabUtility.GetCorrespondingObjectFromSource(weaponToModRoot);
             }
             else
             {
@@ -1073,7 +1218,7 @@ public class ProjectDemiModWeaponExporter : EditorWindow
     {
         FolderSetupComplete = false;
         
-        weaponToMod = null;
+        weaponModel = null;
         weaponToModRoot = null;
         finalPrefab = null;
         
@@ -1086,7 +1231,7 @@ public class ProjectDemiModWeaponExporter : EditorWindow
         if (includeOriginalModel)
             originalWeaponModel = null;
         
-        lastWeaponModel = null;
+        lastOriginalWeaponModel = null;
         lastWeaponType = WeaponType.None;
         lastWeaponToModRoot = null;
 

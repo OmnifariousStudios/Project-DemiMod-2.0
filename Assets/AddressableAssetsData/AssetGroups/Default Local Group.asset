@@ -17,8 +17,8 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: d45708f53d3c5454c91f6c211064d4ae
   m_SerializeEntries:
-  - m_GUID: 90b6e074a7bfa2546b7f0cbd2cd2a948
-    m_Address: Assets/MODS/Weapons/Arc Wave Staff Root.prefab
+  - m_GUID: 9519234cb27a38c418fe3736010ff350
+    m_Address: Assets/MODS/Weapons/Shield Shape.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Weapon

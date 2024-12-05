@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6578966398625343566}
   - component: {fileID: 1375727180373104238}
   m_Layer: 26
-  m_Name: Sword Grab Point
+  m_Name: Grab Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 580299167710585240}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.000000058652773, y: -0.7071068, z: 0.70710677, w: 0.00000010193028}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.035929993, y: 0.035929993, z: 0.03592999}
   m_ConstrainProportionsScale: 0
@@ -159,7 +159,6 @@ GameObject:
   - component: {fileID: 1976172415269852268}
   - component: {fileID: 927272371046879500}
   - component: {fileID: 246482934433365081}
-  - component: {fileID: 4040544641142543118}
   m_Layer: 26
   m_Name: Handle
   m_TagString: Untagged
@@ -232,29 +231,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &4040544641142543118
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4191620762826404328}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!1 &9075400180062145328
 GameObject:
   m_ObjectHideFlags: 0
@@ -281,9 +257,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9075400180062145328}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.0213}
-  m_LocalScale: {x: 0.010051, y: 0.010051, z: 0.054928113}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.0166}
+  m_LocalScale: {x: 0.010051, y: 0.010051001, z: 0.054928113}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8985767912232201288}

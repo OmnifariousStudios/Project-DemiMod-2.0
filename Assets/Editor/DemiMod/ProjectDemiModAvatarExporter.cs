@@ -57,7 +57,7 @@ public class ProjectDemiModAvatarExporter : EditorWindow
     {
         #region Opening GUI
         
-        EditorGUIUtility.labelWidth = 80;
+        EditorGUIUtility.labelWidth = 160;
         GUILayout.Label("Project Demigod Mod Exporter", EditorStyles.largeLabel);
         GUILayout.Space(10);
         
@@ -1917,7 +1917,8 @@ public class ProjectDemiModAvatarExporter : EditorWindow
                 Debug.Log("Saving Avatar Prefab: " + playerAvatar.name);
                 PrefabUtility.ApplyPrefabInstance(playerAvatar, InteractionMode.UserAction);
                 
-                finalPrefab = PrefabUtility.GetCorrespondingObjectFromSource(playerAvatar);
+                if(!finalPrefab)
+                    finalPrefab = PrefabUtility.GetCorrespondingObjectFromSource(playerAvatar);
             }
             else
             {

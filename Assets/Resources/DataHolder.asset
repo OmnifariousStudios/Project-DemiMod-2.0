@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DataHolder
   m_EditorClassIdentifier: 
   userDefinedModsLocation: D:/Unity Projects/MODS
-  lastAddressableBuildPath: D:/Unity Projects/MODS/Weapon - Arc W - Android
+  lastAddressableBuildPath: D:/Unity Projects/MODS/Weapon - Shiel - PCVR
   handPoseCopierGameObject: {fileID: 0}
   handPoseBuildLocation: D:/Unity Projects/Project DemiMod 2.0/Assets/MODS/Avatars\Player
     Avatar - MaleDummy\AvatarModHandPoses.json
@@ -26,9 +26,9 @@ MonoBehaviour:
   lastEnemyAvatarFinalPrefab: {fileID: 7976772319497905118, guid: dd59f1a4253a91e4c892d1b093eec1fb, type: 3}
   lastEnemyAvatarRootName: MaleDummy
   lastWeaponModel: {fileID: 0}
-  lastWeaponModelName: ArcaneStaff
+  lastWeaponModelName: Claw Test
   lastWeaponModScript: {fileID: 0}
   lastWeaponModRoot: {fileID: 0}
-  lastWeaponModRootName: Arc Wave Staff Root
-  lastWeaponFinalPrefab: {fileID: 0}
+  lastWeaponModRootName: Shield Shape Root
+  lastWeaponFinalPrefab: {fileID: 2062856519857078342, guid: 9519234cb27a38c418fe3736010ff350, type: 3}
   lastWeaponPrefabName: 

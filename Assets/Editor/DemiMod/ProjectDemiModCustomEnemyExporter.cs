@@ -48,7 +48,7 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
     {
         #region Opening GUI
         
-        EditorGUIUtility.labelWidth = 80;
+        EditorGUIUtility.labelWidth = 160;
         GUILayout.Label("Project Demigod Mod Exporter", EditorStyles.largeLabel);
         GUILayout.Space(10);
 
@@ -964,6 +964,9 @@ public class ProjectDemiModCustomEnemyExporter : EditorWindow
             {
                 Debug.Log("Saving Avatar Prefab: " + enemyModRoot.name);
                 PrefabUtility.ApplyPrefabInstance(enemyModRoot, InteractionMode.UserAction);
+
+                if (!finalPrefab)
+                    finalPrefab = PrefabUtility.GetCorrespondingObjectFromSource(enemyModRoot);
             }
             else
             {

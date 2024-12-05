@@ -60,7 +60,7 @@ public class ProjectDemiModMapExporter : EditorWindow
     
     private void OnGUI()
     {
-        EditorGUIUtility.labelWidth = 80;
+        EditorGUIUtility.labelWidth = 160;
         GUILayout.Label("Project Demigod Mod Exporter", EditorStyles.largeLabel);
         GUILayout.Space(10);
 

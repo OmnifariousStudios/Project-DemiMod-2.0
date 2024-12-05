@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
 
 public class WeaponMod : MonoBehaviour
@@ -14,6 +15,7 @@ public class WeaponMod : MonoBehaviour
 
     public List<Collider> colliders;
     
+    public WeaponModel weaponModel;
     
     public bool isStabbingWeapon;
     public List<Collider> stabColliders;
@@ -27,9 +29,11 @@ public class WeaponMod : MonoBehaviour
     
     public bool dynamicGrabbable = false;
     
-    public ModGrabPoints modGrabPoints;
     public List<ModPosableGrabPoint> modPosableGrabPoints;
 
+    // Grab point used for Force Grabs and grabbing from the Utility Belt.
+    public List<ModPosableGrabPoint> mainGrabPoints = new List<ModPosableGrabPoint>();
+    
     public GameObject infusionMesh;
     
     [Tooltip("Unpinning means weakening the enemy ragdoll.")]
@@ -54,6 +58,12 @@ public class WeaponMod : MonoBehaviour
     [Tooltip("Forces the enemy to react to the collision. Value can be 0, 1, or 2.")]
     public bool ForceEnemyDamageReaction = false;
     public int ForceEnemyDamageReactionInt = 0;
+    
+    public UnityEvent OnSocketedEvent;
+    public UnityEvent OnUnsocketedEvent;
+
+    public UnityEvent OnGrabbedEvent;
+    public UnityEvent OnReleasedEvent;
 }
 
 public enum WeaponAbility
